@@ -1,11 +1,13 @@
 package bo.gotthardt;
 
+import bo.gotthardt.model.Persistable;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Query;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,14 +25,14 @@ import java.util.List;
  */
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
-public class RestEndpoint<T extends Persistable> {
-    private final Class<T> type;
+public class RestEndpoint<P extends Persistable> {
+    private final Class<P> type;
 
     @GET
     @Path("/{id}")
     @Timed
-    public T one(@PathParam("id") long id) {
-        T item = Ebean.find(type, id);
+    public P one(@PathParam("id") long id) {
+        P item = Ebean.find(type, id);
 
         if (item == null) {
             throw new NotFoundJsonException(id);
@@ -40,12 +42,12 @@ public class RestEndpoint<T extends Persistable> {
     }
 
     @GET
-    public List<T> many(@QueryParam("q") Optional<String> query,
+    public List<P> many(@QueryParam("q") Optional<String> query,
                         @QueryParam("limit") Optional<Integer> limit,
                         @QueryParam("offset") Optional<Integer> offset) {
 
-        Query<T> dbQuery = Ebean.find(type).orderBy().asc("id");
-        if (limit.isPresent()) {
+        Query<P> dbQuery = Ebean.find(type).orderBy().asc("id");
+        if (limit.isPresent() && limit.get() != 0) {
             dbQuery = dbQuery.setMaxRows(limit.get()).setFirstRow(offset.or(50));
         }
         if (query.isPresent()) {
@@ -57,8 +59,8 @@ public class RestEndpoint<T extends Persistable> {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public T create(T item) {
-        Ebean.save(item);
+    public P create(@Valid P item) {
+        item.save();
 
         // TODO validation
         // TODO disallow updating sensitive properties
@@ -69,14 +71,13 @@ public class RestEndpoint<T extends Persistable> {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public T update(T item, @PathParam("id") long id) {
+    public P update(@Valid P item, @PathParam("id") long id) {
         assertExists(id);
 
         // TODO validation
         // TODO disallow updating sensitive properties
 
-        item.setId(id);
-        Ebean.update(item);
+        item.update(id);
 
         return item;
     }

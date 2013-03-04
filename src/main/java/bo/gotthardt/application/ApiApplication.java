@@ -1,7 +1,8 @@
 package bo.gotthardt.application;
 
-import bo.gotthardt.PersonEndpoint;
+import bo.gotthardt.api.PersonEndpoint;
 import bo.gotthardt.configuration.ApiConfiguration;
+import bo.gotthardt.ebean.EbeanHealthCheck;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
@@ -16,7 +17,7 @@ public class ApiApplication extends Service<ApiConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
-
+        // Empty on purpose.
     }
 
     @Override

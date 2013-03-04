@@ -3,6 +3,7 @@ package bo.gotthardt.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jersey.api.client.ClientResponse;
+import com.yammer.dropwizard.testing.ResourceTest;
 
 import javax.ws.rs.core.MediaType;
 
@@ -10,7 +11,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Bo Gotthardt
  */
-public abstract class EasierJerseyTest extends EbeanInMemoryTest {
+public abstract class ImprovedResourceTest extends ResourceTest {
     private final ObjectMapper MAPPER = getObjectMapperFactory().build();
 
     protected ObjectNode createObjectNode() {
@@ -35,5 +36,9 @@ public abstract class EasierJerseyTest extends EbeanInMemoryTest {
 
     protected ClientResponse PUT(String path, Object input) {
         return PUT(path, input,  MediaType.APPLICATION_JSON_TYPE);
+    }
+
+    protected ClientResponse DELETE(String path) {
+        return client().resource(path).delete(ClientResponse.class);
     }
 }

@@ -1,4 +1,4 @@
-package bo.gotthardt;
+package bo.gotthardt.api;
 
 import bo.gotthardt.model.Person;
 

@@ -1,8 +1,10 @@
-package bo.gotthardt.util;
+package bo.gotthardt.api;
 
-import bo.gotthardt.PersonEndpoint;
 import bo.gotthardt.model.Person;
+import bo.gotthardt.util.ImprovedResourceTest;
+import bo.gotthardt.util.InMemoryEbeanServer;
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
@@ -19,11 +21,13 @@ import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
 
 
 /**
- * Tests for {@link bo.gotthardt.PersonEndpoint}.
+ * Tests for {@link bo.gotthardt.api.PersonEndpoint}.
  *
  * @author Bo Gotthardt
  */
-public class PersonEndpointTest extends EasierJerseyTest {
+public class PersonEndpointTest extends ImprovedResourceTest {
+    private final EbeanServer ebean = new InMemoryEbeanServer();
+
     @Override
     protected void setUpResources() throws Exception {
         addResource(new PersonEndpoint());

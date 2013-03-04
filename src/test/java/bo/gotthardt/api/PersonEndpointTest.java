@@ -5,6 +5,7 @@ import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebeaninternal.server.transaction.log.JuliTransactionLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
@@ -31,7 +32,12 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Override
     protected void setUpResources() throws Exception {
         addResource(new PersonEndpoint());
+
+        // Squelch annoying loggers.
+        // TODO move to configuration somewhere.
         Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
+        Logger.getLogger(JuliTransactionLogger.class.getName()).setLevel(Level.WARNING);
+        Logger.getLogger(Ebean.class.getName()).setLevel(Level.SEVERE);
     }
 
     @Test

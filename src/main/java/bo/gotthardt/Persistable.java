@@ -1,4 +1,4 @@
-package bo.gotthardt.model;
+package bo.gotthardt;
 
 /**
  * @author Bo Gotthardt

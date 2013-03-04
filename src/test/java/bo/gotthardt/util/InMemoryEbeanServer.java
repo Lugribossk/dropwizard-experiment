@@ -17,9 +17,11 @@ public class InMemoryEbeanServer implements EbeanServer {
         ServerConfig config = new ServerConfig();
         config.setName("h2");
         config.loadFromProperties();
+
         // Generate and run database creation queries so we start with an empty db.
         config.setDdlGenerate(true);
         config.setDdlRun(true);
+
         // Set as default server so it can also be accessed though the Ebean singleton.
         config.setDefaultServer(true);
         server = EbeanServerFactory.create(config);

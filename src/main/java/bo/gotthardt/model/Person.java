@@ -1,5 +1,6 @@
 package bo.gotthardt.model;
 
+import bo.gotthardt.Persistable;
 import com.avaje.ebean.Ebean;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

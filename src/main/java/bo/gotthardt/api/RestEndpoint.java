@@ -1,6 +1,6 @@
 package bo.gotthardt.api;
 
-import bo.gotthardt.model.Persistable;
+import bo.gotthardt.Persistable;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Query;
 import com.google.common.base.Optional;

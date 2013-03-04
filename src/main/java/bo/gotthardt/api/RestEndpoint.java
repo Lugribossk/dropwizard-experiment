@@ -60,7 +60,7 @@ public class RestEndpoint<P extends Persistable> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public P create(@Valid P item) {
-        item.save();
+        Ebean.save(item);
 
         // TODO validation
         // TODO disallow updating sensitive properties
@@ -77,7 +77,8 @@ public class RestEndpoint<P extends Persistable> {
         // TODO validation
         // TODO disallow updating sensitive properties
 
-        item.update(id);
+        item.setId(id);
+        Ebean.update(item);
 
         return item;
     }

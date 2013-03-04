@@ -3,7 +3,10 @@ package bo.gotthardt.application;
 import bo.gotthardt.api.PersonEndpoint;
 import bo.gotthardt.configuration.ApiConfiguration;
 import bo.gotthardt.ebean.EbeanHealthCheck;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.yammer.dropwizard.Service;
+import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 
@@ -17,7 +20,11 @@ public class ApiApplication extends Service<ApiConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
-        // Empty on purpose.
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html"));
+
+        bootstrap.getObjectMapperFactory().enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+        bootstrap.getObjectMapperFactory().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+
     }
 
     @Override

@@ -22,11 +22,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="dropwizard-experiment" />
+        <module name="client" />
+        <module name="dist" />
+        <module name="server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="client" target="1.7" />
+      <module name="dist" target="1.7" />
       <module name="dropwizard-experiment" target="1.7" />
+      <module name="server" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

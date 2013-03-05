@@ -1,6 +1,7 @@
 package bo.gotthardt.api;
 
 import bo.gotthardt.model.Person;
+import com.avaje.ebean.EbeanServer;
 
 import javax.ws.rs.Path;
 
@@ -9,7 +10,7 @@ import javax.ws.rs.Path;
  */
 @Path("persons")
 public class PersonEndpoint extends RestEndpoint<Person> {
-    public PersonEndpoint() {
-        super(Person.class);
+    public PersonEndpoint(EbeanServer ebean) {
+        super(Person.class, ebean);
     }
 }

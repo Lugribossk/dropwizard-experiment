@@ -1,7 +1,7 @@
 package bo.gotthardt.api;
 
 import bo.gotthardt.Persistable;
-import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
@@ -27,12 +27,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestEndpoint<P extends Persistable> {
     private final Class<P> type;
+    private final EbeanServer ebean;
 
     @GET
     @Path("/{id}")
     @Timed
     public P one(@PathParam("id") long id) {
-        P item = Ebean.find(type, id);
+        P item = ebean.find(type, id);
 
         if (item == null) {
             throw new NotFoundJsonException(id);
@@ -46,7 +47,7 @@ public class RestEndpoint<P extends Persistable> {
                         @QueryParam("limit") Optional<Integer> limit,
                         @QueryParam("offset") Optional<Integer> offset) {
 
-        Query<P> dbQuery = Ebean.find(type).orderBy().asc("id");
+        Query<P> dbQuery = ebean.find(type).orderBy().asc("id");
         if (limit.isPresent() && limit.get() != 0) {
             dbQuery = dbQuery.setMaxRows(limit.get()).setFirstRow(offset.or(50));
         }
@@ -60,7 +61,7 @@ public class RestEndpoint<P extends Persistable> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public P create(@Valid P item) {
-        Ebean.save(item);
+        ebean.save(item);
 
         // TODO validation
         // TODO disallow updating sensitive properties
@@ -78,7 +79,7 @@ public class RestEndpoint<P extends Persistable> {
         // TODO disallow updating sensitive properties
 
         item.setId(id);
-        Ebean.update(item);
+        ebean.update(item);
 
         return item;
     }
@@ -88,7 +89,7 @@ public class RestEndpoint<P extends Persistable> {
     public void delete(@PathParam("id") long id) {
         assertExists(id);
 
-        Ebean.delete(type, id);
+        ebean.delete(type, id);
     }
 
     /**
@@ -98,7 +99,7 @@ public class RestEndpoint<P extends Persistable> {
      */
     private void assertExists(long id) {
         // Presumably this is (slightly) faster than retrieving the object.
-        if (Ebean.find(type).where().eq("id", id).findRowCount() != 1) {
+        if (ebean.find(type).where().eq("id", id).findRowCount() != 1) {
             throw new NotFoundJsonException(id);
         }
     }

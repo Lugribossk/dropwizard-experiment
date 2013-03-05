@@ -1,2 +1,5 @@
+http:
+  rootPath: /api/*
+
 example: Test
 

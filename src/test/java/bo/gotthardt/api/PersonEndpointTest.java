@@ -31,7 +31,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
 
     @Override
     protected void setUpResources() throws Exception {
-        addResource(new PersonEndpoint());
+        addResource(new PersonEndpoint(ebean));
 
         // Squelch annoying loggers.
         // TODO move to configuration somewhere.

@@ -13,6 +13,13 @@
     <name>Dropwizard experiment - Server</name>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Ebean entity class "enhancement". -->
             <plugin>

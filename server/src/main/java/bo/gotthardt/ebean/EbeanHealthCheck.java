@@ -18,11 +18,7 @@ public class EbeanHealthCheck extends HealthCheck {
 
     @Override
     protected Result check() throws Exception {
-        try {
-            ebean.createSqlQuery("/* EbeanHealthCheck */ SELECT 1").findUnique();
-        } catch (RuntimeException e) {
-            return Result.unhealthy(e.getMessage());
-        }
+        ebean.createSqlQuery("/* EbeanHealthCheck */ SELECT 1").findUnique();
         return Result.healthy();
     }
 }

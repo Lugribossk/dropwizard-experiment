@@ -33,5 +33,7 @@ public class ApiApplication extends Service<ApiConfiguration> {
     @Override
     public void run(ApiConfiguration configuration, Environment environment) throws Exception {
         environment.addResource(new PersonEndpoint(ebeanBundle.getDefaultServer()));
+
+        environment.addHealthCheck(new VersionHealthCheck());
     }
 }

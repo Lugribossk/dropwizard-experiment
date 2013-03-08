@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 /**
  * @author Bo Gotthardt
  */
-@Path("persons")
+@Path("/persons")
 public class PersonEndpoint extends RestEndpoint<Person> {
     public PersonEndpoint(EbeanServer ebean) {
         super(Person.class, ebean);

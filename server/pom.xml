@@ -90,6 +90,11 @@
             <artifactId>dropwizard-core</artifactId>
             <version>0.6.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.yammer.dropwizard</groupId>
+            <artifactId>dropwizard-auth</artifactId>
+            <version>0.6.1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.avaje</groupId>
@@ -105,7 +110,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>14.0-rc2</version>
+            <version>14.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>

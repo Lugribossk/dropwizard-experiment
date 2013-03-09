@@ -1,9 +1,9 @@
 package bo.gotthardt.api;
 
+import bo.gotthardt.ListFiltering;
 import bo.gotthardt.Persistable;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
-import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -43,17 +43,10 @@ public class RestEndpoint<P extends Persistable> {
     }
 
     @GET
-    public List<P> many(@QueryParam("q") Optional<String> query,
-                        @QueryParam("limit") Optional<Integer> limit,
-                        @QueryParam("offset") Optional<Integer> offset) {
+    public List<P> many(@Context ListFiltering filtering) {
+        Query<P> dbQuery = ebean.find(type);
 
-        Query<P> dbQuery = ebean.find(type).orderBy().asc("id");
-        if (limit.isPresent() && limit.get() != 0) {
-            dbQuery = dbQuery.setMaxRows(limit.get()).setFirstRow(offset.or(50));
-        }
-        if (query.isPresent()) {
-            dbQuery = dbQuery.where().like("name", "%" + query.get() + "%").query();
-        }
+        filtering.applyToQuery(dbQuery);
 
         return dbQuery.findList();
     }

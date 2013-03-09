@@ -1,5 +1,6 @@
 package bo.gotthardt.api;
 
+import bo.gotthardt.ListFilteringProvider;
 import bo.gotthardt.model.Person;
 import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;
@@ -32,6 +33,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Override
     protected void setUpResources() throws Exception {
         addResource(new PersonEndpoint(ebean));
+        addProvider(ListFilteringProvider.class);
 
         // Squelch annoying loggers.
         // TODO move to configuration somewhere.

@@ -1,5 +1,6 @@
 package bo.gotthardt.application;
 
+import bo.gotthardt.ListFilteringProvider;
 import bo.gotthardt.api.PersonEndpoint;
 import bo.gotthardt.configuration.ApiConfiguration;
 import bo.gotthardt.ebean.EbeanBundle;
@@ -33,6 +34,8 @@ public class ApiApplication extends Service<ApiConfiguration> {
     @Override
     public void run(ApiConfiguration configuration, Environment environment) throws Exception {
         environment.addResource(new PersonEndpoint(ebeanBundle.getDefaultServer()));
+
+        environment.addProvider(ListFilteringProvider.class);
 
         environment.addHealthCheck(new VersionHealthCheck());
     }

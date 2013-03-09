@@ -38,7 +38,7 @@ public class ApiApplication extends Service<ApiConfiguration> {
 
         environment.addProvider(ListFilteringProvider.class);
 
-        environment.addFilter(AllowAllOriginsFilter.class, "/api/*");
+        environment.addFilter(AllowAllOriginsFilter.class, configuration.getHttpConfiguration().getRootPath());
 
         environment.addHealthCheck(new VersionHealthCheck());
     }

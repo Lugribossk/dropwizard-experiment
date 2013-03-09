@@ -1,7 +1,6 @@
 package bo.gotthardt.model;
 
 import bo.gotthardt.Persistable;
-import com.avaje.ebean.Ebean;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,18 +25,5 @@ public class Person implements Persistable {
 
     public Person(String name) {
         this.name = name;
-    }
-
-    public void save() {
-        Ebean.save(this);
-    }
-
-    public void update(long id) {
-        this.setId(id);
-        Ebean.update(this);
-    }
-
-    public void refresh() {
-        Ebean.refresh(this);
     }
 }

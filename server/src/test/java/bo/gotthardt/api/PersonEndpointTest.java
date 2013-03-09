@@ -45,7 +45,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Test
     public void shouldGetOneItem() {
         Person p = new Person("Test");
-        p.save();
+        ebean.save(p);
 
         assertThat(GET("/persons/" + p.getId()))
                 .hasStatus(Response.Status.OK)
@@ -62,9 +62,9 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Test
     public void shouldGetAllItems() {
         Person p1 = new Person("Test1");
-        p1.save();
+        ebean.save(p1);
         Person p2 = new Person("Test2");
-        p2.save();
+        ebean.save(p2);
 
         assertThat(GET("/persons"))
                 .hasStatus(Response.Status.OK)
@@ -74,9 +74,9 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Test
     public void shouldGetItemsMatchingQuery() {
         Person p1 = new Person("Test1");
-        p1.save();
+        ebean.save(p1);
         Person p2 = new Person("Test2");
-        p2.save();
+        ebean.save(p2);
 
         assertThat(GET("/persons?q=2"))
                 .hasStatus(Response.Status.OK)
@@ -86,11 +86,11 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Test
     public void shouldGetItemsAccordingToLimitAndOffest() {
         Person p1 = new Person("Test1");
-        p1.save();
+        ebean.save(p1);
         Person p2 = new Person("Test2");
-        p2.save();
+        ebean.save(p2);
         Person p3 = new Person("Test3");
-        p3.save();
+        ebean.save(p3);
 
         assertThat(GET("/persons?limit=1&offset=1"))
                 .hasStatus(Response.Status.OK)
@@ -100,11 +100,11 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Test
     public void shouldGetAllItemsWhenLimitIs0() {
         Person p1 = new Person("Test1");
-        p1.save();
+        ebean.save(p1);
         Person p2 = new Person("Test2");
-        p2.save();
+        ebean.save(p2);
         Person p3 = new Person("Test3");
-        p3.save();
+        ebean.save(p3);
 
         assertThat(GET("/persons?limit=0&offset=1"))
                 .hasStatus(Response.Status.OK)
@@ -119,32 +119,21 @@ public class PersonEndpointTest extends ImprovedResourceTest {
         assertThat(POST("/persons", input))
                 .hasStatus(Response.Status.OK);
 
-        List<Person> savedItems = Ebean.find(Person.class).findList();
+        List<Person> savedItems = ebean.find(Person.class).findList();
         assertThat(savedItems).hasSize(1);
         assertThat(savedItems.get(0).getName()).isEqualTo("Test1");
     }
 
-//    @Test
-//    public void shouldRejectInvalidPostedItem() {
-//        ObjectNode input = createObjectNode();
-//        input.putNull("name");
-//
-//        assertThat(client().resource("/persons").entity(input, MediaType.APPLICATION_JSON_TYPE).post(ClientResponse.class))
-//                .hasStatus(Response.Status.OK);
-//
-//        assertThat(Ebean.find(Person.class).findList()).isEmpty();
-//    }
-
     @Test
     public void shouldUpdatePuttedItem() {
         Person p = new Person("Test1");
-        p.save();
+        ebean.save(p);
 
         ObjectNode input = createObjectNode();
         input.put("name", "Test2");
 
         ClientResponse response = PUT("/persons/" + p.getId(), input);
-        p.refresh();
+        ebean.refresh(p);
 
         assertThat(response)
                 .hasStatus(Response.Status.OK)
@@ -155,7 +144,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     @Test
     public void shouldNotOverwriteIdFromPuttedItem() {
         Person p = new Person("Test1");
-        p.save();
+        ebean.save(p);
         long oldId = p.getId();
 
         ObjectNode input = new ObjectMapper().createObjectNode();
@@ -163,7 +152,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
         input.put("id", oldId + 100);
 
         ClientResponse response = PUT("/persons/" + oldId, input);
-        p.refresh();
+        ebean.refresh(p);
 
         assertThat(response)
                 .hasStatus(Response.Status.OK)

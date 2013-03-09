@@ -1,4 +1,4 @@
-package bo.gotthardt;
+package bo.gotthardt.jersey.provider;
 
 import com.avaje.ebean.Query;
 import com.google.common.base.Optional;
@@ -9,6 +9,8 @@ import lombok.Setter;
 import javax.ws.rs.core.MultivaluedMap;
 
 /**
+ * Options for how a list should be filtered and sorted.
+ *
  * @author Bo Gotthardt
  */
 @Getter
@@ -63,7 +65,7 @@ public class ListFiltering {
         return filtering;
     }
 
-    public void applyToQuery(Query<?> dbQuery) {
+    public Query<?> applyToQuery(Query<?> dbQuery) {
         if (sortOrder == SortOrder.ASCENDING) {
             dbQuery.order().asc(orderProperty);
         } else {
@@ -78,6 +80,8 @@ public class ListFiltering {
             // TODO Make this not hard-coded
             dbQuery.where().like("name", "%" + searchQuery.get() + "%");
         }
+
+        return dbQuery;
     }
 
     public static enum SortOrder {

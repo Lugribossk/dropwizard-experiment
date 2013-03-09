@@ -1,10 +1,12 @@
-package bo.gotthardt;
+package bo.gotthardt.jersey.provider;
 
 import com.sun.jersey.api.core.HttpContext;
 
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Jetty injectable provider that enables resource methods to have {@link ListFiltering} parameters.
+ *
  * @author Bo Gotthardt
  */
 @Provider

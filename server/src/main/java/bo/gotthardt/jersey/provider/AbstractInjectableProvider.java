@@ -1,4 +1,4 @@
-package bo.gotthardt;
+package bo.gotthardt.jersey.provider;
 
 import com.sun.jersey.core.spi.component.ComponentContext;
 import com.sun.jersey.core.spi.component.ComponentScope;
@@ -10,6 +10,8 @@ import javax.ws.rs.core.Context;
 import java.lang.reflect.Type;
 
 /**
+ * Abstract class for easily building Jetty injectable providers.
+ *
  * @author Coda Hale (http://codahale.com/what-makes-jersey-interesting-injection-providers/)
  */
 public abstract class AbstractInjectableProvider<E>

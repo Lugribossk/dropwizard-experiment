@@ -1,6 +1,6 @@
 package bo.gotthardt.api;
 
-import bo.gotthardt.ListFiltering;
+import bo.gotthardt.jersey.provider.ListFiltering;
 import bo.gotthardt.Persistable;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;

@@ -1,6 +1,6 @@
 package bo.gotthardt.api;
 
-import bo.gotthardt.ListFilteringProvider;
+import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Person;
 import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;

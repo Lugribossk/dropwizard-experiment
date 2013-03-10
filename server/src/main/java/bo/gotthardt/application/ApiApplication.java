@@ -32,7 +32,6 @@ public class ApiApplication extends Service<ApiConfiguration> {
 
         bootstrap.getObjectMapperFactory().enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
         bootstrap.getObjectMapperFactory().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
-        bootstrap.getObjectMapperFactory().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @Override

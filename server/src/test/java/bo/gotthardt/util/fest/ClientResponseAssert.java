@@ -1,7 +1,10 @@
 package bo.gotthardt.util.fest;
 
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.jersey.api.client.ClientResponse;
-import com.yammer.dropwizard.testing.JsonHelpers;
+import com.yammer.dropwizard.json.ObjectMapperFactory;
 import org.fest.assertions.api.AbstractAssert;
 import org.junit.ComparisonFailure;
 
@@ -13,6 +16,16 @@ import java.io.IOException;
  * @author Bo Gotthardt
  */
 public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, ClientResponse> {
+    private static final ObjectMapper MAPPER;
+
+    static {
+        ObjectMapperFactory factory = new ObjectMapperFactory();
+        factory.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+        factory.enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+        factory.enable(SerializationFeature.INDENT_OUTPUT);
+        MAPPER = factory.build();
+    }
+
     public ClientResponseAssert(ClientResponse actual) {
         super(actual, ClientResponseAssert.class);
     }
@@ -39,8 +52,8 @@ public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, C
 
         try {
             // Should probably be something with getEntity(new GenericType<blah>() {}) but that doesn't work and this does...
-            String actualJson = JsonHelpers.asJson(actual.getEntity(Object.class));
-            String expectedJson = JsonHelpers.asJson(expected);
+            String actualJson = MAPPER.writeValueAsString(actual.getEntity(Object.class));
+            String expectedJson = MAPPER.writeValueAsString(expected);
             compare(actualJson, expectedJson, "JSON content");
         } catch (IOException e) {
             throw new RuntimeException(e);

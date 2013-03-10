@@ -71,6 +71,32 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
     }
 
     @Test
+    public void should400WhenMissingGrantType() {
+        assertThat(POST("/token", null))
+                .hasStatus(Response.Status.BAD_REQUEST);
+        assertThat(POST("/token/?grant_type=password&username=test", null))
+                .hasStatus(Response.Status.BAD_REQUEST);
+
+        assertThat(POST("/token/?grant_type=password&password=blah", null))
+                .hasStatus(Response.Status.BAD_REQUEST);
+
+    }
+
+    @Test
+    public void should400WhenGrantTypePasswordMissingUsername() {
+        assertThat(POST("/token/?grant_type=password&password=blah", null))
+                .hasStatus(Response.Status.BAD_REQUEST);
+
+    }
+
+    @Test
+    public void should400WhenGrantTypePasswordMissingPassword() {
+        assertThat(POST("/token/?grant_type=password&username=test", null))
+                .hasStatus(Response.Status.BAD_REQUEST);
+
+    }
+
+    @Test
     public void shouldRefuseUnauthorizedAccessToAuthProtectedResource() {
         assertThat(GET("/users/1"))
                 .hasStatus(Response.Status.UNAUTHORIZED);

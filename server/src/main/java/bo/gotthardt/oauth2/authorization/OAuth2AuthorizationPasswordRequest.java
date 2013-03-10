@@ -1,5 +1,6 @@
 package bo.gotthardt.oauth2.authorization;
 
+import bo.gotthardt.api.exception.WebAppPreconditions;
 import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Optional;
@@ -33,10 +34,10 @@ public class OAuth2AuthorizationPasswordRequest implements OAuth2AuthorizationRe
         Preconditions.checkState("password".equals(queryParameters.getFirst("grant_type")));
 
         String username = queryParameters.getFirst("username");
-        Preconditions.checkArgument(username != null, "Password grant type requires a 'username' query parameter.");
+        WebAppPreconditions.checkArgumentNotNull(username, "'Password' grant type requires a 'username' query parameter.");
 
         String password = queryParameters.getFirst("password");
-        Preconditions.checkArgument(password != null, "Password grant type requires a 'password' query parameter.");
+        WebAppPreconditions.checkArgumentNotNull(password, "'Password' grant type requires a 'password' query parameter.");
 
         return new OAuth2AuthorizationPasswordRequest(username, password);
     }

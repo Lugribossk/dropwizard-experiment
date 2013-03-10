@@ -1,8 +1,8 @@
 package bo.gotthardt.oauth2.authorization;
 
 import bo.gotthardt.api.exception.JsonMessageException;
+import bo.gotthardt.api.exception.WebAppPreconditions;
 import bo.gotthardt.jersey.provider.AbstractInjectableProvider;
-import com.google.common.base.Preconditions;
 import com.sun.jersey.api.core.HttpContext;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -27,7 +27,7 @@ public class OAuth2AuthorizationRequestProvider extends AbstractInjectableProvid
         MultivaluedMap<String, String> queryParameters = c.getRequest().getQueryParameters();
 
         String grantType = queryParameters.getFirst("grant_type");
-        Preconditions.checkArgument(grantType != null, "OAuth2 authentication request requires a 'grant_type' query parameter.");
+        WebAppPreconditions.checkArgumentNotNull(grantType, "OAuth2 authentication request requires a 'grant_type' query parameter.");
 
         switch (grantType) {
             case "password":

@@ -7,6 +7,6 @@ import javax.ws.rs.core.Response;
  */
 public class UnauthorizedException extends JsonMessageException {
     public UnauthorizedException() {
-        super(Response.Status.UNAUTHORIZED, "Credentials are required to access this resource.");
+        super(Response.Status.UNAUTHORIZED.getStatusCode(), "Credentials are required to access this resource.");
     }
 }

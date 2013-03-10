@@ -7,6 +7,6 @@ import javax.ws.rs.core.Response;
  */
 public class NotFoundException extends JsonMessageException {
     public NotFoundException(long id) {
-        super(Response.Status.NOT_FOUND, "No object with id=" + id + " found.");
+        super(Response.Status.NOT_FOUND.getStatusCode(), "No object with id=" + id + " found.");
     }
 }

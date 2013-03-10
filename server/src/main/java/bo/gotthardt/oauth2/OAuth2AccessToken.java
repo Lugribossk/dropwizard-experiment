@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
@@ -29,6 +30,7 @@ public class OAuth2AccessToken {
     private String accessToken; // TODO hash this
 
     /** The token's expiration date, after which it is no longer valid. */
+    @Setter
     private DateTime expirationDate;
 
     /** The user that this token authenticates. */
@@ -42,6 +44,7 @@ public class OAuth2AccessToken {
      * @param duration How long the token should be valid for, starting from now.
      */
     public OAuth2AccessToken(User user, Duration duration) {
+        // UUID is a convenient way to generate a random string.
         this.accessToken = UUID.randomUUID().toString();
         this.expirationDate = DateTime.now().plus(duration);
         this.user = user;
@@ -51,6 +54,6 @@ public class OAuth2AccessToken {
      * Returns whether this token is currently valid.
      */
     public boolean isValid() {
-        return expirationDate.isBeforeNow();
+        return expirationDate.isAfterNow();
     }
 }

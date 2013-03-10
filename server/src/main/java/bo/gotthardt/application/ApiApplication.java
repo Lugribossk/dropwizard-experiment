@@ -5,6 +5,7 @@ import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.api.PersonEndpoint;
 import bo.gotthardt.configuration.ApiConfiguration;
 import bo.gotthardt.ebean.EbeanBundle;
+import bo.gotthardt.oauth2.OAuth2Bundle;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.yammer.dropwizard.Service;
@@ -26,10 +27,12 @@ public class ApiApplication extends Service<ApiConfiguration> {
     public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
         ebeanBundle = new EbeanBundle();
         bootstrap.addBundle(ebeanBundle);
+        bootstrap.addBundle(new OAuth2Bundle(ebeanBundle.getDefaultServer()));
         bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html"));
 
         bootstrap.getObjectMapperFactory().enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
         bootstrap.getObjectMapperFactory().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+        bootstrap.getObjectMapperFactory().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @Override

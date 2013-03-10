@@ -11,6 +11,7 @@ import com.avaje.ebean.EbeanServer;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.auth.oauth.OAuthProvider;
+import org.joda.time.Duration;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -35,7 +36,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
     }
 
     @Test
-    public void shouldPersistAndSendTokenThatIdentifiesUser() {
+    public void shouldCreateAndSendTokenThatIdentifiesUser() {
         User user = new User("test", "blah");
         ebean.save(user);
 
@@ -46,6 +47,27 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
         // The token sent in the response won't have any user information, but if we get it from the database it will have.
         assertThat(ebean.find(OAuth2AccessToken.class, token.getAccessToken()).getUser().getId())
                 .isEqualTo(user.getId());
+    }
+
+    @Test
+    public void shouldNotCreateTokenForInvalidCredentials() {
+        User user = new User("test", "blah");
+        ebean.save(user);
+
+        assertThat(POST("/token/?grant_type=password&username=test&password=WRONGPASSWORD", null))
+                .hasStatus(Response.Status.UNAUTHORIZED);
+
+        assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
+                .isEqualTo(0);
+    }
+
+    @Test
+    public void shouldNotCreateTokenForNonexistentCredentials() {
+        assertThat(POST("/token/?grant_type=password&username=test&password=blah", null))
+                .hasStatus(Response.Status.UNAUTHORIZED);
+
+        assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
+                .isEqualTo(0);
     }
 
     @Test
@@ -68,5 +90,21 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
         assertThat(response)
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(user);
+    }
+
+    @Test
+    public void shouldInvalidateTokens() {
+        User user = new User("test", "blah");
+        ebean.save(user);
+
+        OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
+        ebean.save(token);
+
+        ClientResponse response = client().resource("/token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
+                .delete(ClientResponse.class);
+        ebean.refresh(token);
+
+        assertThat(token.isValid()).isFalse();
     }
 }

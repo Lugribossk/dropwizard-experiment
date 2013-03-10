@@ -29,6 +29,25 @@ public class ListFiltering {
     private String orderProperty = "id";
     private SortOrder sortOrder = SortOrder.ASCENDING;
 
+    public Query<?> applyToQuery(Query<?> dbQuery) {
+        if (sortOrder == SortOrder.ASCENDING) {
+            dbQuery.order().asc(orderProperty);
+        } else {
+            dbQuery.order().desc(orderProperty);
+        }
+
+        if (limit != 0) {
+            dbQuery.setMaxRows(limit).setFirstRow(offset);
+        }
+
+        if (searchQuery.isPresent()) {
+            // TODO Make this not hard-coded
+            dbQuery.where().like("name", "%" + searchQuery.get() + "%");
+        }
+
+        return dbQuery;
+    }
+
     public static ListFiltering fromQueryParameters(MultivaluedMap<String, String> queryParameters) {
         ListFiltering filtering = new ListFiltering();
 
@@ -63,25 +82,6 @@ public class ListFiltering {
         }
 
         return filtering;
-    }
-
-    public Query<?> applyToQuery(Query<?> dbQuery) {
-        if (sortOrder == SortOrder.ASCENDING) {
-            dbQuery.order().asc(orderProperty);
-        } else {
-            dbQuery.order().desc(orderProperty);
-        }
-
-        if (limit != 0) {
-            dbQuery.setMaxRows(limit).setFirstRow(offset);
-        }
-
-        if (searchQuery.isPresent()) {
-            // TODO Make this not hard-coded
-            dbQuery.where().like("name", "%" + searchQuery.get() + "%");
-        }
-
-        return dbQuery;
     }
 
     public static enum SortOrder {

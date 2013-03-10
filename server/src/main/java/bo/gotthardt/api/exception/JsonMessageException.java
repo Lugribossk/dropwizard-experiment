@@ -13,16 +13,16 @@ import javax.ws.rs.core.Response;
 public class JsonMessageException extends WebApplicationException {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public JsonMessageException(Response.Status status, String message) {
-        super(createResponse(status, message));
+    public JsonMessageException(int status, String message, Object... args) {
+        super(createResponse(status, message, args));
     }
 
-    private static Response createResponse(Response.Status status, String message) {
+    private static Response createResponse(int status, String message, Object... args) {
         ObjectNode output = OBJECT_MAPPER.createObjectNode();
-        output.put("status", status.getStatusCode());
-        output.put("message", message);
+        output.put("status", status);
+        output.put("message", String.format(message, args));
 
-        return Response.status(status.getStatusCode())
+        return Response.status(status)
                 .entity(output)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

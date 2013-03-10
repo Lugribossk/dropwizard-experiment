@@ -30,7 +30,7 @@ public class OAuth2Authenticator implements Authenticator<String, User> {
             return Optional.absent();
         }
 
-        if (token.isValid()) {
+        if (!token.isValid()) {
             log.info("Access token '%s' is no longer valid, expired at %s.", credentials, token.getExpirationDate());
             return Optional.absent();
         }

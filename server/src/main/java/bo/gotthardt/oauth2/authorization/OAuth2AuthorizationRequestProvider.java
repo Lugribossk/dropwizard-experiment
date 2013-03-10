@@ -1,9 +1,11 @@
 package bo.gotthardt.oauth2.authorization;
 
+import bo.gotthardt.api.exception.JsonMessageException;
 import bo.gotthardt.jersey.provider.AbstractInjectableProvider;
+import com.google.common.base.Preconditions;
 import com.sun.jersey.api.core.HttpContext;
+import org.eclipse.jetty.http.HttpStatus;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
@@ -25,42 +27,17 @@ public class OAuth2AuthorizationRequestProvider extends AbstractInjectableProvid
         MultivaluedMap<String, String> queryParameters = c.getRequest().getQueryParameters();
 
         String grantType = queryParameters.getFirst("grant_type");
-        required(grantType, "OAuth2 authentication request requires a 'grant_type' query parameter.");
+        Preconditions.checkArgument(grantType != null, "OAuth2 authentication request requires a 'grant_type' query parameter.");
 
         switch (grantType) {
-            case "authorization_code":
-                return createAuthorizationCodeRequest(queryParameters);
             case "password":
-                return createPasswordRequest(queryParameters);
-            case "client_credentials":
-                return createClientCredentialsRequest(queryParameters);
+                return OAuth2AuthorizationPasswordRequest.fromQueryParameters(queryParameters);
+//            case "authorization_code":
+//                throw new WebApplicationException();
+//            case "client_credentials":
+//                throw new WebApplicationException();
             default:
-                throw new WebApplicationException();
-        }
-    }
-
-    private static OAuth2AuthorizationPasswordRequest createPasswordRequest(MultivaluedMap<String, String> queryParameters) {
-        String username = queryParameters.getFirst("username");
-        required(username, "Password grant type requires a 'username' query parameter.");
-
-        String password = queryParameters.getFirst("password");
-        required(password, "Password grant type requires a 'password' query parameter.");
-
-        return new OAuth2AuthorizationPasswordRequest(username, password);
-    }
-
-    private static OAuth2AuthorizationRequest createAuthorizationCodeRequest(MultivaluedMap<String, String> queryParameters) {
-        throw new WebApplicationException();
-    }
-
-    private static OAuth2AuthorizationRequest createClientCredentialsRequest(MultivaluedMap<String, String> queryParameters) {
-        throw new WebApplicationException();
-    }
-
-    private static void required(Object blah, String message) {
-        if (blah == null) {
-            // TODO
-            throw new WebApplicationException();
+                throw new JsonMessageException(HttpStatus.NOT_IMPLEMENTED_501, "Grant type '%s' not implemented.", grantType);
         }
     }
 }

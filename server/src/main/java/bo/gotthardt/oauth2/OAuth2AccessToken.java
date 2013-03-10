@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
  */
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OAuth2AccessToken {
     /** The access token itself. */

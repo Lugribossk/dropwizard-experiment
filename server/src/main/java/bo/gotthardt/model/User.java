@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
+@ToString(of = {"id", "username"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User implements Persistable, HasAccessTo<User> {
     @Id

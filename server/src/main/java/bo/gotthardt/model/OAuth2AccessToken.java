@@ -1,4 +1,4 @@
-package bo.gotthardt.oauth2;
+package bo.gotthardt.model;
 
 import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

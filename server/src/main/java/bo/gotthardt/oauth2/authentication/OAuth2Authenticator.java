@@ -1,6 +1,6 @@
 package bo.gotthardt.oauth2.authentication;
 
-import bo.gotthardt.oauth2.OAuth2AccessToken;
+import bo.gotthardt.model.OAuth2AccessToken;
 import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Optional;

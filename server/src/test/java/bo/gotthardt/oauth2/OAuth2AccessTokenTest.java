@@ -1,13 +1,14 @@
 package bo.gotthardt.oauth2;
 
 import bo.gotthardt.model.User;
+import bo.gotthardt.model.OAuth2AccessToken;
 import org.joda.time.Duration;
 import org.junit.Test;
 
 import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
 
 /**
- * Tests for {@link OAuth2AccessToken}.
+ * Tests for {@link bo.gotthardt.model.OAuth2AccessToken}.
  *
  * @author Bo Gotthardt
  */

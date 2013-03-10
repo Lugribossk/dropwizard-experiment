@@ -4,9 +4,7 @@ import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Person;
 import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;
-import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
-import com.avaje.ebeaninternal.server.transaction.log.JuliTransactionLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
@@ -16,8 +14,6 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
 
@@ -34,12 +30,6 @@ public class PersonEndpointTest extends ImprovedResourceTest {
     protected void setUpResources() throws Exception {
         addResource(new PersonEndpoint(ebean));
         addProvider(ListFilteringProvider.class);
-
-        // Squelch annoying loggers.
-        // TODO move to configuration somewhere.
-        Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
-        Logger.getLogger(JuliTransactionLogger.class.getName()).setLevel(Level.WARNING);
-        Logger.getLogger(Ebean.class.getName()).setLevel(Level.SEVERE);
     }
 
     @Test

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.testing.ResourceTest;
+import org.junit.Before;
 
 import javax.ws.rs.core.MediaType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,6 +16,14 @@ import javax.ws.rs.core.MediaType;
  */
 public abstract class ImprovedResourceTest extends ResourceTest {
     private final ObjectMapper MAPPER = getObjectMapperFactory().build();
+
+    @Before
+    public void blah() {
+        // Squelch annoying loggers.
+        Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
+        Logger.getLogger("com.avaje.ebeaninternal").setLevel(Level.WARNING);
+        Logger.getLogger("com.avaje.ebean.Ebean").setLevel(Level.SEVERE);
+    }
 
     protected ObjectNode createObjectNode() {
         return MAPPER.createObjectNode();

@@ -5,7 +5,7 @@ import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Optional;
 
 /**
- * An OAuth2 authorization request for an {@link bo.gotthardt.oauth2.OAuth2AccessToken}.
+ * An OAuth2 authorization request for an {@link bo.gotthardt.model.OAuth2AccessToken}.
  *
  * @author Bo Gotthardt
  */

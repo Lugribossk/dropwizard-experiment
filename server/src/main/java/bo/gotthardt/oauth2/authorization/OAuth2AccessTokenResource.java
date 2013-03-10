@@ -2,7 +2,7 @@ package bo.gotthardt.oauth2.authorization;
 
 import bo.gotthardt.api.exception.UnauthorizedException;
 import bo.gotthardt.model.User;
-import bo.gotthardt.oauth2.OAuth2AccessToken;
+import bo.gotthardt.model.OAuth2AccessToken;
 import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;

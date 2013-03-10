@@ -1,5 +1,6 @@
 package bo.gotthardt.api;
 
+import bo.gotthardt.api.exception.NotFoundException;
 import bo.gotthardt.jersey.provider.ListFiltering;
 import bo.gotthardt.Persistable;
 import com.avaje.ebean.EbeanServer;
@@ -36,7 +37,7 @@ public class RestEndpoint<P extends Persistable> {
         P item = ebean.find(type, id);
 
         if (item == null) {
-            throw new NotFoundJsonException(id);
+            throw new NotFoundException(id);
         }
 
         return item;
@@ -93,7 +94,7 @@ public class RestEndpoint<P extends Persistable> {
     private void assertExists(long id) {
         // Presumably this is (slightly) faster than retrieving the object.
         if (ebean.find(type).where().eq("id", id).findRowCount() != 1) {
-            throw new NotFoundJsonException(id);
+            throw new NotFoundException(id);
         }
     }
 }

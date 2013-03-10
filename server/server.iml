@@ -55,6 +55,7 @@
     <orderEntry type="library" name="Maven: org.avaje:ebean:2.8.1" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.h2database:h2:1.3.170" level="project" />
+    <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:0.11.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.yammer.dropwizard:dropwizard-testing:0.6.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.sun.jersey.jersey-test-framework:jersey-test-framework-core:1.15" level="project" />

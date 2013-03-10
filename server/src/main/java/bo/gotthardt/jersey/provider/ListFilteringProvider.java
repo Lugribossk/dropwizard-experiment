@@ -2,6 +2,7 @@ package bo.gotthardt.jersey.provider;
 
 import com.sun.jersey.api.core.HttpContext;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -10,7 +11,7 @@ import javax.ws.rs.ext.Provider;
  * @author Bo Gotthardt
  */
 @Provider
-public class ListFilteringProvider extends AbstractInjectableProvider<ListFiltering> {
+public class ListFilteringProvider extends AbstractInjectableProvider<Context, ListFiltering> {
     public ListFilteringProvider() {
         super(ListFiltering.class);
     }

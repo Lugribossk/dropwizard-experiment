@@ -6,17 +6,18 @@ import com.sun.jersey.server.impl.inject.AbstractHttpContextInjectable;
 import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
 
-import javax.ws.rs.core.Context;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
  * Abstract class for easily building Jetty injectable providers.
  *
  * @author Coda Hale (http://codahale.com/what-makes-jersey-interesting-injection-providers/)
+ *         Slightly modified to take the annotation as a type parameter.
  */
-public abstract class AbstractInjectableProvider<E>
+public abstract class AbstractInjectableProvider<A extends Annotation, E>
         extends AbstractHttpContextInjectable<E>
-        implements InjectableProvider<Context, Type> {
+        implements InjectableProvider<A, Type> {
 
     private final Type t;
 
@@ -25,7 +26,7 @@ public abstract class AbstractInjectableProvider<E>
     }
 
     @Override
-    public Injectable<E> getInjectable(ComponentContext ic, Context a, Type c) {
+    public Injectable<E> getInjectable(ComponentContext ic, A a, Type c) {
         if (c.equals(t)) {
             return getInjectable(ic, a);
         }
@@ -33,7 +34,7 @@ public abstract class AbstractInjectableProvider<E>
         return null;
     }
 
-    public Injectable<E> getInjectable(ComponentContext ic, Context a) {
+    public Injectable<E> getInjectable(ComponentContext ic, A a) {
         return this;
     }
 

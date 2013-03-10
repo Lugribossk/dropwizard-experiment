@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.yammer.dropwizard:dropwizard-auth:0.6.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/yammer/dropwizard/dropwizard-auth/0.6.1/dropwizard-auth-0.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/yammer/dropwizard/dropwizard-auth/0.6.1/dropwizard-auth-0.6.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/yammer/dropwizard/dropwizard-auth/0.6.1/dropwizard-auth-0.6.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

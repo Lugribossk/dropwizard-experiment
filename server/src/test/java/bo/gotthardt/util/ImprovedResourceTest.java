@@ -18,8 +18,7 @@ public abstract class ImprovedResourceTest extends ResourceTest {
     private final ObjectMapper MAPPER = getObjectMapperFactory().build();
 
     @Before
-    public void blah() {
-        // Squelch annoying loggers.
+    public void squelchSpammyLoggers() {
         Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
         Logger.getLogger("com.avaje.ebeaninternal").setLevel(Level.WARNING);
         Logger.getLogger("com.avaje.ebean.Ebean").setLevel(Level.SEVERE);

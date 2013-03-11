@@ -8,6 +8,7 @@ import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import lombok.Delegate;
 import org.fest.reflect.core.Reflection;
 
+import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -18,6 +19,8 @@ import java.io.PrintStream;
  * @author Bo Gotthardt
  */
 public class InMemoryEbeanServer implements EbeanServer {
+    private static final String SUBCLASSING_ERROR = "This configuration does not allow entity subclassing ";
+
     @Delegate(types=EbeanServer.class)
     private final EbeanServer server;
 
@@ -36,9 +39,27 @@ public class InMemoryEbeanServer implements EbeanServer {
         // Turn off SQL logging as it is rather spammy.
         config.setDebugSql(false);
 
+        // Production uses enhancement, so turn off subclassing so we will get en error up front if a test run defaults to using it.
+        config.setAllowSubclassing(false);
+
         // Set as default server in case anyone is using the Ebean singleton.
         config.setDefaultServer(true);
-        server = EbeanServerFactory.create(config);
+
+        try {
+            server = EbeanServerFactory.create(config);
+
+        } catch (PersistenceException e) {
+            // Ebean will throw this exception with a particular error message when subclassing is turned off but used anyway.
+            String message = e.getMessage();
+            if (message != null && message.contains(SUBCLASSING_ERROR)) {
+                // Rethrow as a more informative error.
+                throw new RuntimeException("A test involving Ebean has defaulted to using subclassing rather than enhancement.\n" +
+                        "  Is your IDE set up to run unit tests with the Ebean javaagent?\n" +
+                        "  Or is " + message.substring(SUBCLASSING_ERROR.length()) + " located in the wrong package?");
+            } else {
+                throw e;
+            }
+        }
 
         // Block DdlGenerator from spamming System.out by replacing its private "out" PrintStream with a dummy.
         DdlGenerator ddl = ((SpiEbeanServer) server).getDdlGenerator();

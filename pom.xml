@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>bo.gotthardt.dw</groupId>
-    <artifactId>root</artifactId>
+    <artifactId>dw-experiment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Dropwizard experiment - Root</name>
+    <name>Dropwizard experiment</name>
 
     <developers>
         <developer>

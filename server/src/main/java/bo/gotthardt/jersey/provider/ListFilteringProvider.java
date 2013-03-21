@@ -6,7 +6,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Jetty injectable provider that enables resource methods to have {@link ListFiltering} parameters.
+ * Jersey injectable provider that enables resource methods to have {@link ListFiltering} parameters.
  *
  * @author Bo Gotthardt
  */

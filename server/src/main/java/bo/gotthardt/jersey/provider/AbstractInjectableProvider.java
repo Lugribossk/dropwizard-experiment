@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract class for easily building Jetty injectable providers.
+ * Abstract class for easily building Jersey injectable providers.
  *
  * @author Coda Hale (http://codahale.com/what-makes-jersey-interesting-injection-providers/)
  *         Slightly modified to take the annotation as a type parameter.

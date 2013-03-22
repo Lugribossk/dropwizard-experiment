@@ -3,3 +3,4 @@ target
 logs
 h2-create.sql
 h2-drop.sql
+dependency-reduced-pom.xml

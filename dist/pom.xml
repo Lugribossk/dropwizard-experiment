@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>bo.gotthardt.dw</groupId>
-        <artifactId>root</artifactId>
+        <artifactId>dw-experiment</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -21,7 +21,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -34,19 +33,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
+                    <!-- Force the shade plugin to recreate the jar every time to avoid warning spam.
+                         http://stackoverflow.com/questions/8880361/superfluous-warnings-when-using-maven-shade-plugin -->
+                    <forceCreation>true</forceCreation>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>1.7.1</version>
                 <configuration>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <filters>
@@ -76,16 +76,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Force the shade plugin to recreate the jar every time to avoid warning spam.
-                 http://stackoverflow.com/questions/8880361/superfluous-warnings-when-using-maven-shade-plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <forceCreation>true</forceCreation>
-                </configuration>
             </plugin>
         </plugins>
     </build>

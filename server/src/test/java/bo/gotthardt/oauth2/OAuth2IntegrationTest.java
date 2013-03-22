@@ -26,6 +26,7 @@ import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
  */
 public class OAuth2IntegrationTest extends ImprovedResourceTest {
     private final EbeanServer ebean = new InMemoryEbeanServer();
+    private final User user = createUser();
 
     @Override
     protected void setUpResources() throws Exception {
@@ -38,9 +39,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldCreateAndSendTokenThatIdentifiesUser() {
-        User user = createUser();
-
-        ClientResponse response = POST("/token/?grant_type=password&username=test&password=blah", null);
+        ClientResponse response = POST("/token/?grant_type=password&username=testuser&password=testpass", null);
         assertThat(response).hasStatus(Response.Status.OK);
 
         OAuth2AccessToken token = response.getEntity(OAuth2AccessToken.class);
@@ -51,9 +50,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldNotCreateTokenForInvalidCredentials() {
-        User user = createUser();
-
-        assertThat(POST("/token/?grant_type=password&username=test&password=WRONGPASSWORD", null))
+        assertThat(POST("/token/?grant_type=password&username=testuser&password=WRONGPASSWORD", null))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
         assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
@@ -62,7 +59,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldNotCreateTokenForNonexistentCredentials() {
-        assertThat(POST("/token/?grant_type=password&username=test&password=blah", null))
+        assertThat(POST("/token/?grant_type=password&username=DOESNOTEXIST&password=testpass", null))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
         assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
@@ -76,37 +73,29 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
     }
 
     @Test
-    public void should400WhenGrantTypePasswordMissingUsername() {
-        User user = createUser();
-
-        assertThat(POST("/token/?grant_type=password&password=blah", null))
+    public void should400WhenGrantTypePasswordIsMissingUsername() {
+        assertThat(POST("/token/?grant_type=password&password=testpass", null))
                 .hasStatus(Response.Status.BAD_REQUEST);
 
     }
 
     @Test
-    public void should400WhenGrantTypePasswordMissingPassword() {
-        User user = createUser();
-
-        assertThat(POST("/token/?grant_type=password&username=test", null))
+    public void should400WhenGrantTypePasswordIsMissingPassword() {
+        assertThat(POST("/token/?grant_type=password&username=testuser", null))
                 .hasStatus(Response.Status.BAD_REQUEST);
 
     }
 
     @Test
     public void shouldRefuseNonAuthorizedAccessToAuthProtectedResource() {
-        User user = createUser();
-
         assertThat(GET("/users/" + user.getId()))
                 .hasStatus(Response.Status.UNAUTHORIZED);
     }
 
     @Test
     public void shouldRefuseUnauthorizedAccessToAuthProtectedResource() {
-        User user = createUser();
-
         ClientResponse response = client().resource("/users/" + user.getId())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer qwerty")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer WRONGTOKEN")
                 .get(ClientResponse.class);
 
         assertThat(response)
@@ -115,9 +104,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldAllowAuthorizedAccessToProtectedResource() {
-        User user = createUser();
-
-        OAuth2AccessToken token = POST("/token/?grant_type=password&username=test&password=blah", null).getEntity(OAuth2AccessToken.class);
+        OAuth2AccessToken token = POST("/token/?grant_type=password&username=testuser&password=testpass", null).getEntity(OAuth2AccessToken.class);
 
         ClientResponse response = client().resource("/users/" + user.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
@@ -130,8 +117,6 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldInvalidateTokens() {
-        User user = createUser();
-
         OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
         ebean.save(token);
 
@@ -144,7 +129,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
     }
 
     private User createUser() {
-        User user = new User("test", "blah");
+        User user = new User("testuser", "testpass");
         ebean.save(user);
         return user;
     }

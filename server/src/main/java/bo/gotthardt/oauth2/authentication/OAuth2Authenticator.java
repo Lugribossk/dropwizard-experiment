@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Dropwizard {@link Authenticator} that authenticates {@link OAuth2AccessToken} into {@link User}s.
+ * Dropwizard {@link Authenticator} that authenticates {@link OAuth2AccessToken}s into {@link User}s.
  * <br/><br/>
  * The tokens are provided as the String value extracted from the Authorization header.
  *

@@ -70,15 +70,25 @@
                             <arguments>
                                 <argument>maven-test</argument>
                             </arguments>
+                            <environmentVariables>
+                                <PHANTOMJS_BIN>${phantomjs_bin}</PHANTOMJS_BIN>
+                            </environmentVariables>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <!-- Run the resource plugin again so the generated sources will be picked up. By default it runs before the compile phase generates the sources. -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
+                    <!-- Disable the default resource plugin execution as it runs before the compile phase where we generate the JS sources. -->
+                    <execution>
+                        <id>default-resources</id>
+                        <phase>none</phase>
+                    </execution>
+
+                    <!-- And run it in the compile phase instead. -->
                     <execution>
                         <id>grunt-resources</id>
                         <phase>compile</phase>
@@ -91,8 +101,9 @@
         </plugins>
     </build>
 
-    <!-- The exec plugin requires the full filenames for executables, which are different per platform.
-         So use profiles to define a property with the correct value. -->
+    <!-- The exec plugin requires the full filename with .cmd on Windows for npm and grunt.
+         And PhantomJS uses two completely different executables.
+         So use profiles to define properties with the correct values. -->
     <profiles>
         <profile>
             <id>windows</id>
@@ -103,6 +114,7 @@
             </activation>
             <properties>
                 <executable>.cmd</executable>
+                <phantomjs_bin>node_modules\phantomjs\lib\phantom\phantomjs.exe</phantomjs_bin>
             </properties>
         </profile>
 
@@ -114,7 +126,8 @@
                 </os>
             </activation>
             <properties>
-                <executable>.sh</executable>
+                <executable/>
+                <phantomjs_bin>node_modules\phantomjs\bin\phantomjs</phantomjs_bin><!-- TODO is this correct? -->
             </properties>
         </profile>
     </profiles>

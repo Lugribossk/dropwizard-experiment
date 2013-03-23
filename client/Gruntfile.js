@@ -29,12 +29,22 @@ module.exports = function (grunt) {
                     // Path to main.js, relative to the base URL
                     name: "main",
                     // Place output file here, Maven will handle the rest.
-                    out: "target/resources/assets/main.out.js",
+                    out: "target/resources/main.min.js",
                     logLevel: 1,
                     optimize: "uglify2",
                     // Must be turned off for source maps to work.
                     preserveLicenseComments: false,
                     generateSourceMaps: true
+                }
+            }
+        },
+        cssmin: {
+            compress: {
+                files: {
+                    "target/resources/css/main.css": ["src/main/css/**/*.css"]
+                },
+                options: {
+                    report: "min"
                 }
             }
         }/*,
@@ -56,13 +66,16 @@ module.exports = function (grunt) {
         }*/
     });
 
+    // TODO consider using grunt-combine to generate index.html from dev.html
+
     grunt.loadNpmTasks("grunt-jslint");
     grunt.loadNpmTasks("grunt-requirejs");
+    grunt.loadNpmTasks("grunt-contrib-cssmin");
 
-    grunt.registerTask("default", ["jslint", "requirejs"]);
+    grunt.registerTask("default", ["jslint", "requirejs", "cssmin"]);
 
     // Maven will run this task in the compile phase.
-    grunt.registerTask("maven-compile", ["requirejs"]);
+    grunt.registerTask("maven-compile", ["requirejs", "cssmin"]);
     // Maven will run this task in the test phase.
     grunt.registerTask("maven-test", ["jslint"]);
 };

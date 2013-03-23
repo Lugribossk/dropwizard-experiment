@@ -1,0 +1,1 @@
+java -jar target/dist-0.0.1-SNAPSHOT.jar server ../server/src/main/resources/configuration.yml

@@ -28,6 +28,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm Z</maven.build.timestamp.format>
 
+        <!-- Assign the build timestamp to a new property to work around a Maven bug (http://jira.codehaus.org/browse/MRESOURCES-99).-->
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+
         <dropwizard.version>0.6.2</dropwizard.version>
         <ebean.version>2.8.1</ebean.version>
     </properties>

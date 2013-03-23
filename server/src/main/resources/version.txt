@@ -1,1 +1,1 @@
-${project.version}, ${maven.build.timestamp}
+${project.version}, ${build.timestamp}

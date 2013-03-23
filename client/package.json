@@ -1,0 +1,13 @@
+{
+    "name": "blah",
+    "version": "0.0.1",
+    "private": true,
+    "devDependencies": {
+        "grunt": "~0.4.0",
+        "grunt-jslint": "~0.2.5",
+        "grunt-requirejs": "~0.3.4",
+        "karma": "~0.8.0",
+        "grunt-karma": "~0.3.0",
+        "phantomjs": "~1.8.1-3"
+    }
+}

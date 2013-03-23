@@ -11,4 +11,111 @@
 
     <artifactId>client</artifactId>
     <name>Dropwizard experiment - Client</name>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- Also include the generated Javascript sources as jar resources. -->
+            <resource>
+                <directory>target/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <!-- Ensure that npm dependencies are installed. TODO does not install grunt-cli, install manually on build server?-->
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm${executable}</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- Run the Grunt compile phase goal. -->
+                    <execution>
+                        <id>grunt-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>grunt${executable}</executable>
+                            <arguments>
+                                <argument>maven-compile</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- Run the Grunt test phase goal. -->
+                    <execution>
+                        <id>grunt-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>grunt${executable}</executable>
+                            <arguments>
+                                <argument>maven-test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Run the resource plugin again so the generated sources will be picked up. By default it runs before the compile phase generates the sources. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>grunt-resources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- The exec plugin requires the full filenames for executables, which are different per platform.
+         So use profiles to define a property with the correct value. -->
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <executable>.cmd</executable>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>nix</id>
+            <activation>
+                <os>
+                    <family>!windows</family>
+                </os>
+            </activation>
+            <properties>
+                <executable>.sh</executable>
+            </properties>
+        </profile>
+    </profiles>
 </project>

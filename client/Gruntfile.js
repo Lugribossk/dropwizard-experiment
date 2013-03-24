@@ -47,10 +47,10 @@ module.exports = function (grunt) {
                     report: "min"
                 }
             }
-        }/*,
-        testacular: {
+        },
+        karma: {
             options: {
-                configFile: "testacular.conf.js"
+                configFile: "karma.conf.js"
             },
             unit: {
             },
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
                     dir: "target/coverage/"
                 }
             }
-        }*/
+        }
     });
 
     // TODO consider using grunt-combine to generate index.html from dev.html
@@ -71,11 +71,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-jslint");
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
+    grunt.loadNpmTasks("grunt-karma");
 
     grunt.registerTask("default", ["jslint", "requirejs", "cssmin"]);
 
-    // Maven will run this task in the compile phase.
+    // Maven will run these tasks in the named phase.
     grunt.registerTask("maven-compile", ["requirejs", "cssmin"]);
-    // Maven will run this task in the test phase.
-    grunt.registerTask("maven-test", ["jslint"]);
+    // The PHANTOMJS_BIN environment variable must be set, Maven takes care of this.
+    grunt.registerTask("maven-test", ["jslint", "karma:ci"]);
 };

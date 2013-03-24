@@ -13,7 +13,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/img" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target/coverage" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>

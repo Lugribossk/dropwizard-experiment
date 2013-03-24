@@ -58,7 +58,7 @@ module.exports = function (grunt) {
             },
             ci: {
                 singleRun: true,
-                reporters: ["progress", "coverage", "junit"],
+                reporters: ["progress", "coverage", "junit", "teamcity"],
                 browsers: ["PhantomJS"],
                 coverageReporter: {
                     type: "cobertura",

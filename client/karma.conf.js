@@ -34,7 +34,3 @@ coverageReporter = {
     type: "html",
     dir: "target/coverage/"
 };
-
-junitReporter = {
-    outputFile: "target/test-results.xml"
-};

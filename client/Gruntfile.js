@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                 predef: ["define"]
             },
             options: {
-                checkstyle: "target/jslint.xml"
+                junit: "target/jslint-junit.xml"
             }
         },
         requirejs: {
@@ -61,6 +61,9 @@ module.exports = function (grunt) {
                 coverageReporter: {
                     type: "cobertura",
                     dir: "target/coverage/"
+                },
+                junitReporter: {
+                    outputFile: "target/karma-junit.xml"
                 }
             }
         }
@@ -73,7 +76,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-karma");
 
-    grunt.registerTask("default", ["jslint", "requirejs", "cssmin"]);
+    grunt.registerTask("default", ["jslint", "cssmin"]);
 
     // Maven will run these tasks in the named phase.
     grunt.registerTask("maven-compile", ["requirejs", "cssmin"]);

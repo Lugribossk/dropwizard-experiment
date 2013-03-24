@@ -10,8 +10,6 @@ files = [
     // Serve all code and tests, but do not include and execute it in the served html page.
     {pattern: "src/main/javascript/**/*.js", included: false},
     {pattern: "src/test/javascript/**/*.js", included: false}
-
-    // TODO should css be included?
 ];
 
 preprocessors = {

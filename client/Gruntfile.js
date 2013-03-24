@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             options: {
                 jslintXml: "target/jslint.xml",
                 junit: "target/jslint-junit.xml",
-                checkstyle: "target/jslint-checkstyle.xml"
+                checkstyle: "target/checkstyle-result.xml"
             }
         },
         requirejs: {
@@ -58,14 +58,14 @@ module.exports = function (grunt) {
             },
             ci: {
                 singleRun: true,
-                reporters: ["progress", "coverage", "junit", "teamcity"],
+                reporters: ["progress", "coverage", "junit"],
                 browsers: ["PhantomJS"],
                 coverageReporter: {
                     type: "cobertura",
                     dir: "target/coverage/"
                 },
                 junitReporter: {
-                    outputFile: "target/karma-junit.xml"
+                    outputFile: "target/surefire-reports/karma-junit.xml"
                 }
             }
         }

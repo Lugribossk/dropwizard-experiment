@@ -10,7 +10,7 @@ define(["angular"],
                 replace: true,
                 template: "<div>Hello world</div>"
             };
-        });
+        })
 
         return app;
     });

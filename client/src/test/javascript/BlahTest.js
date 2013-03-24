@@ -5,7 +5,7 @@ define([],
 
         describe("Blah", function () {
             it("should work", function () {
-                expect(true).toBe(true);
+                expect(false).toBe(true);
             });
         });
     });

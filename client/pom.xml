@@ -76,6 +76,9 @@
                             <executable>grunt${executable}</executable>
                             <arguments>
                                 <argument>maven-test</argument>
+                                <!-- Force Grunt to continue on failures so we always collect both JSLint and unit test information.
+                                     This also causes it to exit with code 0 on failures so that Maven does not immediately count it as a failed build. -->
+                                <argument>--force</argument>
                             </arguments>
                             <environmentVariables>
                                 <PHANTOMJS_BIN>${phantomjs_bin}</PHANTOMJS_BIN>

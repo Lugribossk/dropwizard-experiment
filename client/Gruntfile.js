@@ -16,7 +16,9 @@ module.exports = function (grunt) {
                 predef: ["define"]
             },
             options: {
-                junit: "target/jslint-junit.xml"
+                jslintXml: "target/jslint.xml",
+                junit: "target/jslint-junit.xml",
+                checkstyle: "target/jslint-checkstyle.xml"
             }
         },
         requirejs: {

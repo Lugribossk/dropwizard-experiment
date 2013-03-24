@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             options: {
                 jslintXml: "target/jslint.xml",
                 junit: "target/jslint-junit.xml",
-                checkstyle: "target/checkstyle-result.xml"
+                checkstyle: "target/jslint-checkstyle.xml"
             }
         },
         requirejs: {
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
                     dir: "target/coverage/"
                 },
                 junitReporter: {
-                    outputFile: "target/surefire-reports/karma-junit.xml"
+                    outputFile: "target/karma-junit.xml"
                 }
             }
         }

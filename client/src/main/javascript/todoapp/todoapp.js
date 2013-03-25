@@ -1,16 +1,16 @@
-define(["angular"],
-    function (angular) {
+define(["angular", "bootstrap/Bootstrap"],
+    function (angular, Bootstrap) {
         "use strict";
 
-        var app = angular.module("todoapp", []);
+        var app = angular.module("todoapp", [Bootstrap.name]);
 
         app.directive("todoapp", function () {
             return {
                 restrict: "E",
                 replace: true,
-                template: "<div>Hello world</div>"
+                template: "<div><icon volume-up/> Hello world</div>"
             };
-        })
+        });
 
         return app;
     });

@@ -1,7 +1,12 @@
 /*global require, document*/
-require(["angular", "todoapp/todoapp"],
-    function (angular, todoapp) {
+/**
+ * RequireJS main function that manually bootstraps the Angular app module.
+ *
+ * @author Bo Gotthardt
+ */
+require(["angular", "todoapp/TodoApp"],
+    function (angular, TodoApp) {
         "use strict";
 
-        angular.bootstrap(document.body, [todoapp.name]);
+        angular.bootstrap(document.body, [TodoApp.name]);
     });

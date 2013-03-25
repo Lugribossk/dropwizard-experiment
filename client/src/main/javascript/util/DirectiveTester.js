@@ -22,16 +22,17 @@ define(["angular", "angular-mocks"],
          */
         DirectiveTester.prototype.compile = function (html) {
             angular.mock.module(this.module.name);
-            var ele;
+            var element;
 
+            // See https://github.com/vojtajina/ng-directive-testing
             angular.mock.inject(function ($rootScope, $compile) {
                 // It seems like the directive html must be wrapped in a div or compiling it will not change it.
-                ele = angular.element("<div>" + html + "</div>");
-                $compile(ele)($rootScope);
+                element = angular.element("<div>" + html + "</div>");
+                $compile(element)($rootScope);
                 $rootScope.$digest();
             });
 
-            return ele.children();
+            return element.children();
         };
 
         return DirectiveTester;

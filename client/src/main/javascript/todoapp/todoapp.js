@@ -2,7 +2,7 @@ define(["angular", "bootstrap/Bootstrap"],
     function (angular, Bootstrap) {
         "use strict";
 
-        var app = angular.module("todoapp", [Bootstrap.name]);
+        var app = angular.module("TodoApp", [Bootstrap.name]);
 
         app.directive("todoapp", function () {
             return {

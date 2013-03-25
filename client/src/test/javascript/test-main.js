@@ -12,7 +12,8 @@
             jquery: "lib/jquery-1.9.1",
             angular: "lib/angular",
             "angular-mocks": "lib/angular-mocks",
-            customMatchers: "/base/src/test/javascript/customMatchers"
+            customMatchers: "/base/src/test/javascript/customMatchers",
+            "jasmine-jquery": "lib/jasmine-jquery"
         },
         shim: {
             angular: {
@@ -30,14 +31,14 @@
         return (/Test\.js$/).test(file);
     });
 
-    require(["customMatchers", "angular-mocks"], function (customMatchers) {
+    require(["customMatchers", "angular-mocks", "jasmine-jquery"], function (customMatchers) {
         // Add the Jasmine custom matchers globally so we don't have to do it in every test.
         beforeEach(function () {
             this.addMatchers(customMatchers);
         });
 
         require(allTests, function () {
-            // Start the test run, nested inside another require call so we know that the two dependencies above have loaded.
+            // Start the test run, nested inside another require call so we know that the above dependencies have been loaded.
             window.__karma__.start();
         });
     });

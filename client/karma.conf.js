@@ -22,7 +22,7 @@ reporters = ["progress", "coverage"];
 logLevel = LOG_DEBUG;
 
 // Don't forget to set the CHROME_BIN environment variable.
-browsers = ["Chrome"];
+//browsers = ["Chrome"];
 
 captureTimeout = 20000;
 

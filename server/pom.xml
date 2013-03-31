@@ -81,7 +81,7 @@
     <dependencies>
         <dependency>
             <groupId>bo.gotthardt.dw</groupId>
-            <artifactId>client</artifactId>
+            <artifactId>frontend</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

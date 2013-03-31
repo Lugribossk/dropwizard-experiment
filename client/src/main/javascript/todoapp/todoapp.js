@@ -1,16 +1,31 @@
-define(["angular", "bootstrap/Bootstrap"],
-    function (angular, Bootstrap) {
+define(["angular", "todoapp/TodoAppInternal", "todoapp/LoginManager", "todoapp/MainView", "login/LoginView"],
+    function (angular, module, LoginManager, MainView, LoginView) {
         "use strict";
 
-        var app = angular.module("TodoApp", [Bootstrap.name]);
+        function todoAppController(scope, loginManager) {
+            scope.loginManager = loginManager;
+        }
 
-        app.directive("todoapp", function () {
+        todoAppController.$inject = ["$scope", "loginManager"];
+
+
+        module.directive("todoapp", function () {
             return {
                 restrict: "E",
                 replace: true,
-                template: "<div><icon volume-up/> Hello world</div>"
+                controller: todoAppController,
+                template:   "<div>" +
+                                "<div ng-switch='loginManager.loggedIn'>" +
+                                    "<mainview ng-switch-when='true'/>" +
+                                    "<login ng-switch-default/>" +
+                                "</div>" +
+                            "</div>"
             };
         });
 
-        return app;
+        module.factory("loginManager", ["$rootScope", function (scope) {
+            return new LoginManager(scope);
+        }]);
+
+        return module;
     });

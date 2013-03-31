@@ -70,7 +70,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>bo.gotthardt.application.ApiApplication</mainClass>
+                                    <mainClass>bo.gotthardt.application.TodoApplication</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -88,7 +88,7 @@
         </dependency>
         <dependency>
             <groupId>bo.gotthardt.dw</groupId>
-            <artifactId>server</artifactId>
+            <artifactId>api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

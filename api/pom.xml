@@ -9,8 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>server</artifactId>
-    <name>Dropwizard experiment - Server</name>
+    <artifactId>api</artifactId>
+    <name>Dropwizard experiment - API</name>
 
     <build>
         <resources>

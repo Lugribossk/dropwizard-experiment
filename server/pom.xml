@@ -9,11 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>dist</artifactId>
+    <artifactId>server</artifactId>
     <packaging>jar</packaging>
-    <name>Dropwizard experiment - Distribution</name>
-    <description>Dummy project to handle building a jar that combines client and server.
-        Having server simply depend on client would require it to be recompiled to deploy client changes.</description>
+    <name>Dropwizard experiment - Server</name>
 
     <build>
         <plugins>

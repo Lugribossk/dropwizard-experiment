@@ -18,9 +18,9 @@
     </developers>
 
     <modules>
-        <module>client</module>
+        <module>frontend</module>
         <module>server</module>
-        <module>dist</module>
+        <module>api</module>
     </modules>
 
     <properties>

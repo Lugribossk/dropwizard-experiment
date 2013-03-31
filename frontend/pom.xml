@@ -9,8 +9,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>client</artifactId>
-    <name>Dropwizard experiment - Client</name>
+    <artifactId>frontend</artifactId>
+    <name>Dropwizard experiment - Frontend</name>
 
     <properties>
         <!-- Place all resources under this folder in the jar. -->

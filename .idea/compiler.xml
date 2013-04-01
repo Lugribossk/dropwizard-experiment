@@ -33,6 +33,7 @@
       <module name="client" target="1.7" />
       <module name="dist" target="1.7" />
       <module name="dropwizard-experiment" target="1.7" />
+      <module name="dw-experiment" target="1.7" />
       <module name="frontend" target="1.7" />
       <module name="server" target="1.7" />
     </bytecodeTargetLevel>

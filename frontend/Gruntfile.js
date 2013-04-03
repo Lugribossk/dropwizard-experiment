@@ -6,7 +6,8 @@ module.exports = function (grunt) {
         jslint: {
             files: ["src/main/javascript/**/*.js",
                     "src/test/javascript/**/*.js",
-                    "Gruntfile.js"],
+                    "Gruntfile.js",
+                    "package.json"],
             exclude: ["src/main/javascript/lib/*.js"],
             directives: {
                 plusplus: true,

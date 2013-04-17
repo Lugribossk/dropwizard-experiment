@@ -1,7 +1,7 @@
 package bo.gotthardt.api;
 
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
-import bo.gotthardt.model.Person;
+import bo.gotthardt.model.Widget;
 import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;
 import com.avaje.ebean.EbeanServer;
@@ -19,84 +19,84 @@ import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
 
 
 /**
- * Tests for {@link bo.gotthardt.api.PersonEndpoint}.
+ * Tests for {@link WidgetResource}.
  *
  * @author Bo Gotthardt
  */
-public class PersonEndpointTest extends ImprovedResourceTest {
+public class WidgetEndpointTest extends ImprovedResourceTest {
     private final EbeanServer ebean = new InMemoryEbeanServer();
 
     @Override
     protected void setUpResources() throws Exception {
-        addResource(new PersonEndpoint(ebean));
+        addResource(new WidgetResource(ebean));
         addProvider(ListFilteringProvider.class);
     }
 
     @Test
     public void shouldGetOneItem() {
-        Person p = new Person("Test");
+        Widget p = new Widget("Test");
         ebean.save(p);
 
-        assertThat(GET("/persons/" + p.getId()))
+        assertThat(GET("/widgets/" + p.getId()))
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(p);
     }
 
     @Test
     public void should404WhenOneItemNotFound() {
-        assertThat(GET("/persons/1"))
+        assertThat(GET("/widgets/1"))
                 .hasStatus(Response.Status.NOT_FOUND)
                 .hasContentType(MediaType.APPLICATION_JSON_TYPE);
     }
 
     @Test
     public void shouldGetAllItems() {
-        Person p1 = new Person("Test1");
+        Widget p1 = new Widget("Test1");
         ebean.save(p1);
-        Person p2 = new Person("Test2");
+        Widget p2 = new Widget("Test2");
         ebean.save(p2);
 
-        assertThat(GET("/persons"))
+        assertThat(GET("/widgets"))
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(ImmutableList.of(p1, p2));
     }
 
     @Test
     public void shouldGetItemsMatchingQuery() {
-        Person p1 = new Person("Test1");
+        Widget p1 = new Widget("Test1");
         ebean.save(p1);
-        Person p2 = new Person("Test2");
+        Widget p2 = new Widget("Test2");
         ebean.save(p2);
 
-        assertThat(GET("/persons?q=2"))
+        assertThat(GET("/widgets?q=2"))
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(ImmutableList.of(p2));
     }
 
     @Test
     public void shouldGetItemsAccordingToLimitAndOffest() {
-        Person p1 = new Person("Test1");
+        Widget p1 = new Widget("Test1");
         ebean.save(p1);
-        Person p2 = new Person("Test2");
+        Widget p2 = new Widget("Test2");
         ebean.save(p2);
-        Person p3 = new Person("Test3");
+        Widget p3 = new Widget("Test3");
         ebean.save(p3);
 
-        assertThat(GET("/persons?limit=1&offset=1"))
+        assertThat(GET("/widgets?limit=1&offset=1"))
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(ImmutableList.of(p2));
     }
 
     @Test
     public void shouldGetAllItemsWhenLimitIs0() {
-        Person p1 = new Person("Test1");
+        Widget p1 = new Widget("Test1");
         ebean.save(p1);
-        Person p2 = new Person("Test2");
+        Widget p2 = new Widget("Test2");
         ebean.save(p2);
-        Person p3 = new Person("Test3");
+        Widget p3 = new Widget("Test3");
         ebean.save(p3);
 
-        assertThat(GET("/persons?limit=0&offset=1"))
+        assertThat(GET("/widgets?limit=0&offset=1"))
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(ImmutableList.of(p1, p2, p3));
     }
@@ -106,23 +106,23 @@ public class PersonEndpointTest extends ImprovedResourceTest {
         ObjectNode input = createObjectNode();
         input.put("name", "Test1");
 
-        assertThat(POST("/persons", input))
+        assertThat(POST("/widgets", input))
                 .hasStatus(Response.Status.OK);
 
-        List<Person> savedItems = ebean.find(Person.class).findList();
+        List<Widget> savedItems = ebean.find(Widget.class).findList();
         assertThat(savedItems).hasSize(1);
         assertThat(savedItems.get(0).getName()).isEqualTo("Test1");
     }
 
     @Test
     public void shouldUpdatePuttedItem() {
-        Person p = new Person("Test1");
+        Widget p = new Widget("Test1");
         ebean.save(p);
 
         ObjectNode input = createObjectNode();
         input.put("name", "Test2");
 
-        ClientResponse response = PUT("/persons/" + p.getId(), input);
+        ClientResponse response = PUT("/widgets/" + p.getId(), input);
         ebean.refresh(p);
 
         assertThat(response)
@@ -133,7 +133,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
 
     @Test
     public void shouldNotOverwriteIdFromPuttedItem() {
-        Person p = new Person("Test1");
+        Widget p = new Widget("Test1");
         ebean.save(p);
         long oldId = p.getId();
 
@@ -141,7 +141,7 @@ public class PersonEndpointTest extends ImprovedResourceTest {
         input.put("name", "Test2");
         input.put("id", oldId + 100);
 
-        ClientResponse response = PUT("/persons/" + oldId, input);
+        ClientResponse response = PUT("/widgets/" + oldId, input);
         ebean.refresh(p);
 
         assertThat(response)

@@ -16,14 +16,14 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Person implements Persistable {
+public class Widget implements Persistable {
     @Id
     private long id;
 
     @NotEmpty
     private String name;
 
-    public Person(String name) {
+    public Widget(String name) {
         this.name = name;
     }
 }

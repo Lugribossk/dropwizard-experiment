@@ -1,7 +1,8 @@
 package bo.gotthardt.model;
 
-import bo.gotthardt.HasAccessTo;
+import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
+import bo.gotthardt.Principal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import javax.persistence.Id;
 @Setter
 @ToString(of = {"id", "username"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class User implements Persistable, HasAccessTo<User> {
+public class User implements Persistable, AccessibleBy<User>, Principal {
     @Id
     private long id;
     private String username;
@@ -35,7 +36,7 @@ public class User implements Persistable, HasAccessTo<User> {
     }
 
     @Override
-    public boolean hasAccessTo(User possiblyAccessible) {
-        return id == possiblyAccessible.getId();
+    public boolean isAccessibleBy(User principal) {
+        return id == principal.getId();
     }
 }

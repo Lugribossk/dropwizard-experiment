@@ -31,7 +31,7 @@ public class UserResource {
             throw new NotFoundException(id);
         }
 
-        if (!user.hasAccessTo(item)) {
+        if (!item.isAccessibleBy(user)) {
             throw new UnauthorizedException();
         }
 

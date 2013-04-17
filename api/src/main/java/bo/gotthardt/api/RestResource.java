@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
-public class RestEndpoint<P extends Persistable> {
+public class RestResource<P extends Persistable> {
     private final Class<P> type;
     private final EbeanServer ebean;
 
@@ -91,7 +91,7 @@ public class RestEndpoint<P extends Persistable> {
      *
      * @param id the object ID
      */
-    private void assertExists(long id) {
+    protected void assertExists(long id) {
         // Presumably this is (slightly) faster than retrieving the object.
         if (ebean.find(type).where().eq("id", id).findRowCount() != 1) {
             throw new NotFoundException(id);

@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.time.DateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -27,9 +29,10 @@ public class TodoList implements Persistable, AccessibleBy<User> {
     @Id
     private long id;
     private String name;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<TodoItem> items = Lists.newArrayList();
     private DateTime creationDate = DateTime.now();
+    @ManyToOne
     @JsonIgnore
     private User owner;
 

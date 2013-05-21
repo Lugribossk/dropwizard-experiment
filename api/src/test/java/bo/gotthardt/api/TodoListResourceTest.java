@@ -33,12 +33,8 @@ public class TodoListResourceTest extends ImprovedResourceTest {
         authProvider.setUser(user);
 
         TodoList list = new TodoList("testlist", user);
-        TodoItem item1 = new TodoItem("testitem1");
-        TodoItem item2 = new TodoItem("testitem2");
-        list.getItems().add(item1);
-        list.getItems().add(item2);
-        ebean.save(item1);
-        ebean.save(item2);
+        list.getItems().add(new TodoItem("testitem1"));
+        list.getItems().add(new TodoItem("testitem2"));
         ebean.save(list);
 
         assertThat(GET("/todolists/" + list.getId()))

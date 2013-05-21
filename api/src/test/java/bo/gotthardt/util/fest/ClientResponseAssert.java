@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
+
 /**
  * @author Bo Gotthardt
  */
@@ -41,6 +43,7 @@ public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, C
     public ClientResponseAssert hasContentType(MediaType type) {
         isNotNull();
 
+        assertThat(actual.getType()).isNotNull();
         compare(actual.getType().getType(), type.getType(), "Content type");
 
         return this;

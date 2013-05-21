@@ -8,8 +8,8 @@ import javax.ws.rs.Path;
 /**
  * @author Bo Gotthardt
  */
-@Path("/todolist")
-public class TodoListResource extends RestrictedRestResource<TodoList> {
+@Path("/todolists")
+public class TodoListResource extends RestResource<TodoList> {
     public TodoListResource(EbeanServer ebean) {
         super(TodoList.class, ebean);
     }

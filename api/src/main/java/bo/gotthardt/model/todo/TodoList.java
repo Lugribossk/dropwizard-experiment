@@ -3,6 +3,7 @@ package bo.gotthardt.model.todo;
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,10 +30,16 @@ public class TodoList implements Persistable, AccessibleBy<User> {
     @OneToMany
     private List<TodoItem> items = Lists.newArrayList();
     private DateTime creationDate = DateTime.now();
+    @JsonIgnore
     private User owner;
 
-    public TodoList(String name) {
+    public TodoList(String name, User owner) {
         this.name = name;
+        this.owner = owner;
+    }
+
+    public void addItem(String name) {
+        items.add(new TodoItem(name));
     }
 
     @Override

@@ -3,6 +3,7 @@ package bo.gotthardt.model.todo;
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,8 @@ public class TodoItem implements Persistable, AccessibleBy<User> {
     private String name;
     private boolean completed = false;
     @ManyToOne
-    private TodoList list;
+    @JsonIgnore
+    private TodoList todoList;
 
     public TodoItem(String name) {
         this.name = name;
@@ -33,6 +35,6 @@ public class TodoItem implements Persistable, AccessibleBy<User> {
 
     @Override
     public boolean isAccessibleBy(User principal) {
-        return list.getOwner().getId() == principal.getId();
+        return todoList.getOwner().getId() == principal.getId();
     }
 }

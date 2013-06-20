@@ -26,7 +26,7 @@
                 <groupId>org.avaje</groupId>
                 <artifactId>ebean-maven-enhancement-plugin</artifactId>
                 <configuration>
-                    <packages>bo.gotthardt.model</packages>
+                    <packages>bo.gotthardt.model.*</packages>
                     <transformArgs>debug=1</transformArgs>
                     <classSource>${project.build.outputDirectory}</classSource>
                     <classDestination>${project.build.outputDirectory}</classDestination>

@@ -55,7 +55,7 @@ public class InMemoryEbeanServer implements EbeanServer {
                 // Rethrow as a more informative error.
                 throw new RuntimeException("A test involving Ebean has defaulted to using subclassing rather than enhancement.\n" +
                         "  Is your IDE set up to run unit tests with the Ebean javaagent?\n" +
-                        "  Or is " + message.substring(SUBCLASSING_ERROR.length()) + " located in the wrong package?");
+                        "  Or is " + message.substring(SUBCLASSING_ERROR.length()) + " located in a package that the ebean-maven-enhancement plugin is not configured for?");
             } else {
                 throw e;
             }

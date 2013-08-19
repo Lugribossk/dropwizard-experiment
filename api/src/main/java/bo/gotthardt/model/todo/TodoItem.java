@@ -4,14 +4,14 @@ import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Reference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.bson.types.ObjectId;
 
 /**
  * @author Bo Gotthardt
@@ -22,10 +22,10 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TodoItem implements Persistable, AccessibleBy<User> {
     @Id
-    private long id;
+    private ObjectId id;
     private String name;
     private boolean completed = false;
-    @ManyToOne
+    @Reference
     @JsonIgnore
     private TodoList todoList;
 

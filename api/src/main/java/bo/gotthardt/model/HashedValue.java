@@ -4,15 +4,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.persistence.Embeddable;
-
 /**
  * A securely hashed value suitable for storing passwords.
  *
  * @see <a href="http://codahale.com/how-to-safely-store-a-password/">How To Safely Store A Password</a>
  * @author Bo Gotthardt
  */
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HashedValue {
     private String hashedValue;

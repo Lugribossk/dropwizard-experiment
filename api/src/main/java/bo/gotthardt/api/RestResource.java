@@ -1,12 +1,13 @@
 package bo.gotthardt.api;
 
+import bo.gotthardt.Persistable;
 import bo.gotthardt.api.exception.NotFoundException;
 import bo.gotthardt.jersey.provider.ListFiltering;
-import bo.gotthardt.Persistable;
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.Query;
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.query.Query;
 import com.yammer.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -28,13 +29,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestResource<P extends Persistable> {
     private final Class<P> type;
-    private final EbeanServer ebean;
+    private final Datastore ds;
 
     @GET
     @Path("/{id}")
     @Timed
-    public P one(@PathParam("id") long id) {
-        P item = ebean.find(type, id);
+    public P one(@PathParam("id") ObjectId id) {
+        P item = ds.get(type, id);
 
         if (item == null) {
             throw new NotFoundException(id);
@@ -45,17 +46,17 @@ public class RestResource<P extends Persistable> {
 
     @GET
     public List<P> many(@Context ListFiltering filtering) {
-        Query<P> dbQuery = ebean.find(type);
+        Query<P> dbQuery = ds.find(type);
 
         filtering.applyToQuery(dbQuery);
 
-        return dbQuery.findList();
+        return dbQuery.asList();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public P create(@Valid P item) {
-        ebean.save(item);
+        ds.save(item);
 
         // TODO validation
         // TODO disallow updating sensitive properties
@@ -66,24 +67,23 @@ public class RestResource<P extends Persistable> {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public P update(@Valid P item, @PathParam("id") long id) {
-        assertExists(id);
+    public P update(@Valid P item/*, @PathParam("id") String id*/) {
+        assertExists(item.getId());
 
         // TODO validation
         // TODO disallow updating sensitive properties
 
-        item.setId(id);
-        ebean.update(item);
+        ds.save(item);
 
         return item;
     }
 
     @DELETE
     @Path("/{id}")
-    public void delete(@PathParam("id") long id) {
+    public void delete(@PathParam("id") ObjectId id) {
         assertExists(id);
 
-        ebean.delete(type, id);
+        ds.delete(type, id);
     }
 
     /**
@@ -91,9 +91,8 @@ public class RestResource<P extends Persistable> {
      *
      * @param id the object ID
      */
-    protected void assertExists(long id) {
-        // Presumably this is (slightly) faster than retrieving the object.
-        if (ebean.find(type).where().eq("id", id).findRowCount() != 1) {
+    protected void assertExists(ObjectId id) {
+        if (ds.get(type, id) == null) {
             throw new NotFoundException(id);
         }
     }

@@ -4,18 +4,17 @@ import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Reference;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.util.List;
 
 /**
@@ -27,12 +26,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TodoList implements Persistable, AccessibleBy<User> {
     @Id
-    private long id;
+    private ObjectId id;
     private String name;
-    @OneToMany(cascade = CascadeType.ALL)
+    @Reference
     private List<TodoItem> items = Lists.newArrayList();
     private DateTime creationDate = DateTime.now();
-    @ManyToOne
+    @Reference
     @JsonIgnore
     private User owner;
 

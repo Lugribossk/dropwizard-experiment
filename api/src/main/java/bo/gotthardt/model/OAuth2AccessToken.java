@@ -1,18 +1,18 @@
 package bo.gotthardt.model;
 
-import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Reference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 /**
@@ -29,14 +29,16 @@ import java.util.UUID;
 public class OAuth2AccessToken {
     /** The access token itself. */
     @Id
-    private String accessToken; // TODO hash this
+    private ObjectId id;
+
+    private String accessToken;
 
     /** The token's expiration date, after which it is no longer valid. */
     @Setter
     private DateTime expirationDate;
 
     /** The user that this token authenticates. */
-    @ManyToOne
+    @Reference
     @JsonIgnore
     private User user;
 

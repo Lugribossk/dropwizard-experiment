@@ -1,7 +1,7 @@
 package bo.gotthardt.api;
 
 import bo.gotthardt.model.todo.TodoList;
-import com.avaje.ebean.EbeanServer;
+import com.google.code.morphia.Datastore;
 
 import javax.ws.rs.Path;
 
@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
  */
 @Path("/todolists")
 public class TodoListResource extends RestrictedRestResource<TodoList> {
-    public TodoListResource(EbeanServer ebean) {
-        super(TodoList.class, ebean);
+    public TodoListResource(Datastore ds) {
+        super(TodoList.class, ds);
     }
 }

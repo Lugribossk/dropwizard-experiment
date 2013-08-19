@@ -1,9 +1,11 @@
 package bo.gotthardt;
 
+import org.bson.types.ObjectId;
+
 /**
  * @author Bo Gotthardt
  */
 public interface Persistable {
-    long getId();
-    void setId(long id);
+    ObjectId getId();
+    void setId(ObjectId id);
 }

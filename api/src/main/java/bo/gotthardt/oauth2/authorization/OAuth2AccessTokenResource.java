@@ -1,9 +1,9 @@
 package bo.gotthardt.oauth2.authorization;
 
 import bo.gotthardt.api.exception.UnauthorizedException;
-import bo.gotthardt.model.User;
 import bo.gotthardt.model.OAuth2AccessToken;
-import com.avaje.ebean.EbeanServer;
+import bo.gotthardt.model.User;
+import com.google.code.morphia.Datastore;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.net.HttpHeaders;
@@ -35,17 +35,17 @@ import javax.ws.rs.core.MediaType;
 public class OAuth2AccessTokenResource {
     private static final Duration TOKEN_LIFETIME = Duration.standardDays(365);
 
-    private final EbeanServer ebean;
+    private final Datastore ds;
 
     @POST
     public OAuth2AccessToken token(@Context OAuth2AuthorizationRequest authRequest) {
-        Optional<User> user = authRequest.getValidUser(ebean);
+        Optional<User> user = authRequest.getValidUser(ds);
         if (!user.isPresent()) {
             throw new UnauthorizedException();
         }
 
         OAuth2AccessToken token = new OAuth2AccessToken(user.get(), TOKEN_LIFETIME);
-        ebean.save(token);
+        ds.save(token);
         log.info("Created token %s", token);
 
         return token;
@@ -55,13 +55,13 @@ public class OAuth2AccessTokenResource {
     public void delete(@Auth User user, @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader) {
         // Since the user was authenticated, we know that the header is present, valid and points to an access token owned by the user.
         String accessToken = authHeader.substring(authHeader.indexOf(" ") + 1);
-        OAuth2AccessToken token = ebean.find(OAuth2AccessToken.class, accessToken);
+        OAuth2AccessToken token = ds.find(OAuth2AccessToken.class, "accessToken", accessToken).get();
 
         Preconditions.checkNotNull(token);
         Preconditions.checkState(user.getId() == token.getUser().getId());
 
         token.setExpirationDate(DateTime.now());
-        ebean.save(token);
+        ds.save(token);
         log.info("Expired token %s", token);
     }
 }

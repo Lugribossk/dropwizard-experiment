@@ -4,15 +4,15 @@ import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.Principal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.bson.types.ObjectId;
 
 /**
  * @author Bo Gotthardt
@@ -24,7 +24,7 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User implements Persistable, AccessibleBy<User>, Principal {
     @Id
-    private long id;
+    private ObjectId id;
     private String username;
     @Embedded
     @JsonIgnore

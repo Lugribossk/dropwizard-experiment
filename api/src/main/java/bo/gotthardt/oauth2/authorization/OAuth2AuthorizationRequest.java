@@ -1,7 +1,7 @@
 package bo.gotthardt.oauth2.authorization;
 
 import bo.gotthardt.model.User;
-import com.avaje.ebean.EbeanServer;
+import com.google.code.morphia.Datastore;
 import com.google.common.base.Optional;
 
 /**
@@ -10,5 +10,5 @@ import com.google.common.base.Optional;
  * @author Bo Gotthardt
  */
 public interface OAuth2AuthorizationRequest {
-    Optional<User> getValidUser(EbeanServer ebean);
+    Optional<User> getValidUser(Datastore ds);
 }

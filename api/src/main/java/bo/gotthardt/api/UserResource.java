@@ -3,9 +3,10 @@ package bo.gotthardt.api;
 import bo.gotthardt.api.exception.NotFoundException;
 import bo.gotthardt.api.exception.UnauthorizedException;
 import bo.gotthardt.model.User;
-import com.avaje.ebean.EbeanServer;
+import com.google.code.morphia.Datastore;
 import com.yammer.dropwizard.auth.Auth;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,12 +21,12 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
 public class UserResource {
-    private final EbeanServer ebean;
+    private final Datastore ds;
 
     @GET
     @Path("/{id}")
-    public User one(@Auth User user, @PathParam("id") long id) {
-        User item = ebean.find(User.class, id);
+    public User one(@Auth User user, @PathParam("id") ObjectId id) {
+        User item = ds.get(User.class, id);
 
         if (item == null) {
             throw new NotFoundException(id);

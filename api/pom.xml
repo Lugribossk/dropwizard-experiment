@@ -21,35 +21,6 @@
         </resources>
 
         <plugins>
-            <!-- Ebean entity class "enhancement". -->
-            <plugin>
-                <groupId>org.avaje</groupId>
-                <artifactId>ebean-maven-enhancement-plugin</artifactId>
-                <configuration>
-                    <packages>bo.gotthardt.model.*</packages>
-                    <transformArgs>debug=1</transformArgs>
-                    <classSource>${project.build.outputDirectory}</classSource>
-                    <classDestination>${project.build.outputDirectory}</classDestination>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>main</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>enhance</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Fix Maven not finding Ebean test classes. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -72,12 +43,12 @@
         </dependency>
 
         <dependency>
-            <groupId>org.avaje</groupId>
-            <artifactId>ebean</artifactId>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>com.google.code.morphia</groupId>
+            <artifactId>morphia</artifactId>
         </dependency>
 
         <dependency>

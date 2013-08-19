@@ -1,6 +1,6 @@
 package bo.gotthardt.jersey.provider;
 
-import com.avaje.ebean.Query;
+import com.google.code.morphia.query.Query;
 import com.google.common.base.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,18 +31,18 @@ public class ListFiltering {
 
     public Query<?> applyToQuery(Query<?> dbQuery) {
         if (sortOrder == SortOrder.ASCENDING) {
-            dbQuery.order().asc(orderProperty);
+            dbQuery.order(orderProperty);
         } else {
-            dbQuery.order().desc(orderProperty);
+            dbQuery.order("-" + orderProperty);
         }
 
         if (limit != 0) {
-            dbQuery.setMaxRows(limit).setFirstRow(offset);
+            dbQuery.limit(limit).offset(offset);
         }
 
         if (searchQuery.isPresent()) {
             // TODO Make this not hard-coded
-            dbQuery.where().like("name", "%" + searchQuery.get() + "%");
+            dbQuery.field("name").containsIgnoreCase(searchQuery.get());
         }
 
         return dbQuery;

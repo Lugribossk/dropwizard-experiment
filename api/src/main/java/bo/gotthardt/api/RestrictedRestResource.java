@@ -5,11 +5,12 @@ import bo.gotthardt.Persistable;
 import bo.gotthardt.api.exception.WebAppPreconditions;
 import bo.gotthardt.jersey.provider.ListFiltering;
 import bo.gotthardt.model.User;
-import com.avaje.ebean.EbeanServer;
+import com.google.code.morphia.Datastore;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.yammer.dropwizard.auth.Auth;
+import org.bson.types.ObjectId;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -31,13 +32,13 @@ import java.util.List;
 public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> {
     private final RestResource<P> rest;
 
-    public RestrictedRestResource(Class<P> type, EbeanServer ebean) {
-        rest = new RestResource<>(type, ebean);
+    public RestrictedRestResource(Class<P> type, Datastore ds) {
+        rest = new RestResource<>(type, ds);
     }
 
     @GET
     @Path("/{id}")
-    public P one(@Auth User user, @PathParam("id") long id) {
+    public P one(@Auth User user, @PathParam("id") ObjectId id) {
         P item = rest.one(id);
 
         WebAppPreconditions.assertAccessTo(user, item);
@@ -66,15 +67,15 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public P update(@Auth User user, @Valid P item, @PathParam("id") long id) {
+    public P update(@Auth User user, @Valid P item/*, @PathParam("id") ObjectId id*/) {
         WebAppPreconditions.assertAccessTo(user, item);
 
-        return rest.update(item, id);
+        return rest.update(item/*, id*/);
     }
 
     @DELETE
     @Path("/{id}")
-    public void delete(@Auth User user, @PathParam("id") long id) {
+    public void delete(@Auth User user, @PathParam("id") ObjectId id) {
         P item = rest.one(id);
 
         WebAppPreconditions.assertAccessTo(user, item);

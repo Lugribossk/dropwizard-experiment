@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.google.code.morphia:morphia:0.102">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/morphia/morphia/0.102/morphia-0.102.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/morphia/morphia/0.102/morphia-0.102-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/morphia/morphia/0.102/morphia-0.102-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -3,3 +3,5 @@ http:
 
 example: Test
 
+mongodb:
+  host: localhost

@@ -2,7 +2,7 @@ package bo.gotthardt.oauth2.authentication;
 
 import bo.gotthardt.model.OAuth2AccessToken;
 import bo.gotthardt.model.User;
-import com.avaje.ebean.EbeanServer;
+import com.google.code.morphia.Datastore;
 import com.google.common.base.Optional;
 import com.yammer.dropwizard.auth.AuthenticationException;
 import com.yammer.dropwizard.auth.Authenticator;
@@ -19,11 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2Authenticator implements Authenticator<String, User> {
-    private final EbeanServer ebean;
+    private final Datastore ds;
 
     @Override
     public Optional<User> authenticate(String credentials) throws AuthenticationException {
-        OAuth2AccessToken token = ebean.find(OAuth2AccessToken.class, credentials);
+        OAuth2AccessToken token = ds.find(OAuth2AccessToken.class, "accessToken", credentials).get();
 
         if (token == null) {
             log.info("Access token '%s' not found.", credentials);

@@ -67,7 +67,7 @@ public class RestResource<P extends Persistable> {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public P update(@Valid P item/*, @PathParam("id") String id*/) {
+    public P update(@Valid P item, @PathParam("id") ObjectId id) {
         assertExists(item.getId());
 
         // TODO validation

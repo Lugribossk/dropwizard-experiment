@@ -67,10 +67,10 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public P update(@Auth User user, @Valid P item/*, @PathParam("id") ObjectId id*/) {
+    public P update(@Auth User user, @Valid P item, @PathParam("id") ObjectId id) {
         WebAppPreconditions.assertAccessTo(user, item);
 
-        return rest.update(item/*, id*/);
+        return rest.update(item, id);
     }
 
     @DELETE

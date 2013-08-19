@@ -77,6 +77,10 @@
             <groupId>com.yammer.dropwizard</groupId>
             <artifactId>dropwizard-testing</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.foursquare</groupId>
+            <artifactId>fongo</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>

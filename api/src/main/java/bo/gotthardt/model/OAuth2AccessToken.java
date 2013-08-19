@@ -1,6 +1,8 @@
 package bo.gotthardt.model;
 
+import bo.gotthardt.morphia.DateTimeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.code.morphia.annotations.Converters;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Reference;
@@ -23,6 +25,7 @@ import java.util.UUID;
  * @author Bo Gotthardt
  */
 @Entity
+@Converters(DateTimeConverter.class)
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -5,7 +5,7 @@ import bo.gotthardt.model.OAuth2AccessToken;
 import org.joda.time.Duration;
 import org.junit.Test;
 
-import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
+import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 
 /**
  * Tests for {@link bo.gotthardt.model.OAuth2AccessToken}.

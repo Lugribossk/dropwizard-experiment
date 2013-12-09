@@ -1,18 +1,18 @@
-package bo.gotthardt.util.fest;
+package bo.gotthardt.util.assertj;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.jersey.api.client.ClientResponse;
 import com.yammer.dropwizard.json.ObjectMapperFactory;
-import org.fest.assertions.api.AbstractAssert;
+import org.assertj.core.api.AbstractAssert;
 import org.junit.ComparisonFailure;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
+import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 
 /**
  * @author Bo Gotthardt

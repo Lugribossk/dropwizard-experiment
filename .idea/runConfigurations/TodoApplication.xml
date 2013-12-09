@@ -7,8 +7,8 @@
       </pattern>
     </extension>
     <option name="MAIN_CLASS_NAME" value="bo.gotthardt.application.TodoApplication" />
-    <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="server server\src\main\resources\configuration.yml" />
+    <option name="VM_PARAMETERS" value="-javaagent:C:\Users\Bo\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\3.2.2\avaje-ebeanorm-agent-3.2.2.jar" />
+    <option name="PROGRAM_PARAMETERS" value="server api\src\main\resources\configuration.yml" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />

@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
+import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 
 
 /**

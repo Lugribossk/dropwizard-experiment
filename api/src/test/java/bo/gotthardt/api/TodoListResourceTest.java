@@ -10,7 +10,7 @@ import bo.gotthardt.util.InMemoryEbeanServer;
 import com.avaje.ebean.EbeanServer;
 import org.junit.Test;
 
-import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
+import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 
 /**
  * @author Bo Gotthardt

@@ -1,7 +1,7 @@
-package bo.gotthardt.util.fest;
+package bo.gotthardt.util.assertj;
 
 import com.sun.jersey.api.client.ClientResponse;
-import org.fest.assertions.api.Assertions;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Bo Gotthardt

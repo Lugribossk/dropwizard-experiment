@@ -80,10 +80,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>bo.gotthardt.dw</groupId>
-            <artifactId>frontend</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>com.yammer.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>bo.gotthardt.dw</groupId>
             <artifactId>api</artifactId>

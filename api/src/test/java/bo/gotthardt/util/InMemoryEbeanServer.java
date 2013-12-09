@@ -6,12 +6,8 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import lombok.Delegate;
-import org.fest.reflect.core.Reflection;
 
 import javax.persistence.PersistenceException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 
 /**
  * In-memory EbeanServer for use in unit/integration tests.
@@ -37,10 +33,10 @@ public class InMemoryEbeanServer implements EbeanServer {
         config.setDdlRun(false);
 
         // Turn off SQL logging as it is rather spammy.
-        config.setDebugSql(false);
+        //config.setDebugSql(false);
 
         // Production uses enhancement, so turn off subclassing so we will get en error up front if a test run defaults to using it.
-        config.setAllowSubclassing(false);
+        //config.setAllowSubclassing(false);
 
         // Set as default server in case anyone is using the Ebean singleton.
         config.setDefaultServer(true);
@@ -64,13 +60,13 @@ public class InMemoryEbeanServer implements EbeanServer {
         // Block DdlGenerator from spamming System.out by replacing its private "out" PrintStream with a dummy.
         DdlGenerator ddl = ((SpiEbeanServer) server).getDdlGenerator();
 
-        PrintStream stream = new PrintStream(new OutputStream() {
+        /*PrintStream stream = new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
                 // Do nothing.
             }
         });
-        Reflection.field("out").ofType(PrintStream.class).in(ddl).set(stream);
+        Reflection.field("out").ofType(PrintStream.class).in(ddl).set(stream);*/
 
         // And finally run the database creation queries.
         ddl.runScript(false, ddl.generateDropDdl());

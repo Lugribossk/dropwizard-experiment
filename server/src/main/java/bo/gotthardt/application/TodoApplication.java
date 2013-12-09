@@ -1,7 +1,6 @@
 package bo.gotthardt.application;
 
 import bo.gotthardt.configuration.ApiConfiguration;
-import bo.gotthardt.frontend.FrontendBundle;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
@@ -20,7 +19,6 @@ public class TodoApplication extends Service<ApiConfiguration> {
     @Override
     public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
         bootstrap.addBundle(new ApiBundle());
-        bootstrap.addBundle(new FrontendBundle("/"));
     }
 
     @Override

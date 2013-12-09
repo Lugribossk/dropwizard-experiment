@@ -23,8 +23,8 @@
         <plugins>
             <!-- Ebean entity class "enhancement". -->
             <plugin>
-                <groupId>org.avaje</groupId>
-                <artifactId>ebean-maven-enhancement-plugin</artifactId>
+                <groupId>org.avaje.ebeanorm</groupId>
+                <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
                 <configuration>
                     <packages>bo.gotthardt.model.*</packages>
                     <transformArgs>debug=1</transformArgs>
@@ -72,8 +72,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.avaje</groupId>
-            <artifactId>ebean</artifactId>
+            <groupId>org.avaje.ebeanorm</groupId>
+            <artifactId>avaje-ebeanorm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.avaje.ebeanorm</groupId>
+            <artifactId>avaje-ebeanorm-agent</artifactId>
+            <version>3.2.2</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -97,10 +102,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-reflect</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.yammer.dropwizard</groupId>
@@ -112,8 +113,8 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert-core</artifactId>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
         </dependency>
     </dependencies>
 </project>

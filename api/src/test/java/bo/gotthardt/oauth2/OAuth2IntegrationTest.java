@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 
-import static bo.gotthardt.util.fest.DropwizardAssertions.assertThat;
+import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 
 /**
  * Tests for the OAuth2 functionality working end-to-end.

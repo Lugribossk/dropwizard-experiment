@@ -51,11 +51,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.16</version>
+                    <configuration>
+                        <!-- Fix Maven not finding Ebean test classes. -->
+                        <useSystemClassLoader>false</useSystemClassLoader>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>2.11</version>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <!-- Disable weird warning. -->
+                        <linkXRef>false</linkXRef>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>checkstyle</id>
@@ -65,10 +75,6 @@
                             </goals>
                         </execution>
                     </executions>
-                    <configuration>
-                        <configLocation>checkstyle.xml</configLocation>
-                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -95,6 +101,19 @@
                     <groupId>org.avaje.ebeanorm</groupId>
                     <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
                     <version>3.2.2</version>
+                    <configuration>
+                        <packages>bo.gotthardt.model.*</packages>
+                        <transformArgs>debug=1</transformArgs>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>main</id>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>enhance</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -142,6 +161,11 @@
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm</artifactId>
                 <version>3.2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.avaje.ebeanorm</groupId>
+                <artifactId>avaje-ebeanorm-agent</artifactId>
+                <version>3.2.2</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>

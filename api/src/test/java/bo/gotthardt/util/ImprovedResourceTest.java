@@ -20,8 +20,6 @@ public abstract class ImprovedResourceTest extends ResourceTest {
     @Before
     public void squelchSpammyLoggers() {
         Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
-        Logger.getLogger("com.avaje.ebeaninternal").setLevel(Level.WARNING);
-        Logger.getLogger("com.avaje.ebean.Ebean").setLevel(Level.SEVERE);
     }
 
     protected ObjectNode createObjectNode() {

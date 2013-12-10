@@ -1,6 +1,10 @@
-package bo.gotthardt.api;
+package bo.gotthardt.resource;
 
+import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
+import bo.gotthardt.model.todo.TodoItem;
+import bo.gotthardt.model.todo.TodoList;
+import bo.gotthardt.resource.TodoListResource;
 import bo.gotthardt.util.DummyAuthProvider;
 import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;
@@ -12,14 +16,15 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 /**
  * @author Bo Gotthardt
  */
-public class UserResourceTest extends ImprovedResourceTest {
+public class TodoListResourceTest extends ImprovedResourceTest {
     private final DummyAuthProvider authProvider = new DummyAuthProvider();
     private final EbeanServer ebean = new InMemoryEbeanServer();
 
     @Override
     protected void setUpResources() throws Exception {
-        addResource(new UserResource(ebean));
+        addResource(new TodoListResource(ebean));
         addProvider(authProvider);
+        addProvider(ListFilteringProvider.class);
     }
 
     @Test
@@ -28,7 +33,12 @@ public class UserResourceTest extends ImprovedResourceTest {
         ebean.save(user);
         authProvider.setUser(user);
 
-        assertThat(GET("/users/" + user.getId()))
-                .hasJsonContent(user);
+        TodoList list = new TodoList("testlist", user);
+        list.getItems().add(new TodoItem("testitem1"));
+        list.getItems().add(new TodoItem("testitem2"));
+        ebean.save(list);
+
+        assertThat(GET("/todolists/" + list.getId()))
+                .hasJsonContent(list);
     }
 }

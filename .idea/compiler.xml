@@ -24,7 +24,6 @@
         <processorPath useClasspath="true" />
         <module name="api" />
         <module name="client" />
-        <module name="frontend" />
         <module name="server" />
       </profile>
     </annotationProcessing>

@@ -11,6 +11,7 @@
 
     <artifactId>frontend</artifactId>
     <name>Dropwizard experiment - Frontend</name>
+    <packaging>pom</packaging>
 
     <build>
         <plugins>

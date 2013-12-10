@@ -1,4 +1,4 @@
-package bo.gotthardt.api;
+package bo.gotthardt.resource;
 
 import bo.gotthardt.api.exception.NotFoundException;
 import bo.gotthardt.api.exception.UnauthorizedException;

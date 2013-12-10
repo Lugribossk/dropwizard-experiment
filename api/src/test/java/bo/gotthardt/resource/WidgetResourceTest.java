@@ -1,11 +1,11 @@
-package bo.gotthardt.api;
+package bo.gotthardt.resource;
 
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
+import bo.gotthardt.service.CrudService;
 import bo.gotthardt.util.ImprovedResourceTest;
 import bo.gotthardt.util.InMemoryEbeanServer;
 import com.avaje.ebean.EbeanServer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.client.ClientResponse;
@@ -19,16 +19,17 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
 
 
 /**
- * Tests for {@link WidgetResource}.
+ * Tests for {@link bo.gotthardt.resource.WidgetResource}.
  *
  * @author Bo Gotthardt
  */
-public class WidgetEndpointTest extends ImprovedResourceTest {
+public class WidgetResourceTest extends ImprovedResourceTest {
     private final EbeanServer ebean = new InMemoryEbeanServer();
+    private final CrudService<Widget> service = new CrudService<>(Widget.class, ebean);
 
     @Override
     protected void setUpResources() throws Exception {
-        addResource(new WidgetResource(ebean));
+        addResource(new WidgetResource(service));
         addProvider(ListFilteringProvider.class);
     }
 
@@ -137,7 +138,7 @@ public class WidgetEndpointTest extends ImprovedResourceTest {
         ebean.save(p);
         long oldId = p.getId();
 
-        ObjectNode input = new ObjectMapper().createObjectNode();
+        ObjectNode input = createObjectNode();
         input.put("name", "Test2");
         input.put("id", oldId + 100);
 

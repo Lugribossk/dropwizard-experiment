@@ -1,15 +1,16 @@
-package bo.gotthardt.api;
+package bo.gotthardt.resource.base;
 
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.api.exception.WebAppPreconditions;
 import bo.gotthardt.jersey.provider.ListFiltering;
 import bo.gotthardt.model.User;
-import com.avaje.ebean.EbeanServer;
+import bo.gotthardt.service.CrudService;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.yammer.dropwizard.auth.Auth;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -28,17 +29,14 @@ import java.util.List;
  * @author Bo Gotthardt
  */
 @Produces(MediaType.APPLICATION_JSON)
+@RequiredArgsConstructor
 public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> {
-    private final RestResource<P> rest;
-
-    public RestrictedRestResource(Class<P> type, EbeanServer ebean) {
-        rest = new RestResource<>(type, ebean);
-    }
+    private final CrudService<P> service;
 
     @GET
     @Path("/{id}")
     public P one(@Auth User user, @PathParam("id") long id) {
-        P item = rest.one(id);
+        P item = service.fetchById(id);
 
         WebAppPreconditions.assertAccessTo(user, item);
 
@@ -47,7 +45,7 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
 
     @GET
     public List<P> many(@Auth final User user, @Context ListFiltering filtering) {
-        List<P> items = rest.many(filtering);
+        List<P> items = service.fetchByFilter(filtering);
 
         return Lists.newArrayList(Collections2.filter(items, new Predicate<P>() {
             @Override
@@ -60,7 +58,8 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public P create(@Auth User user, @Valid P item) {
-        return rest.create(item);
+        // TODO
+        return service.create(item);
     }
 
     @PUT
@@ -69,16 +68,16 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
     public P update(@Auth User user, @Valid P item, @PathParam("id") long id) {
         WebAppPreconditions.assertAccessTo(user, item);
 
-        return rest.update(item, id);
+        return service.update(id, item);
     }
 
     @DELETE
     @Path("/{id}")
     public void delete(@Auth User user, @PathParam("id") long id) {
-        P item = rest.one(id);
+        P item = service.fetchById(id);
 
         WebAppPreconditions.assertAccessTo(user, item);
 
-        rest.delete(id);
+        service.delete(id);
     }
 }

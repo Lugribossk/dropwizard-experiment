@@ -1,6 +1,6 @@
 package bo.gotthardt.oauth2;
 
-import bo.gotthardt.api.UserResource;
+import bo.gotthardt.resource.UserResource;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;

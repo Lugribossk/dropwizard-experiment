@@ -1,11 +1,13 @@
 package bo.gotthardt.application;
 
-import bo.gotthardt.api.WidgetResource;
 import bo.gotthardt.configuration.ApiConfiguration;
 import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.jersey.filter.AllowAllOriginsFilter;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
+import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
+import bo.gotthardt.resource.WidgetResource;
+import bo.gotthardt.service.CrudService;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.yammer.dropwizard.ConfiguredBundle;
@@ -30,7 +32,7 @@ public class ApiBundle implements ConfiguredBundle<ApiConfiguration> {
 
     @Override
     public void run(ApiConfiguration configuration, Environment environment) throws Exception {
-        environment.addResource(new WidgetResource(ebeanBundle.getDefaultServer()));
+        environment.addResource(new WidgetResource(new CrudService<>(Widget.class, ebeanBundle.getDefaultServer())));
 
         environment.addProvider(ListFilteringProvider.class);
 

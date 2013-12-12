@@ -9,7 +9,7 @@ import bo.gotthardt.service.CrudService;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.yammer.dropwizard.auth.Auth;
+import io.dropwizard.auth.Auth;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;

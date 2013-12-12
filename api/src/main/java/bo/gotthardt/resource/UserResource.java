@@ -4,7 +4,7 @@ import bo.gotthardt.api.exception.NotFoundException;
 import bo.gotthardt.api.exception.UnauthorizedException;
 import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
-import com.yammer.dropwizard.auth.Auth;
+import io.dropwizard.auth.Auth;
 import lombok.RequiredArgsConstructor;
 
 import javax.ws.rs.GET;

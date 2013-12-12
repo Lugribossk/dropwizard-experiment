@@ -3,7 +3,7 @@ package bo.gotthardt.resource.base;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.jersey.provider.ListFiltering;
 import bo.gotthardt.service.CrudService;
-import com.yammer.metrics.annotation.Timed;
+import com.codahale.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;

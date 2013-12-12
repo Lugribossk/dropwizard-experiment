@@ -1,13 +1,13 @@
 package bo.gotthardt.oauth2.authorization;
 
 import bo.gotthardt.api.exception.UnauthorizedException;
-import bo.gotthardt.model.User;
 import bo.gotthardt.model.OAuth2AccessToken;
+import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.net.HttpHeaders;
-import com.yammer.dropwizard.auth.Auth;
+import io.dropwizard.auth.Auth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;

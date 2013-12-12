@@ -1,6 +1,6 @@
 package bo.gotthardt.configuration;
 
-import com.yammer.dropwizard.config.Configuration;
+import io.dropwizard.Configuration;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotEmpty;
 

@@ -10,9 +10,9 @@ import bo.gotthardt.resource.WidgetResource;
 import bo.gotthardt.service.CrudService;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.yammer.dropwizard.ConfiguredBundle;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 
 /**
  * @author Bo Gotthardt
@@ -26,18 +26,18 @@ public class ApiBundle implements ConfiguredBundle<ApiConfiguration> {
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle.getDefaultServer()));
 
-        bootstrap.getObjectMapperFactory().enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
-        bootstrap.getObjectMapperFactory().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+        bootstrap.getObjectMapper().enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+        bootstrap.getObjectMapper().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
     }
 
     @Override
     public void run(ApiConfiguration configuration, Environment environment) throws Exception {
-        environment.addResource(new WidgetResource(new CrudService<>(Widget.class, ebeanBundle.getDefaultServer())));
+        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebeanBundle.getDefaultServer())));
 
-        environment.addProvider(ListFilteringProvider.class);
+        environment.jersey().register(new ListFilteringProvider());
 
-        environment.addFilter(AllowAllOriginsFilter.class, configuration.getHttpConfiguration().getRootPath());
+        environment.servlets().addFilter("cors", new AllowAllOriginsFilter());
 
-        environment.addHealthCheck(new VersionHealthCheck());
+        environment.healthChecks().register("version", new VersionHealthCheck());
     }
 }

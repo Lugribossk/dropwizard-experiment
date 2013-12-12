@@ -8,12 +8,12 @@ import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
 import bo.gotthardt.resource.UserResource;
 import bo.gotthardt.util.InMemoryEbeanServer;
 import bo.gotthardt.util.RestHelper;
-import com.avaje.ebean.EbeanServer;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.auth.oauth.OAuthProvider;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.joda.time.Duration;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
  * @author Bo Gotthardt
  */
 public class OAuth2IntegrationTest {
-    private static final EbeanServer ebean = new InMemoryEbeanServer();
+    private static final InMemoryEbeanServer ebean = new InMemoryEbeanServer();
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new OAuth2AccessTokenResource(ebean))
@@ -37,7 +37,13 @@ public class OAuth2IntegrationTest {
             .build();
     public final RestHelper rest = new RestHelper(resources);
 
-    private final User user = createUser();
+    private User user;
+
+    @Before
+    public void blah() {
+        ebean.blah();
+        user = createUser();
+    }
 
     @Test
     public void shouldCreateAndSendTokenThatIdentifiesUser() {
@@ -106,7 +112,8 @@ public class OAuth2IntegrationTest {
 
     @Test
     public void shouldAllowAuthorizedAccessToProtectedResource() {
-        OAuth2AccessToken token = rest.POST("/token/?grant_type=password&username=testuser&password=testpass", null).getEntity(OAuth2AccessToken.class);
+        OAuth2AccessToken token = rest.POST("/token/?grant_type=password&username=testuser&password=testpass", null)
+                .getEntity(OAuth2AccessToken.class);
 
         ClientResponse response = resources.client().resource("/users/" + user.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())

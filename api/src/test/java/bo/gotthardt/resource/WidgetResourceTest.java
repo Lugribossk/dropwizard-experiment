@@ -5,11 +5,11 @@ import bo.gotthardt.model.Widget;
 import bo.gotthardt.service.CrudService;
 import bo.gotthardt.util.InMemoryEbeanServer;
 import bo.gotthardt.util.RestHelper;
-import com.avaje.ebean.EbeanServer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
  * @author Bo Gotthardt
  */
 public class WidgetResourceTest {
-    private static final EbeanServer ebean = new InMemoryEbeanServer();
+    private static final InMemoryEbeanServer ebean = new InMemoryEbeanServer();
     private static final CrudService<Widget> service = new CrudService<>(Widget.class, ebean);
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
@@ -34,6 +34,11 @@ public class WidgetResourceTest {
             .addResource(new ListFilteringProvider())
             .build();
     public final RestHelper rest = new RestHelper(resources);
+
+    @Before
+    public void blah() {
+        ebean.blah();
+    }
 
     @Test
     public void shouldGetOneItem() {

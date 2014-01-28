@@ -1,6 +1,5 @@
 package bo.gotthardt.util.assertj;
 
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.jersey.api.client.ClientResponse;
@@ -22,8 +21,6 @@ public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, C
 
     static {
         MAPPER = Jackson.newObjectMapper();
-        MAPPER.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
-        MAPPER.enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
         MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
@@ -54,7 +51,8 @@ public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, C
 
         try {
             // Should probably be something with getEntity(new GenericType<blah>() {}) but that doesn't work and this does...
-            String actualJson = MAPPER.writeValueAsString(actual.getEntity(Object.class));
+            Object entity = actual.getEntity(Object.class);
+            String actualJson = MAPPER.writeValueAsString(entity);
             String expectedJson = MAPPER.writeValueAsString(expected);
             compare(actualJson, expectedJson, "JSON content");
         } catch (IOException e) {

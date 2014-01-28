@@ -26,7 +26,8 @@ public class TodoListResourceTest {
             .addResource(authProvider)
             .addResource(new ListFilteringProvider())
             .build();
-    public final RestHelper rest = new RestHelper(resources);
+
+    private final RestHelper rest = new RestHelper(resources);
 
     @Test
     public void blah() {

@@ -6,8 +6,7 @@ import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
 import bo.gotthardt.resource.UserResource;
-import bo.gotthardt.util.InMemoryEbeanServer;
-import bo.gotthardt.util.RestHelper;
+import bo.gotthardt.util.ApiIntegrationTest;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.auth.oauth.OAuthProvider;
@@ -26,8 +25,7 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
  *
  * @author Bo Gotthardt
  */
-public class OAuth2IntegrationTest {
-    private static final InMemoryEbeanServer ebean = new InMemoryEbeanServer();
+public class OAuth2IntegrationTest extends ApiIntegrationTest {
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new OAuth2AccessTokenResource(ebean))
@@ -35,19 +33,17 @@ public class OAuth2IntegrationTest {
             .addResource(new OAuth2AuthorizationRequestProvider())
             .addResource(new OAuthProvider<>(new OAuth2Authenticator(ebean), "realm"))
             .build();
-    public final RestHelper rest = new RestHelper(resources);
 
     private User user;
 
     @Before
     public void blah() {
-        ebean.blah();
         user = createUser();
     }
 
     @Test
     public void shouldCreateAndSendTokenThatIdentifiesUser() {
-        ClientResponse response = rest.POST("/token/?grant_type=password&username=testuser&password=testpass", null);
+        ClientResponse response = POST("/token/?grant_type=password&username=testuser&password=testpass", null);
         assertThat(response).hasStatus(Response.Status.OK);
 
         OAuth2AccessToken token = response.getEntity(OAuth2AccessToken.class);
@@ -58,7 +54,7 @@ public class OAuth2IntegrationTest {
 
     @Test
     public void shouldNotCreateTokenForInvalidCredentials() {
-        assertThat(rest.POST("/token/?grant_type=password&username=testuser&password=WRONGPASSWORD", null))
+        assertThat(POST("/token/?grant_type=password&username=testuser&password=WRONGPASSWORD", null))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
         assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
@@ -67,7 +63,7 @@ public class OAuth2IntegrationTest {
 
     @Test
     public void shouldNotCreateTokenForNonexistentCredentials() {
-        assertThat(rest.POST("/token/?grant_type=password&username=DOESNOTEXIST&password=testpass", null))
+        assertThat(POST("/token/?grant_type=password&username=DOESNOTEXIST&password=testpass", null))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
         assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
@@ -76,27 +72,27 @@ public class OAuth2IntegrationTest {
 
     @Test
     public void should400WhenMissingGrantType() {
-        assertThat(rest.POST("/token", null))
+        assertThat(POST("/token", null))
                 .hasStatus(Response.Status.BAD_REQUEST);
     }
 
     @Test
     public void should400WhenGrantTypePasswordIsMissingUsername() {
-        assertThat(rest.POST("/token/?grant_type=password&password=testpass", null))
+        assertThat(POST("/token/?grant_type=password&password=testpass", null))
                 .hasStatus(Response.Status.BAD_REQUEST);
 
     }
 
     @Test
     public void should400WhenGrantTypePasswordIsMissingPassword() {
-        assertThat(rest.POST("/token/?grant_type=password&username=testuser", null))
+        assertThat(POST("/token/?grant_type=password&username=testuser", null))
                 .hasStatus(Response.Status.BAD_REQUEST);
 
     }
 
     @Test
     public void shouldRefuseNonAuthorizedAccessToAuthProtectedResource() {
-        assertThat(rest.GET("/users/" + user.getId()))
+        assertThat(GET("/users/" + user.getId()))
                 .hasStatus(Response.Status.UNAUTHORIZED);
     }
 
@@ -112,7 +108,7 @@ public class OAuth2IntegrationTest {
 
     @Test
     public void shouldAllowAuthorizedAccessToProtectedResource() {
-        OAuth2AccessToken token = rest.POST("/token/?grant_type=password&username=testuser&password=testpass", null)
+        OAuth2AccessToken token = POST("/token/?grant_type=password&username=testuser&password=testpass", null)
                 .getEntity(OAuth2AccessToken.class);
 
         ClientResponse response = resources.client().resource("/users/" + user.getId())
@@ -141,5 +137,10 @@ public class OAuth2IntegrationTest {
         User user = new User("testuser", "testpass");
         ebean.save(user);
         return user;
+    }
+
+    @Override
+    public ResourceTestRule getResources() {
+        return resources;
     }
 }

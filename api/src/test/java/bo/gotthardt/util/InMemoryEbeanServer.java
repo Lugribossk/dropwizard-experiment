@@ -15,10 +15,9 @@ import lombok.Delegate;
 public class InMemoryEbeanServer implements EbeanServer {
     @Delegate(types=EbeanServer.class)
     private final EbeanServer server;
-
     private final DdlGenerator ddl;
 
-    public void blah() {
+    public void clear() {
         ddl.runScript(false, ddl.generateDropDdl());
         ddl.runScript(false, ddl.generateCreateDdl());
     }

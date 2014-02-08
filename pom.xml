@@ -31,7 +31,7 @@
         <!-- Assign the build timestamp to a new property to work around a Maven bug (http://jira.codehaus.org/browse/MRESOURCES-99).-->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
-        <dropwizard.version>0.7.0-SNAPSHOT</dropwizard.version>
+        <dropwizard.version>0.7.0-rc1</dropwizard.version>
     </properties>
 
     <build>
@@ -118,7 +118,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.6.3.201306030806</version>
+                    <version>0.6.4.201312101107</version>
                     <executions>
                         <execution>
                             <id>jacoco-initialize</id>
@@ -170,7 +170,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.3.174</version>
+                <version>1.3.175</version>
             </dependency>
             <dependency>
                 <groupId>org.mindrot</groupId>

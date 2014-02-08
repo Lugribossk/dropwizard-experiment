@@ -3,6 +3,7 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/build" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/server" charset="UTF-8" />
   </component>

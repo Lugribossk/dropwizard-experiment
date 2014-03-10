@@ -1,18 +1,19 @@
 package bo.gotthardt.oauth2;
 
-import bo.gotthardt.resource.UserResource;
+import bo.gotthardt.model.OAuth2AccessToken;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
-import bo.gotthardt.model.OAuth2AccessToken;
-import bo.gotthardt.util.ImprovedResourceTest;
-import bo.gotthardt.util.InMemoryEbeanServer;
-import com.avaje.ebean.EbeanServer;
+import bo.gotthardt.resource.UserResource;
+import bo.gotthardt.util.ApiIntegrationTest;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
-import com.yammer.dropwizard.auth.oauth.OAuthProvider;
+import io.dropwizard.auth.oauth.OAuthProvider;
+import io.dropwizard.testing.junit.ResourceTestRule;
 import org.joda.time.Duration;
+import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -24,17 +25,20 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
  *
  * @author Bo Gotthardt
  */
-public class OAuth2IntegrationTest extends ImprovedResourceTest {
-    private final EbeanServer ebean = new InMemoryEbeanServer();
-    private final User user = createUser();
+public class OAuth2IntegrationTest extends ApiIntegrationTest {
+    @ClassRule
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
+            .addResource(new OAuth2AccessTokenResource(ebean))
+            .addResource(new UserResource(ebean))
+            .addResource(new OAuth2AuthorizationRequestProvider())
+            .addResource(new OAuthProvider<>(new OAuth2Authenticator(ebean), "realm"))
+            .build();
 
-    @Override
-    protected void setUpResources() throws Exception {
-        addResource(new OAuth2AccessTokenResource(ebean));
-        addResource(new UserResource(ebean));
+    private User user;
 
-        addProvider(OAuth2AuthorizationRequestProvider.class);
-        addProvider(new OAuthProvider<User>(new OAuth2Authenticator(ebean), "realm"));
+    @Before
+    public void blah() {
+        user = createUser();
     }
 
     @Test
@@ -94,7 +98,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldRefuseUnauthorizedAccessToAuthProtectedResource() {
-        ClientResponse response = client().resource("/users/" + user.getId())
+        ClientResponse response = resources.client().resource("/users/" + user.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer WRONGTOKEN")
                 .get(ClientResponse.class);
 
@@ -104,9 +108,10 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
 
     @Test
     public void shouldAllowAuthorizedAccessToProtectedResource() {
-        OAuth2AccessToken token = POST("/token/?grant_type=password&username=testuser&password=testpass", null).getEntity(OAuth2AccessToken.class);
+        OAuth2AccessToken token = POST("/token/?grant_type=password&username=testuser&password=testpass", null)
+                .getEntity(OAuth2AccessToken.class);
 
-        ClientResponse response = client().resource("/users/" + user.getId())
+        ClientResponse response = resources.client().resource("/users/" + user.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
                 .get(ClientResponse.class);
 
@@ -120,7 +125,7 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
         OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
         ebean.save(token);
 
-        ClientResponse response = client().resource("/token")
+        ClientResponse response = resources.client().resource("/token")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
                 .delete(ClientResponse.class);
         ebean.refresh(token);
@@ -132,5 +137,10 @@ public class OAuth2IntegrationTest extends ImprovedResourceTest {
         User user = new User("testuser", "testpass");
         ebean.save(user);
         return user;
+    }
+
+    @Override
+    public ResourceTestRule getResources() {
+        return resources;
     }
 }

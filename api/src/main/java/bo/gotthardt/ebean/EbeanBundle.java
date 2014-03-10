@@ -2,9 +2,9 @@ package bo.gotthardt.ebean;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
-import com.yammer.dropwizard.Bundle;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.Bundle;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 
 /**
  * @author Bo Gotthardt
@@ -18,7 +18,7 @@ public class EbeanBundle implements Bundle {
 
     @Override
     public void run(Environment environment) {
-        environment.addHealthCheck(new EbeanHealthCheck(getDefaultServer()));
+        environment.healthChecks().register("ebean-" + getDefaultServer().getName(), new EbeanHealthCheck(getDefaultServer()));
     }
 
     public EbeanServer getDefaultServer() {

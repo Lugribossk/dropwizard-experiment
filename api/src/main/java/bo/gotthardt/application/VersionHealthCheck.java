@@ -1,8 +1,8 @@
 package bo.gotthardt.application;
 
+import com.codahale.metrics.health.HealthCheck;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import com.yammer.metrics.core.HealthCheck;
 
 import java.io.IOException;
 
@@ -16,7 +16,6 @@ public class VersionHealthCheck extends HealthCheck {
     private final String version;
 
     public VersionHealthCheck() throws IOException {
-        super("version");
         this.version = Resources.toString(Resources.getResource("version.txt"), Charsets.UTF_8);
     }
 

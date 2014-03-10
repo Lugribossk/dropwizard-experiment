@@ -1,7 +1,7 @@
 package bo.gotthardt.ebean;
 
 import com.avaje.ebean.EbeanServer;
-import com.yammer.metrics.core.HealthCheck;
+import com.codahale.metrics.health.HealthCheck;
 
 /**
  *
@@ -12,7 +12,6 @@ public class EbeanHealthCheck extends HealthCheck {
     private final EbeanServer ebean;
 
     public EbeanHealthCheck(EbeanServer ebean) {
-        super("ebean-" + ebean.getName());
         this.ebean = ebean;
     }
 

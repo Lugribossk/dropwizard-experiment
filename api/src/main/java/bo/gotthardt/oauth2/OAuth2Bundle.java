@@ -1,14 +1,13 @@
 package bo.gotthardt.oauth2;
 
-import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
-import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
+import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
 import com.avaje.ebean.EbeanServer;
-import com.yammer.dropwizard.Bundle;
-import com.yammer.dropwizard.auth.oauth.OAuthProvider;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.Bundle;
+import io.dropwizard.auth.oauth.OAuthProvider;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -27,9 +26,9 @@ public class OAuth2Bundle implements Bundle {
 
     @Override
     public void run(Environment environment) {
-        environment.addResource(new OAuth2AccessTokenResource(ebean));
-        environment.addProvider(OAuth2AuthorizationRequestProvider.class);
+        environment.jersey().register(new OAuth2AccessTokenResource(ebean));
+        environment.jersey().register(new OAuth2AuthorizationRequestProvider());
 
-        environment.addProvider(new OAuthProvider<User>(new OAuth2Authenticator(ebean), "realm"));
+        environment.jersey().register(new OAuthProvider<>(new OAuth2Authenticator(ebean), "realm"));
     }
 }

@@ -1,6 +1,5 @@
 package bo.gotthardt.model;
 
-import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -55,6 +54,7 @@ public class OAuth2AccessToken {
     /**
      * Returns whether this token is currently valid.
      */
+    @JsonIgnore
     public boolean isValid() {
         return expirationDate.isAfterNow();
     }

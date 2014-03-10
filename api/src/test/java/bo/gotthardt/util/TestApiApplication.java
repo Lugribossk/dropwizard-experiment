@@ -2,14 +2,14 @@ package bo.gotthardt.util;
 
 import bo.gotthardt.application.ApiBundle;
 import bo.gotthardt.configuration.ApiConfiguration;
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 
 /**
  * @author Bo Gotthardt
  */
-public class TestApiApplication extends Service<ApiConfiguration> {
+public class TestApiApplication extends Application<ApiConfiguration> {
 
     public static void main(String... args) throws Exception {
         new TestApiApplication().run(args);

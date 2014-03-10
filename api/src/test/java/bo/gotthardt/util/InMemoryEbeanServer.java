@@ -3,6 +3,8 @@ package bo.gotthardt.util;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebeaninternal.api.SpiEbeanServer;
+import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import lombok.Delegate;
 
 /**
@@ -13,6 +15,12 @@ import lombok.Delegate;
 public class InMemoryEbeanServer implements EbeanServer {
     @Delegate(types=EbeanServer.class)
     private final EbeanServer server;
+    private final DdlGenerator ddl;
+
+    public void clear() {
+        ddl.runScript(false, ddl.generateDropDdl());
+        ddl.runScript(false, ddl.generateCreateDdl());
+    }
 
     public InMemoryEbeanServer() {
         // Load the in-memory database configuration.
@@ -28,5 +36,6 @@ public class InMemoryEbeanServer implements EbeanServer {
         config.setDefaultServer(true);
 
         server = EbeanServerFactory.create(config);
+        ddl = ((SpiEbeanServer) server).getDdlGenerator();
     }
 }

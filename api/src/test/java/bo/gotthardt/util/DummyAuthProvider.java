@@ -3,7 +3,7 @@ package bo.gotthardt.util;
 import bo.gotthardt.jersey.provider.AbstractInjectableProvider;
 import bo.gotthardt.model.User;
 import com.sun.jersey.api.core.HttpContext;
-import com.yammer.dropwizard.auth.Auth;
+import io.dropwizard.auth.Auth;
 import lombok.Setter;
 
 /**

@@ -3,12 +3,12 @@ package bo.gotthardt.resource;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.service.CrudService;
-import bo.gotthardt.util.ImprovedResourceTest;
-import bo.gotthardt.util.InMemoryEbeanServer;
-import com.avaje.ebean.EbeanServer;
+import bo.gotthardt.util.ApiIntegrationTest;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.client.ClientResponse;
+import io.dropwizard.testing.junit.ResourceTestRule;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -23,15 +23,13 @@ import static bo.gotthardt.util.assertj.DropwizardAssertions.assertThat;
  *
  * @author Bo Gotthardt
  */
-public class WidgetResourceTest extends ImprovedResourceTest {
-    private final EbeanServer ebean = new InMemoryEbeanServer();
-    private final CrudService<Widget> service = new CrudService<>(Widget.class, ebean);
-
-    @Override
-    protected void setUpResources() throws Exception {
-        addResource(new WidgetResource(service));
-        addProvider(ListFilteringProvider.class);
-    }
+public class WidgetResourceTest extends ApiIntegrationTest {
+    private static final CrudService<Widget> service = new CrudService<>(Widget.class, ebean);
+    @ClassRule
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
+            .addResource(new WidgetResource(service))
+            .addResource(new ListFilteringProvider())
+            .build();
 
     @Test
     public void shouldGetOneItem() {
@@ -104,7 +102,7 @@ public class WidgetResourceTest extends ImprovedResourceTest {
 
     @Test
     public void shouldPersistPostedItem() {
-        ObjectNode input = createObjectNode();
+        ObjectNode input = resources.getObjectMapper().createObjectNode();
         input.put("name", "Test1");
 
         assertThat(POST("/widgets", input))
@@ -120,7 +118,7 @@ public class WidgetResourceTest extends ImprovedResourceTest {
         Widget p = new Widget("Test1");
         ebean.save(p);
 
-        ObjectNode input = createObjectNode();
+        ObjectNode input = resources.getObjectMapper().createObjectNode();
         input.put("name", "Test2");
 
         ClientResponse response = PUT("/widgets/" + p.getId(), input);
@@ -138,7 +136,7 @@ public class WidgetResourceTest extends ImprovedResourceTest {
         ebean.save(p);
         long oldId = p.getId();
 
-        ObjectNode input = createObjectNode();
+        ObjectNode input = resources.getObjectMapper().createObjectNode();
         input.put("name", "Test2");
         input.put("id", oldId + 100);
 
@@ -151,4 +149,8 @@ public class WidgetResourceTest extends ImprovedResourceTest {
         assertThat(p.getId()).isEqualTo(oldId);
     }
 
+    @Override
+    public ResourceTestRule getResources() {
+        return resources;
+    }
 }

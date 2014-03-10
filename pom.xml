@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>bo.gotthardt.dw</groupId>
+    <groupId>bo.gotthardt.stack</groupId>
     <artifactId>dropwizard-experiment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -18,11 +18,14 @@
     </developers>
 
     <modules>
-        <module>frontend</module>
-        <module>server</module>
-        <module>api</module>
-    </modules>
-
+        <module>build</module>
+        <module>common/common-client</module>
+		<module>common/common-server</module>
+        <module>integration-tests</module>
+		<module>todo/todo-client</module>
+		<module>todo/todo-server</module>
+	</modules>	
+		
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

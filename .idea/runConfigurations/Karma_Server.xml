@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Karma Server" type="NodeJSConfigurationType" factoryName="Node.js" singleton="true" path-to-node="C:/Program Files/nodejs/node" path-to-js-file="D:/Users/Bo/AppData/Roaming/npm/node_modules/grunt-cli/bin/grunt" application-parameters="karma" working-dir="$PROJECT_DIR$/frontend">
-    <browser start="false" url="" with-js-debugger="false" />
-    <RunnerSettings RunnerId="NodeJS.run" />
-    <ConfigurationWrapper RunnerId="NodeJS.run" />
-    <method />
-  </configuration>
-</component>

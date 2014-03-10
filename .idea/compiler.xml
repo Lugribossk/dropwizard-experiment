@@ -22,19 +22,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="api" />
-        <module name="client" />
-        <module name="server" />
+        <module name="build" />
+        <module name="common-server" />
+        <module name="integration-tests" />
+        <module name="todo-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api" target="1.7" />
-      <module name="client" target="1.7" />
-      <module name="dist" target="1.7" />
-      <module name="dropwizard-experiment" target="1.7" />
-      <module name="dw-experiment" target="1.7" />
-      <module name="frontend" target="1.7" />
-      <module name="server" target="1.7" />
+      <module name="build" target="1.7" />
+      <module name="common-server" target="1.7" />
+      <module name="integration-tests" target="1.7" />
+      <module name="todo-server" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

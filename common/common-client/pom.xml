@@ -31,6 +31,9 @@
                             <executable>npm${executable}</executable>
                             <arguments>
                                 <argument>install</argument>
+                                <!-- Don't spam the MAven log output with useless missing repository field warnings. -->
+                                <argument>--loglevel</argument>
+                                <argument>error</argument>
                             </arguments>
                         </configuration>
                     </execution>

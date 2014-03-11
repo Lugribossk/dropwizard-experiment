@@ -14,6 +14,31 @@
     <name>Integration tests</name>
 
     <dependencies>
+        <dependency>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>common-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>common-server</artifactId>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>todo-server</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-testing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
     </dependencies>
 </project>

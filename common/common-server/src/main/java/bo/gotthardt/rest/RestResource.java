@@ -2,7 +2,6 @@ package bo.gotthardt.rest;
 
 import bo.gotthardt.Persistable;
 import bo.gotthardt.jersey.provider.ListFiltering;
-import bo.gotthardt.rest.resource.CrudService;
 import com.codahale.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 

@@ -3,7 +3,7 @@ package bo.gotthardt.todo;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.rest.resource.WidgetResource;
-import bo.gotthardt.rest.resource.CrudService;
+import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;

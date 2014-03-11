@@ -73,7 +73,7 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty.toolchain.setuid:jetty-setuid-java:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-auth:0.7.0-rc2" level="project" />
     <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
-    <orderEntry type="library" name="Maven: org.avaje.ebeanorm:avaje-ebeanorm:3.2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.avaje.ebeanorm:avaje-ebeanorm:3.3.1-RC2" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.12.6" level="project" />
     <orderEntry type="module" module-name="common-server" scope="TEST" production-on-test="" />

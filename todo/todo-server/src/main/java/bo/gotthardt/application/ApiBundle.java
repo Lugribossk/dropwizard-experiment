@@ -7,7 +7,7 @@ import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.resource.WidgetResource;
-import bo.gotthardt.rest.resource.CrudService;
+import bo.gotthardt.rest.CrudService;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;

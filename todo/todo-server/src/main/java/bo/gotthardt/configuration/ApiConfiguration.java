@@ -1,14 +1,14 @@
 package bo.gotthardt.configuration;
 
+import bo.gotthardt.ebean.EbeanConfiguration;
+import bo.gotthardt.ebean.HasEbeanConfiguration;
 import io.dropwizard.Configuration;
 import lombok.Getter;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author Bo Gotthardt
  */
 @Getter
-public class ApiConfiguration extends Configuration {
-    @NotEmpty
-    private String example;
+public class ApiConfiguration extends Configuration implements HasEbeanConfiguration {
+    private EbeanConfiguration ebean;
 }

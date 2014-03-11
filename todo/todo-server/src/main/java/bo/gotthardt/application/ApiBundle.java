@@ -6,8 +6,8 @@ import bo.gotthardt.jersey.filter.AllowAllOriginsFilter;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
-import bo.gotthardt.rest.resource.WidgetResource;
 import bo.gotthardt.rest.CrudService;
+import bo.gotthardt.rest.resource.WidgetResource;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -21,13 +21,13 @@ public class ApiBundle implements ConfiguredBundle<ApiConfiguration> {
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
         ebeanBundle = new EbeanBundle();
-        bootstrap.addBundle(ebeanBundle);
-        bootstrap.addBundle(new OAuth2Bundle(ebeanBundle.getDefaultServer()));
+        ((Bootstrap<ApiConfiguration>)bootstrap).addBundle(ebeanBundle);
+        bootstrap.addBundle(new OAuth2Bundle(ebeanBundle.getEbeanServer()));
     }
 
     @Override
     public void run(ApiConfiguration configuration, Environment environment) throws Exception {
-        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebeanBundle.getDefaultServer())));
+        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebeanBundle.getEbeanServer())));
 
         environment.jersey().register(new ListFilteringProvider());
 

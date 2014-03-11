@@ -1,5 +1,6 @@
-http:
-  rootPath: /api/*
 
-example: Test
-
+ebean:
+  username: sa
+  password:
+  url: jdbc:h2:mem:tests;DB_CLOSE_DELAY=-1
+  driver: org.h2.Driver

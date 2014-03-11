@@ -1,31 +1,42 @@
 package bo.gotthardt.ebean;
 
-import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
-import io.dropwizard.Bundle;
+import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.config.ServerConfig;
+import com.google.common.collect.ImmutableList;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.Getter;
 
 /**
  * @author Bo Gotthardt
  */
-public class EbeanBundle implements Bundle {
+public class EbeanBundle implements ConfiguredBundle<HasEbeanConfiguration> {
+    @Getter
+    private EbeanServer ebeanServer;
+
+    @Override
+    public void run(HasEbeanConfiguration configuration, Environment environment) throws Exception {
+        ServerConfig serverConfig = getServerConfig(configuration.getEbean());
+        ebeanServer = EbeanServerFactory.create(serverConfig);
+
+        environment.healthChecks().register("ebean-" + ebeanServer.getName(), new EbeanHealthCheck(ebeanServer));
+    }
+
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-        // Ebean automatically loads its configuration, so nothing to do here.
-        // TODO Consider using dropwizard config instead?
+        // Empty on purpose.
     }
 
-    @Override
-    public void run(Environment environment) {
-        environment.healthChecks().register("ebean-" + getDefaultServer().getName(), new EbeanHealthCheck(getDefaultServer()));
-    }
+    private static ServerConfig getServerConfig(EbeanConfiguration ebeanConfiguration) {
+        ServerConfig config = new ServerConfig();
+        config.setName("main");
+        config.setDataSourceConfig(ebeanConfiguration.toDataSourceConfig());
+        config.setDefaultServer(true);
+        // TODO Do we need config.setClasses(null); here as well?
+        config.setPackages(ImmutableList.of("bo.gotthardt.model.*"));
 
-    public EbeanServer getDefaultServer() {
-        return Ebean.getServer(null);
-    }
-
-    public EbeanServer getServer(String name) {
-        return Ebean.getServer(name);
+        return config;
     }
 }

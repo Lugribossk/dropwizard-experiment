@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- ${build} -->
+        <meta charset="utf-8">
+        <title>Backbone stuff</title>
+
+        <script>
+            var appConfig = {
+
+            };
+        </script>
+
+        <!-- ${scripts-start} -->
+        <script src="../bower_components/requirejs/require.js"></script>
+        <script src="javascript/require.config.js"></script>
+        <script src="javascript/main.js"></script>
+        <!-- ${scripts-end} -->
+
+        <!-- ${css-start} -->
+        <!-- TODO Fix this to work when built -->
+        <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../bower_components/Ladda/dist/ladda-themeless.min.css">
+        <link rel="stylesheet" href="../target/styling.css">
+        <!-- ${css-end} -->
+    </head>
+    <body>
+        <div id="navbar"></div>
+        <div id="main" class="container"></div>
+    </body>
+</html>

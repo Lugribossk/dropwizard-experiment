@@ -1,17 +1,24 @@
 Full stack experiment
 =====================
 
-##Javascript
+## Javascript
 
-###Setup
+### Setup
 1. Install NodeJS and npm.
 2. Globally install Grunt CLI and Bower: `npm install -g grunt-cli bower`
 3. Install individual project dependencies in their folders: `npm install` && `bower install` (Maven will automatically do this.)
 
 
-##Java
+## Java
 
-###Unit test setup
-Add `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\3.2.2\avaje-ebeanorm-agent-3.2.2.jar` to the VM options.
+### Running
+Create a run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\src\main\resources\configuration.yml`
 
-In IntelliJ you can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
+Or run `mvn package` and then `java -jar todo\todo-server\target\todo-server-0.0.1-SNAPSHOT.jar` (with the same arguments as above).
+
+### Test setup
+For test run configurations, add VM option: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\3.2.2\avaje-ebeanorm-agent-3.2.2.jar`
+
+This ensures that Ebean is activated for the tests, even when not running them via Maven (where a plugin handles it).
+
+You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.

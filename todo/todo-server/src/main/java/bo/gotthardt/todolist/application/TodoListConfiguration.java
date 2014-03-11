@@ -1,4 +1,4 @@
-package bo.gotthardt.configuration;
+package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.ebean.EbeanConfiguration;
 import bo.gotthardt.ebean.HasEbeanConfiguration;
@@ -9,6 +9,6 @@ import lombok.Getter;
  * @author Bo Gotthardt
  */
 @Getter
-public class ApiConfiguration extends Configuration implements HasEbeanConfiguration {
+public class TodoListConfiguration extends Configuration implements HasEbeanConfiguration {
     private EbeanConfiguration ebean;
 }

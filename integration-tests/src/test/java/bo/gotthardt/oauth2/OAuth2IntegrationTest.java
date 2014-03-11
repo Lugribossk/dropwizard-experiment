@@ -5,9 +5,8 @@ import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
-import bo.gotthardt.rest.resource.UserResource;
-import bo.gotthardt.test.assertj.DropwizardAssertions;
 import bo.gotthardt.test.ApiIntegrationTest;
+import bo.gotthardt.todolist.rest.UserResource;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.auth.oauth.OAuthProvider;
@@ -103,7 +102,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer WRONGTOKEN")
                 .get(ClientResponse.class);
 
-        DropwizardAssertions.assertThat(response)
+        assertThat(response)
                 .hasStatus(Response.Status.UNAUTHORIZED);
     }
 
@@ -116,7 +115,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
                 .get(ClientResponse.class);
 
-        DropwizardAssertions.assertThat(response)
+        assertThat(response)
                 .hasStatus(Response.Status.OK)
                 .hasJsonContent(user);
     }

@@ -1,6 +1,6 @@
-package bo.gotthardt.rest.resource;
+package bo.gotthardt.todolist.rest;
 
-import bo.gotthardt.model.TodoList;
+import bo.gotthardt.model.todo.TodoList;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.rest.RestrictedRestResource;
 import com.avaje.ebean.EbeanServer;

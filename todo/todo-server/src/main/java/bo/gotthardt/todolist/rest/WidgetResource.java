@@ -1,4 +1,4 @@
-package bo.gotthardt.rest.resource;
+package bo.gotthardt.todolist.rest;
 
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.rest.CrudService;

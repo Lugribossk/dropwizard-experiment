@@ -2,7 +2,7 @@ package bo.gotthardt.todo;
 
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
-import bo.gotthardt.rest.resource.WidgetResource;
+import bo.gotthardt.todolist.rest.WidgetResource;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,7 +20,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
 
 /**
- * Tests for {@link bo.gotthardt.rest.resource.WidgetResource}.
+ * Tests for {@link bo.gotthardt.todolist.rest.WidgetResource}.
  *
  * @author Bo Gotthardt
  */

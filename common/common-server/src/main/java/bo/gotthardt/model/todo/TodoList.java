@@ -1,7 +1,8 @@
-package bo.gotthardt.model;
+package bo.gotthardt.model.todo;
 
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
+import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
 package bo.gotthardt.todo;
 
 import bo.gotthardt.model.User;
-import bo.gotthardt.rest.resource.UserResource;
+import bo.gotthardt.todolist.rest.UserResource;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthProvider;
 import io.dropwizard.testing.junit.ResourceTestRule;

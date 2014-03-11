@@ -2,9 +2,9 @@ package bo.gotthardt.todo;
 
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
-import bo.gotthardt.model.TodoItem;
-import bo.gotthardt.model.TodoList;
-import bo.gotthardt.rest.resource.TodoListResource;
+import bo.gotthardt.model.todo.TodoItem;
+import bo.gotthardt.model.todo.TodoList;
+import bo.gotthardt.todolist.rest.TodoListResource;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthProvider;
 import io.dropwizard.testing.junit.ResourceTestRule;

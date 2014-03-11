@@ -2,6 +2,26 @@
     "name": "Dropwizard-experiment",
     "version": "0.1.0",
     "dependencies": {
-        "backbone": "~1.1.0"
+        "backbone": "~1.1.0",
+        "backbone.marionette": "~1.2.0",
+        "backbone.stickit": "https://github.com/NYTimes/backbone.stickit.git#~0.6.3",
+        "backbone-associations": "~0.5.4",
+        "jquery": "~2.0.3",
+        "lodash": "~2.2.1",
+        "handlebars": "~1.0.0",
+        "requirejs": "~2.1.9",
+        "requirejs-text": "~2.0.10",
+        "requirejs-handlebars": "https://github.com/jfparadis/requirejs-handlebars.git",
+        "moment": "~2.3.1",
+        "JavaScript-MD5": "~1.1.0",
+        "font-awesome": "~4.0.3",
+        "bootstrap": "~3.0.2",
+        "Ladda": "~0.9.0",
+        "require-less": "~0.1.1"
+    },
+    "devDependencies": {
+        "jasmine-jquery": "~1.5.92",
+        "jasmine-as-promised": "~0.0.5",
+        "es5-shim": "~2.1.0"
     }
 }

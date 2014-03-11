@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * @author Bo Gotthardt
  */
 @Entity
-@Table(name = "users")
+@Table(name = "users") // Avoid warnings about "user" being a reserved word.
 @Getter
 @Setter
 @ToString(of = {"id", "username"})

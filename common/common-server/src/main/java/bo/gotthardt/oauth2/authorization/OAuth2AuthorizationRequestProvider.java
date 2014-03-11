@@ -3,6 +3,7 @@ package bo.gotthardt.oauth2.authorization;
 import bo.gotthardt.exception.JsonMessageException;
 import bo.gotthardt.exception.WebAppPreconditions;
 import bo.gotthardt.jersey.provider.AbstractInjectableProvider;
+import com.google.common.base.Preconditions;
 import com.sun.jersey.api.core.HttpContext;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -31,7 +32,7 @@ public class OAuth2AuthorizationRequestProvider extends AbstractInjectableProvid
 
         switch (grantType) {
             case "password":
-                return OAuth2AuthorizationPasswordRequest.fromQueryParameters(queryParameters);
+                return passwordFromQueryParameters(queryParameters);
 //            case "authorization_code":
 //                throw new WebApplicationException();
 //            case "client_credentials":
@@ -39,5 +40,17 @@ public class OAuth2AuthorizationRequestProvider extends AbstractInjectableProvid
             default:
                 throw new JsonMessageException(HttpStatus.NOT_IMPLEMENTED_501, "Grant type '%s' not implemented.", grantType);
         }
+    }
+
+    private static OAuth2AuthorizationPasswordRequest passwordFromQueryParameters(MultivaluedMap<String, String> queryParameters) {
+        Preconditions.checkState("password".equals(queryParameters.getFirst("grant_type")));
+
+        String username = queryParameters.getFirst("username");
+        WebAppPreconditions.checkArgumentNotNull(username, "'Password' grant type requires a 'username' query parameter.");
+
+        String password = queryParameters.getFirst("password");
+        WebAppPreconditions.checkArgumentNotNull(password, "'Password' grant type requires a 'password' query parameter.");
+
+        return new OAuth2AuthorizationPasswordRequest(username, password);
     }
 }

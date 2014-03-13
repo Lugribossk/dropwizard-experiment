@@ -4,8 +4,8 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var LoginForm = require("example/user/LoginForm");
-    var User = require("example/user/User");
+    var LoginForm = require("user/LoginForm");
+    var User = require("user/User");
     var Logger = require("tbone/util/Logger");
 
     var log = new Logger("LoginController");
@@ -29,7 +29,7 @@ define(function (require) {
             var scope = this;
             return User.fetchByLogin(username, password)
                 .done(function (user) {
-                    log.info("Logged in as", user.get("email"));
+                    log.info("Logged in as", user.get("username"));
                     scope.options.currentUser.clear();
                     scope.options.currentUser.set(user.attributes);
                     scope._loginSuccess.resolve();

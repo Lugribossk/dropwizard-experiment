@@ -5,11 +5,11 @@ define(function (require) {
     var Backbone = require("backbone");
     var Marionette = require("marionette");
     var Logger = require("tbone/util/Logger");
-    var ExampleNavbarController = require("example/navbar/ExampleNavbarController");
-    var ExampleRouter = require("example/app/ExampleRouter");
-    var ExampleAuthentication = require("example/app/ExampleAuthentication");
-    var User = require("example/user/User");
-    var LoginController = require("example/user/LoginController");
+    var ExampleNavbarController = require("navbar/ExampleNavbarController");
+    var ExampleRouter = require("app/ExampleRouter");
+    var ExampleAuthentication = require("app/ExampleAuthentication");
+    var User = require("user/User");
+    var LoginController = require("user/LoginController");
     require("less!./ExampleApp");
 
     var app = new Marionette.Application();

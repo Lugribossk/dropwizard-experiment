@@ -38,7 +38,7 @@ define(function (require) {
 
         sync: function (method, model, options) {
             options.sync = true;
-            Backbone.AssociatedModel.prototype.sync.call(this, method, model, options);
+            return Backbone.AssociatedModel.prototype.sync.call(this, method, model, options);
         },
 
         toJSON: function (options) {
@@ -51,13 +51,13 @@ define(function (require) {
             return json;
         }
     }, {
-        fetchById: function (id) {
+        fetchById: function (id, fetchArgs) {
             var args = {};
             args[this.prototype.idAttribute] = id;
             var ThisClass = this;
             var model = new ThisClass(args);
 
-            return model.fetch()
+            return model.fetch(fetchArgs)
                 .then(function () {
                     return model;
                 });

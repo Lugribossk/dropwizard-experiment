@@ -4,6 +4,7 @@ import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.jersey.filter.AllowAllOriginsFilter;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
+import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.CrudService;
@@ -40,8 +41,14 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
         environment.jersey().register(new ListFilteringProvider());
 
+        // TODO This does not seem to work.
         environment.servlets().addFilter("cors", new AllowAllOriginsFilter());
 
         environment.healthChecks().register("version", new VersionHealthCheck());
+
+        User user = new User("test", "test");
+        user.setName("Test Testsen");
+        user.setEmail("example@example.com");
+        ebean.save(user);
     }
 }

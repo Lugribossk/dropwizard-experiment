@@ -25,17 +25,17 @@ public class OAuth2Authenticator implements Authenticator<String, User> {
         OAuth2AccessToken token = ebean.find(OAuth2AccessToken.class, credentials);
 
         if (token == null) {
-            log.info("Access token '%s' not found.", credentials);
+            log.info("Access token '{}' not found.", credentials);
             return Optional.absent();
         }
 
         if (!token.isValid()) {
-            log.info("Access token '%s' is no longer valid, expired at %s.", credentials, token.getExpirationDate());
+            log.info("Access token '{}' is no longer valid, expired at {}.", credentials, token.getExpirationDate());
             return Optional.absent();
         }
 
         User user = token.getUser();
-        log.info("Authenticated user %s with access token '%s'", user, credentials);
+        log.info("Authenticated user {} with access token '{}'", user, credentials);
         return Optional.of(user);
     }
 }

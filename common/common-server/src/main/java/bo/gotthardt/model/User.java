@@ -28,6 +28,8 @@ public class User implements Persistable, AccessibleBy<User>, Principal {
     @Id
     private long id;
     private String username;
+    private String email;
+    private String name;
     @Embedded
     @JsonIgnore
     private HashedValue password;

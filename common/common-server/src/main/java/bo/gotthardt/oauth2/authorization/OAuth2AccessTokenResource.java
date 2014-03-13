@@ -46,7 +46,7 @@ public class OAuth2AccessTokenResource {
 
         OAuth2AccessToken token = new OAuth2AccessToken(user.get(), TOKEN_LIFETIME);
         ebean.save(token);
-        log.info("Created token %s", token);
+        log.info("Created token for {}", user.get());
 
         return token;
     }

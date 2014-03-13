@@ -5,7 +5,7 @@ define(function (require) {
     var Backbone = require("backbone");
     var Marionette = require("marionette");
     var Logger = require("tbone/util/Logger");
-    var Dashboard = require("example/dashboard/Dashboard");
+    var Dashboard = require("dashboard/Dashboard");
 
     var log = new Logger("ExampleRouter");
 

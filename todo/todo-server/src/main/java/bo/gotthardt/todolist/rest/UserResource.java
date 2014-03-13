@@ -37,4 +37,10 @@ public class UserResource {
 
         return item;
     }
+
+    @GET
+    @Path("/current")
+    public User current(@Auth User user) {
+        return user;
+    }
 }

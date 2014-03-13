@@ -1,6 +1,7 @@
 /*global module*/
 module.exports = function (config) {
     "use strict";
+
     config.set({
         frameworks: ["requirejs", "jasmine"],
         files: [
@@ -17,17 +18,17 @@ module.exports = function (config) {
         // Randomize the port in case several CI jobs are running at the same time.
         port: 10000 + Math.round(Math.random() * 1000),
         // Disable the default html2js preprocessor as it screws up the Handlebars HTML files.
-        preprocessors: {
-            "src/main/javascript/**/*.js": ["coverage"]
-        },
+//        preprocessors: {
+//            "src/main/javascript/**/*.js": ["coverage"]
+//        },
         logLevel: "DEBUG",
         reporters: ["progress", "junit", "coverage"],
         junitReporter: {
             outputFile: "target/test-results.xml"
-        },
-        coverageReporter: {
-            type: "html",
-            dir: "target/coverage"
-        }
+        }//,
+//        coverageReporter: {
+//            type: "html",
+//            dir: "target/coverage"
+//        }
     });
 };

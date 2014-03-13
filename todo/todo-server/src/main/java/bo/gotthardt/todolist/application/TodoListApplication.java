@@ -2,7 +2,6 @@ package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
-import bo.gotthardt.jersey.filter.AllowAllOriginsFilter;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;

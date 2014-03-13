@@ -6,6 +6,7 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
+import com.google.common.collect.ImmutableList;
 import lombok.Delegate;
 
 /**
@@ -36,10 +37,8 @@ public class InMemoryEbeanServer implements EbeanServer {
         config.setDataSourceConfig(dbConfig);
         config.setDefaultServer(true);
 
-        // This seems to need to be explicitly set to null to activate the new classpath scanning feature in 3.3.1-RC2.
-        config.setClasses(null);
+        config.setPackages(ImmutableList.of("bo.gotthardt.model"));
 
-        // Generate and run database creation queries before each test.
         config.setDdlGenerate(true);
         config.setDdlRun(true);
 

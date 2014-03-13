@@ -7,7 +7,9 @@ import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.CrudService;
+import bo.gotthardt.todolist.rest.UserResource;
 import bo.gotthardt.todolist.rest.WidgetResource;
+import com.avaje.ebean.EbeanServer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -26,12 +28,15 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     public void initialize(Bootstrap<TodoListConfiguration> bootstrap) {
         ebeanBundle = new EbeanBundle();
         bootstrap.addBundle(ebeanBundle);
-        bootstrap.addBundle(new OAuth2Bundle(ebeanBundle.getEbeanServer()));
+        bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
     }
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebeanBundle.getEbeanServer())));
+        EbeanServer ebean = ebeanBundle.getEbeanServer();
+
+        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebean)));
+        environment.jersey().register(new UserResource(ebean));
 
         environment.jersey().register(new ListFilteringProvider());
 

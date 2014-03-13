@@ -1,8 +1,8 @@
 .idea/workspace.xml
 target
 logs
-h2-create.sql
-h2-drop.sql
+*-create.sql
+*-drop.sql
 dependency-reduced-pom.xml
 node_modules
 bower_components

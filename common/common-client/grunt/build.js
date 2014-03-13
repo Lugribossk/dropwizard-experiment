@@ -9,8 +9,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.config.set("requirejs", {
         options: {
-            baseUrl: "src/javascript",
-            mainConfigFile: "src/javascript/require.config.js",
+            //baseUrl: "src/javascript",
+            mainConfigFile: "../../common/common-client/src/main/javascript/require.config.js",
             findNestedDependencies: true,
             almond: true,
             optimize: "uglify2",
@@ -19,7 +19,7 @@ module.exports = function (grunt) {
         },
         build: {
             options: {
-                name: "blah",
+                //name: "blah",
                 out: "target/test.js"
             }
         }
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
                 }]
             },
             files: [{
-                src: "src/index.html",
+                src: "src/main/javascript/index.html",
                 dest: "target/index.html"
             }]
         }

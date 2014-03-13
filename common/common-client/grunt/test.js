@@ -7,8 +7,8 @@ module.exports = function (grunt) {
      */
 
     var jsFiles = [
-        "src/javascript/**/*.js",
-        "test/javascript/**/*.js",
+        "src/main/javascript/**/*.js",
+        "src/test/javascript/**/*.js",
         "Gruntfile.js",
         "grunt/**/*.js"
     ];
@@ -16,7 +16,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.config.set("jshint", {
         options: {
-            jshintrc: ".jshintrc"
+            jshintrc: "../../.jshintrc"
         },
         dev: {
             src: jsFiles
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-karma");
     grunt.config.set("karma", {
         options: {
-            configFile: "karma.conf.js"
+            configFile: "../../common/common-client/karma.conf.js"
         },
         unit: {
             browsers: ["Chrome"],

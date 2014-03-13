@@ -12,11 +12,11 @@ module.exports = function (grunt) {
             livereload: true
         },
         js: {
-            files: ["src/javascript/**/*.js"],
+            files: ["src/main/javascript/**/*.js"],
             tasks: ["jshint:dev"]
         },
         templates: {
-            files: ["src/**/*.html"]
+            files: ["src/main/javascript/**/*.html"]
         }
     });
 };

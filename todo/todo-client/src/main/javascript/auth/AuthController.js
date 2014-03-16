@@ -22,6 +22,11 @@ define(function (require) {
                 currentUser.clear();
                 currentUser.set(user.attributes);
                 return user;
+            }, function (err) {
+                if (err.status === 401) {
+                    log.info("Saved token was rejected, deleting it.");
+                    window.localStorage.removeItem(STORAGE_KEY);
+                }
             });
     }
 

@@ -7,45 +7,56 @@ define(function (require) {
     var LoginForm = require("user/LoginForm");
     var User = require("user/User");
     var Logger = require("tbone/util/Logger");
+    var OAuth2AccessToken = require("tbone/auth/OAuth2AccessToken");
 
     var log = new Logger("LoginController");
+    var currentUser = new User();
 
     return Marionette.Controller.extend({
-        initialize: function (options) {
-            options.currentUser.logout = this.logout.bind(this);
-        },
-
-        attemptLogin: function () {
-            this.options.region.show(new LoginForm({
-                controller: this
-            }));
-
+        initialize: function () {
             this._loginSuccess = new $.Deferred();
-
-            return this._loginSuccess.promise();
         },
 
         tryCredentials: function (username, password) {
             var scope = this;
-            return User.fetchByLogin(username, password)
+            return OAuth2AccessToken.fetchByLogin(username, password)
+                .then(function (token) {
+                    token.addToRequestsFor("http://localhost:8080/");
+                    return User.fetchById("current");
+                })
                 .done(function (user) {
+                    currentUser.clear();
+                    currentUser.set(user.attributes);
                     log.info("Logged in as", user.get("username"));
-                    scope.options.currentUser.clear();
-                    scope.options.currentUser.set(user.attributes);
                     scope._loginSuccess.resolve();
                 })
                 .fail(function () {
                     log.info("Login failed with username", username);
-                    scope._loginSuccess.reject();
+                    // Don't reject the loginSuccess promise here, ao the user can try to login multiple times.
                 });
+        }
+    }, {
+        getCurrentUser: function () {
+            return currentUser;
         },
-
+        
         logout: function () {
-            log.info("Logged out");
-            this.options.currentUser.clear();
+            currentUser.clear();
 
             // Force navigation to the empty route, even if there already.
             Backbone.history.loadUrl("");
+            log.info("Logged out");
+        },
+
+        showLoginForm: function (region) {
+            var ThisClass = this;
+            var controller = new ThisClass();
+
+            region.show(new LoginForm({
+                controller: controller
+            }));
+
+            return controller._loginSuccess.promise();
         }
     });
 });

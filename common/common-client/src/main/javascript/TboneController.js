@@ -6,27 +6,13 @@ define(function (require) {
     var Marionette = require("marionette");
 
     return Marionette.Controller.extend({
-        constructor: function () {
+        constructor: function (options) {
             Marionette.Controller.prototype.constructor.apply(this, arguments);
 
+            if (options.model) {
+                this.model = options.model;
+            }
         }
-
-        /*_showModel: function (modelPromise, viewOptions) {
-            var scope = this;
-            this.options.region.show(modelPromise
-                .then(function (model) {
-                    scope.model = model;
-
-                    var ViewClass = scope.viewType;
-                    var view = new ViewClass(_.extend({
-                        controller: scope,
-                        model: model
-                    }, viewOptions));
-                    scope.listenTo(view, "close", this.close);
-
-                    return view;
-                }));
-        }*/
     }, {
         _showModel: function (modelPromise, region, viewOptions) {
             var ThisClass = this;
@@ -34,7 +20,8 @@ define(function (require) {
             region.show($.when(modelPromise)
                 .then(function (model) {
                     var controller = new ThisClass({
-                        model: model
+                        model: model,
+                        region: region
                     });
 
                     var ViewClass = controller.viewType;

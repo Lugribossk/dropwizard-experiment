@@ -3,6 +3,7 @@ define(function (require) {
     var Navbar = require("tbone/ui/bootstrap/Navbar");
     var template = require("hbars!./ExampleNavbar");
     var Gravatar = require("tbone/ui/Gravatar");
+    var LoginController = require("user/LoginController");
     require("less!./ExampleNavbar");
 
     return Navbar.extend({
@@ -18,7 +19,7 @@ define(function (require) {
 
         events: {
             "click .logout": function () {
-                this.model.logout();
+                LoginController.logout();
                 return false;
             }
         },

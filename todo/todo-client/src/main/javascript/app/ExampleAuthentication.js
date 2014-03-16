@@ -4,15 +4,16 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var PreRouteHistory = require("tbone/PreRouteHistory");
+    var PreRouteHistory = require("tbone/auth/PreRouteHistory");
     var Promise = require("tbone/util/Promise");
+    var LoginController = require("user/LoginController");
 
     return PreRouteHistory.extend({
         preRoute: function (fragment) {
-            if (this.options.currentUser.get("isLoggedIn")) {
+            if (LoginController.getCurrentUser().get("isLoggedIn")) {
                 return Promise.resolved();
             } else {
-                return this.options.controller.attemptLogin();
+                return LoginController.showLoginForm(this.options.region);
             }
         }
     });

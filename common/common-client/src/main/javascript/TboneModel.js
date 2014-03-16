@@ -1,7 +1,6 @@
 define(function (require) {
     "use strict";
     var _ = require("underscore");
-    var Backbone = require("backbone");
     var Promise = require("tbone/util/Promise");
     var Associations = require("associations");
 
@@ -15,9 +14,9 @@ define(function (require) {
         scope.set(name, value);
     }
 
-    return Backbone.AssociatedModel.extend({
+    return Associations.AssociatedModel.extend({
         constructor: function () {
-            Backbone.Model.prototype.constructor.apply(this, arguments);
+            Associations.AssociatedModel.prototype.constructor.apply(this, arguments);
             var scope = this;
 
             // Computed attributes.
@@ -38,11 +37,11 @@ define(function (require) {
 
         sync: function (method, model, options) {
             options.sync = true;
-            return Backbone.AssociatedModel.prototype.sync.call(this, method, model, options);
+            return Associations.AssociatedModel.prototype.sync.call(this, method, model, options);
         },
 
         toJSON: function (options) {
-            var json = Backbone.Model.prototype.toJSON.call(this, options);
+            var json = Associations.AssociatedModel.prototype.toJSON.call(this, options);
             if (options && options.sync && this.computed) {
                 _.each(this.computed, function (config, name) {
                     delete json[name];

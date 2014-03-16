@@ -13,7 +13,7 @@ define(function (require) {
             if (LoginController.getCurrentUser().get("isLoggedIn")) {
                 return Promise.resolved();
             } else {
-                return LoginController.showLoginForm(this.options.region);
+                return LoginController.attemptLogin(this.options.region);
             }
         }
     });

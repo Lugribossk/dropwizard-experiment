@@ -3,6 +3,12 @@ define(function (require) {
     var TboneView = require("tbone/TboneView");
     var md5 = require("md5");
 
+    /**
+     * A Gravatar avatar thumbnail.
+     *
+     * @cfg {User} model
+     * @class Gravatar
+     */
     return TboneView.extend({
         template: function () {
             return "";

@@ -7,44 +7,38 @@ define(function (require) {
     var Logger = require("tbone/util/Logger");
     var ExampleNavbarController = require("navbar/ExampleNavbarController");
     var ExampleRouter = require("app/ExampleRouter");
-    var ExampleAuthentication = require("app/ExampleAuthentication");
-    var User = require("user/User");
-    var LoginController = require("user/LoginController");
+    var AuthenticatingHistory = require("auth/AuthenticatingHistory");
+    var DeferredRegion = require("tbone/view/DeferredRegion");
     require("less!./ExampleApp");
 
     var app = new Marionette.Application();
 
     app.addRegions({
-        content: "#main",
-        navbar: "#navbar"
+        content: {
+            selector: "#main",
+            regionType: DeferredRegion
+        },
+        navbar: {
+            selector: "#navbar",
+            regionType: DeferredRegion
+        }
     });
 
     app.addInitializer(Logger.initialize);
 
     app.addInitializer(function () {
-        this.currentUser = new User();
-        ExampleAuthentication.initialize();
+        AuthenticatingHistory.initialize();
 
         var router = new ExampleRouter({region: this.content});
 
-        var loginController = new LoginController({
-            region: this.content,
-            currentUser: this.currentUser
-        });
-
-        // These are actually options for ExampleAuthentication.
+        // These are actually options for AuthenticatingHistory.
         Backbone.history.start({
-            currentUser: this.currentUser,
-            controller: loginController
+            region: this.content
         });
     });
 
     app.addInitializer(function () {
-        var x = new ExampleNavbarController({
-            region: this.navbar,
-            currentUser: this.currentUser
-        });
-        x.showNavbar();
+        ExampleNavbarController.showNavbar(this.navbar);
     });
 
     return app;

@@ -5,21 +5,24 @@ define(function (require) {
     var Backbone = require("backbone");
     var Marionette = require("marionette");
     var ExampleNavbar = require("./ExampleNavbar");
+    var AuthController = require("auth/AuthController");
+    var TboneController = require("tbone/TboneController");
 
-    return Marionette.Controller.extend({
-        initialize: function () {
-            var currentUser = this.options.currentUser;
+    return TboneController.extend({
+        viewType: ExampleNavbar,
+
+        initialize: function (options) {
             var region = this.options.region;
 
-            this.listenTo(currentUser, "change:isLoggedIn", function (model, isLoggedIn) {
+            this.listenTo(options.model, "change:isLoggedIn", function (model, isLoggedIn) {
                 region.$el.toggle(isLoggedIn);
             });
             region.ensureEl();
-            region.$el.toggle(currentUser.get("isLoggedIn"));
-        },
-
-        showNavbar: function () {
-            this.options.region.show(new ExampleNavbar({model: this.options.currentUser}));
+            region.$el.toggle(options.model.get("isLoggedIn"));
+        }
+    }, {
+        showNavbar: function (region) {
+            this._showModel(AuthController.getCurrentUser(), region);
         }
     });
 });

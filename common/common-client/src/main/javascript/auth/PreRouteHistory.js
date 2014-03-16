@@ -35,12 +35,13 @@ define(function (require) {
             // loadUrl is called to trigger a route from a fragment, so it provides a convenient place to
             // add logic that will be run before every route.
             var scope = this;
-            // fragment might be undefined on the very first route, which is solved by defaulting logic in the superclass, which we therefore miss out on.
+            // fragment might be undefined on the very first route, which is solved by defaulting logic in the superclass,
+            // which we therefore miss out on and have to include ourselves.
             var actualFragment = fragment || this.getFragment(fragment);
             var doRouting = this.preRoute(actualFragment);
 
             if (doRouting.state() === "pending") {
-                log.info("Suspended routing of", actualFragment);
+                log.info("Suspended routing of '" + actualFragment + "'.");
             }
 
             doRouting
@@ -48,7 +49,7 @@ define(function (require) {
                     Backbone.History.prototype.loadUrl.call(scope, actualFragment);
                 })
                 .fail(function () {
-                    log.warn("Blocked routing of", actualFragment);
+                    log.warn("Blocked routing of '" + actualFragment + "'.");
                 });
         }
     }, {

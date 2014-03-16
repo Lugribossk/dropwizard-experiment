@@ -2,7 +2,6 @@ package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
-import bo.gotthardt.jersey.filter.AllowAllOriginsFilter;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
@@ -14,6 +13,11 @@ import com.avaje.ebean.EbeanServer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
 
 /**
  * @author Bo Gotthardt
@@ -41,8 +45,13 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
         environment.jersey().register(new ListFilteringProvider());
 
-        // TODO This does not seem to work.
-        environment.servlets().addFilter("cors", new AllowAllOriginsFilter());
+        FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        filter.setInitParameter("allowedOrigins", "*");
+        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowedMethods", "GET,PUT,POST,DELETE,OPTIONS");
+        filter.setInitParameter("preflightMaxAge", "5184000"); // 2 months
+        filter.setInitParameter("allowCredentials", "true");
 
         environment.healthChecks().register("version", new VersionHealthCheck());
 

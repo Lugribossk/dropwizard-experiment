@@ -7,7 +7,7 @@ module.exports = function (config) {
         frameworks: ["requirejs", "jasmine"],
         files: [
             "common/common-client/src/main/javascript/require.config.js",
-            "common/common-client/src/test/javascript/test-main.js",
+            "todo/todo-client/src/test/javascript/test-main.js",
             // Serve all the code, but don't include it as script tags. RequireJS will load them.
             {pattern: "common/common-client/bower_components/**/*.js", included: false},
             {pattern: "common/common-client/src/main/javascript/**/*", included: false},

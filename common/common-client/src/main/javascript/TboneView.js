@@ -10,6 +10,7 @@ define(function (require) {
     return Marionette.Layout.extend({
         constructor: function (options) {
             Marionette.Layout.prototype.constructor.apply(this, arguments);
+            var scope = this;
 
             if (options && options.controller) {
                 this.controller = options.controller;
@@ -20,6 +21,12 @@ define(function (require) {
                     this.stickit();
                 });
             }
+
+            this.listenTo(this, "item:rendered", function () {
+                setTimeout(function () {
+                    scope.triggerMethod("after:render");
+                }, 0);
+            });
         }
     });
 });

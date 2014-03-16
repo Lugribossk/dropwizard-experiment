@@ -20,6 +20,10 @@ define(function (require) {
      * @class OAuth2AccessToken
      */
     return TBoneModel.extend({
+        defaults: {
+            accessToken: null
+        },
+
         addToRequestsFor: function (urlPrefix) {
             prefixes[urlPrefix] = this.get("accessToken");
         }

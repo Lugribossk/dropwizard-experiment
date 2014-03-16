@@ -19,4 +19,19 @@ module.exports = function (grunt) {
             files: ["src/main/javascript/**/*.html"]
         }
     });
+
+    grunt.loadNpmTasks("grunt-contrib-connect");
+    grunt.config.set("connect", {
+        client: {
+            options: {
+                port: 9090,
+                hostname: "*",
+                base: "../../",
+                keepalive: true,
+                livereload: true
+            }
+        }
+    });
+
+    grunt.registerTask("serve", ["connect:client"]);
 };

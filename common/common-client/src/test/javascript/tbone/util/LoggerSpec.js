@@ -1,7 +1,7 @@
 /*global describe, it, expect, spyOn, beforeEach, afterEach, jasmine, console*/
 define(function (require) {
     "use strict";
-    var Logger = require("tbone/util/Logger");
+    var Logger = require("common/util/Logger");
 
     describe("Logger", function () {
         describe("info()", function () {

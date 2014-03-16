@@ -1,5 +1,5 @@
 /*global require*/
-require(["app/ExampleApp"], function (ExampleApp) {
+require(["todo/app/ExampleApp"], function (ExampleApp) {
     "use strict";
     ExampleApp.start(window.appConfig);
 });

@@ -4,9 +4,9 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var PreRouteHistory = require("tbone/auth/PreRouteHistory");
-    var Promise = require("tbone/util/Promise");
-    var AuthController = require("auth/AuthController");
+    var PreRouteHistory = require("common/auth/PreRouteHistory");
+    var Promise = require("common/util/Promise");
+    var AuthController = require("todo/auth/AuthController");
 
     /**
      * Backbone.History that authenticates the user before allowing access to any routes.

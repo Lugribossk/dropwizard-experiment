@@ -11,8 +11,8 @@ module.exports = function (config) {
             // Serve all the code, but don't include it as script tags. RequireJS will load them.
             {pattern: "common/common-client/bower_components/**/*.js", included: false},
             {pattern: "common/common-client/src/main/javascript/**/*", included: false},
-            //{pattern: "src/main/javascript/**/*", included: false},
-            {pattern: "common/common-client/src/test/javascript/**/*", included: false}
+            {pattern: "todo/todo-client/src/main/javascript/**/*", included: false},
+            {pattern: "todo/todo-client/src/test/javascript/**/*", included: false}
         ],
         browsers: ["PhantomJS"],
         singleRun: true,
@@ -25,7 +25,7 @@ module.exports = function (config) {
         logLevel: "DEBUG",
         reporters: ["progress", "junit"/*, "coverage"*/],
         junitReporter: {
-            outputFile: "common/common-client/target/test-results.xml"
+            outputFile: "todo/todo-client/target/test-results.xml"
         }//,
 //        coverageReporter: {
 //            type: "html",

@@ -1,8 +1,8 @@
 define(function (require) {
     "use strict";
     var Backbone = require("backbone");
-    var Logger = require("tbone/util/Logger");
-    var Promise = require("tbone/util/Promise");
+    var Logger = require("common/util/Logger");
+    var Promise = require("common/util/Promise");
 
     var log = new Logger("PreRouteHistory");
 

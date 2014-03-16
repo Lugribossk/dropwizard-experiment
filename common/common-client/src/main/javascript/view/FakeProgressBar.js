@@ -1,7 +1,7 @@
 define(function (require) {
     "use strict";
-    var ProgressBar = require("tbone/views/ProgressBar");
-    var Promise = require("tbone/util/Promise");
+    var ProgressBar = require("common/views/ProgressBar");
+    var Promise = require("common/util/Promise");
 
     var timings = {};
 

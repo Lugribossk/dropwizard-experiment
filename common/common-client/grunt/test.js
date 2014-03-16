@@ -33,8 +33,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-karma");
     grunt.config.set("karma", {
         options: {
-            basePath: process.cwd(),
-            configFile: "../../common/common-client/karma.conf.js"
+            configFile: "karma.conf.js"
         },
         unit: {
             browsers: ["Chrome"],

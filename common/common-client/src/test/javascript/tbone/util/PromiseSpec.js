@@ -2,7 +2,7 @@
 define(function (require) {
     "use strict";
     var $ = require("jquery");
-    var Promise = require("tbone/util/Promise");
+    var Promise = require("common/util/Promise");
 
     describe("Promise", function () {
         it("rejected() should return a rejected promise", function () {

@@ -1,9 +1,9 @@
 define(function (require) {
     "use strict";
-    var Navbar = require("tbone/ui/bootstrap/Navbar");
+    var Navbar = require("common/ui/bootstrap/Navbar");
     var template = require("hbars!./ExampleNavbar");
-    var Gravatar = require("tbone/ui/Gravatar");
-    var AuthController = require("auth/AuthController");
+    var Gravatar = require("common/ui/Gravatar");
+    var AuthController = require("todo/auth/AuthController");
     require("less!./ExampleNavbar");
 
     return Navbar.extend({

@@ -1,6 +1,6 @@
 define(function (require) {
     "use strict";
-    var Logger = require("tbone/util/Logger");
+    var Logger = require("common/util/Logger");
 
     var log = new Logger("ComponentPlugin");
     var loadedComponents = {};

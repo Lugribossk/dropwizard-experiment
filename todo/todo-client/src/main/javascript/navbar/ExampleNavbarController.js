@@ -5,8 +5,8 @@ define(function (require) {
     var Backbone = require("backbone");
     var Marionette = require("marionette");
     var ExampleNavbar = require("./ExampleNavbar");
-    var AuthController = require("auth/AuthController");
-    var TboneController = require("tbone/TboneController");
+    var AuthController = require("todo/auth/AuthController");
+    var TboneController = require("common/TboneController");
 
     return TboneController.extend({
         viewType: ExampleNavbar,

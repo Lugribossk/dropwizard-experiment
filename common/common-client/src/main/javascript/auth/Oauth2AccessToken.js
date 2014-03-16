@@ -2,7 +2,7 @@ define(function (require) {
     "use strict";
     var $ = require("jquery");
     var _ = require("underscore");
-    var TBoneModel = require("tbone/TboneModel");
+    var TBoneModel = require("common/TboneModel");
 
     var prefixes = {};
 

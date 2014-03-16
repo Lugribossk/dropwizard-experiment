@@ -12,7 +12,7 @@
     var allTests = Object.keys(window.__karma__.files).filter(function (file) {
         // Tests end with Spec.js
         // But so do some of the files we're serving from bower_components, so check that they come from our tests directory as well.
-        return (/\/base\/src\/test\/.*?Spec\.js$/).test(file);
+        return (/\/src\/test\/javascript\/.*?Spec\.js$/).test(file);
     });
 
     // PhantomJS *still* doesn't have Function#bind(), so load an ES5 shim for that.

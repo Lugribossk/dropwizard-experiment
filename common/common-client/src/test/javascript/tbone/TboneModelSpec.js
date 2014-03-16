@@ -2,7 +2,7 @@
 define(function (require) {
     "use strict";
     var $ = require("jquery");
-    var TboneModel = require("tbone/TboneModel");
+    var TboneModel = require("common/TboneModel");
 
     describe("TboneModel", function () {
         describe("computed attributes", function () {

@@ -1,7 +1,7 @@
 define(function (require) {
     "use strict";
-    var Promise = require("tbone/util/Promise");
-    var TboneView = require("tbone/TboneView");
+    var Promise = require("common/util/Promise");
+    var TboneView = require("common/TboneView");
     var template = require("hbars!./ProgressBar");
 
     /**

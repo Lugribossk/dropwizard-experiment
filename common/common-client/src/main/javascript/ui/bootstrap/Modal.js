@@ -4,7 +4,7 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var TboneView = require("tbone/TboneView");
+    var TboneView = require("common/TboneView");
     var Bootstrap = require("Bootstrap");
     var template = require("hbars!./Modal");
 

@@ -4,7 +4,7 @@ define(function (require) {
     var Marionette = require("marionette");
     var Handlebars = require("Handlebars");
     var TestUtils = require("test/TestUtils");
-    var ListCollection = require("tbone/collection/ListCollection");
+    var ListCollection = require("common/collection/ListCollection");
 
     describe("ListCollection", function () {
         it("should create models for the list input", function () {

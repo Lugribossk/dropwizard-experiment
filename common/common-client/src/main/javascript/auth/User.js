@@ -2,9 +2,9 @@ define(function (require) {
     "use strict";
     var $ = require("jquery");
     var _ = require("underscore");
-    var TboneModel = require("tbone/TboneModel");
-    var Promise = require("tbone/util/Promise");
-    var OAuth2AccessToken = require("tbone/auth/OAuth2AccessToken");
+    var TboneModel = require("common/TboneModel");
+    var Promise = require("common/util/Promise");
+    var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
 
     /**
      * @class User

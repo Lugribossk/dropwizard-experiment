@@ -4,11 +4,11 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var LoginForm = require("auth/LoginForm");
-    var User = require("tbone/auth/User");
-    var Logger = require("tbone/util/Logger");
-    var OAuth2AccessToken = require("tbone/auth/OAuth2AccessToken");
-    var Promise = require("tbone/util/Promise");
+    var LoginForm = require("todo/auth/LoginForm");
+    var User = require("common/auth/User");
+    var Logger = require("common/util/Logger");
+    var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
+    var Promise = require("common/util/Promise");
 
     var log = new Logger("AuthController");
     var STORAGE_KEY = "accessToken";

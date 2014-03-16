@@ -1,7 +1,7 @@
 define(function (require) {
     "use strict";
     var _ = require("underscore");
-    var Promise = require("tbone/util/Promise");
+    var Promise = require("common/util/Promise");
     var Associations = require("associations");
 
     function handleDependencyChange(config, name, scope) {

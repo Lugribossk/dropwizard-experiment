@@ -4,11 +4,11 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var Logger = require("tbone/util/Logger");
-    var ExampleNavbarController = require("navbar/ExampleNavbarController");
-    var ExampleRouter = require("app/ExampleRouter");
-    var AuthenticatingHistory = require("auth/AuthenticatingHistory");
-    var DeferredRegion = require("tbone/view/DeferredRegion");
+    var Logger = require("common/util/Logger");
+    var ExampleNavbarController = require("todo/navbar/ExampleNavbarController");
+    var ExampleRouter = require("todo/app/ExampleRouter");
+    var AuthenticatingHistory = require("todo/auth/AuthenticatingHistory");
+    var DeferredRegion = require("common/view/DeferredRegion");
     require("less!./ExampleApp");
 
     var app = new Marionette.Application();

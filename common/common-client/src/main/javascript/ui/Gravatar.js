@@ -1,6 +1,6 @@
 define(function (require) {
     "use strict";
-    var TboneView = require("tbone/TboneView");
+    var TboneView = require("common/TboneView");
     var md5 = require("md5");
 
     /**

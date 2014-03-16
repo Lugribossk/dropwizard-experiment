@@ -4,8 +4,8 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var Logger = require("tbone/util/Logger");
-    var Dashboard = require("dashboard/Dashboard");
+    var Logger = require("common/util/Logger");
+    var Dashboard = require("todo/dashboard/Dashboard");
 
     var log = new Logger("ExampleRouter");
 

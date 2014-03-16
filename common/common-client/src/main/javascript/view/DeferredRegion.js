@@ -1,7 +1,7 @@
 define(function (require) {
     "use strict";
     var Marionette = require("marionette");
-    var Promise = require("tbone/util/Promise");
+    var Promise = require("common/util/Promise");
 
     /**
      * @class DeferredRegion

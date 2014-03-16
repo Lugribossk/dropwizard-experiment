@@ -11,25 +11,23 @@ module.exports = function (config) {
             // Serve all the code, but don't include it as script tags. RequireJS will load them.
             {pattern: "common/common-client/bower_components/**/*.js", included: false},
             {pattern: "common/common-client/src/main/javascript/**/*", included: false},
-            //{pattern: "src/main/javascript/**/*", included: false},
             {pattern: "common/common-client/src/test/javascript/**/*", included: false}
         ],
         browsers: ["PhantomJS"],
         singleRun: true,
         // Randomize the port in case several CI jobs are running at the same time.
         port: 10000 + Math.round(Math.random() * 1000),
-        // Disable the default html2js preprocessor as it screws up the Handlebars HTML files.
-//        preprocessors: {
-//            "src/main/javascript/**/*.js": ["coverage"]
-//        },
+        preprocessors: {
+            "common/common-client/src/main/javascript/**/*.js": ["coverage"]
+        },
         logLevel: "DEBUG",
-        reporters: ["progress", "junit"/*, "coverage"*/],
+        reporters: ["progress", "junit", "coverage"],
         junitReporter: {
             outputFile: "common/common-client/target/test-results.xml"
-        }//,
-//        coverageReporter: {
-//            type: "html",
-//            dir: "target/coverage"
-//        }
+        },
+        coverageReporter: {
+            type: "html",
+            dir: "common/common-client/target/coverage"
+        }
     });
 };

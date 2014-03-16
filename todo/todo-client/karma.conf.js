@@ -18,18 +18,17 @@ module.exports = function (config) {
         singleRun: true,
         // Randomize the port in case several CI jobs are running at the same time.
         port: 10000 + Math.round(Math.random() * 1000),
-        // Disable the default html2js preprocessor as it screws up the Handlebars HTML files.
-//        preprocessors: {
-//            "src/main/javascript/**/*.js": ["coverage"]
-//        },
+        preprocessors: {
+            "todo/todo-client/src/main/javascript/**/*.js": ["coverage"]
+        },
         logLevel: "DEBUG",
-        reporters: ["progress", "junit"/*, "coverage"*/],
+        reporters: ["progress", "junit", "coverage"],
         junitReporter: {
             outputFile: "todo/todo-client/target/test-results.xml"
-        }//,
-//        coverageReporter: {
-//            type: "html",
-//            dir: "target/coverage"
-//        }
+        },
+        coverageReporter: {
+            type: "html",
+            dir: "todo/todo-client/target/coverage"
+        }
     });
 };

@@ -6,14 +6,19 @@ define(function (require) {
     var Marionette = require("marionette");
     var PreRouteHistory = require("tbone/auth/PreRouteHistory");
     var Promise = require("tbone/util/Promise");
-    var LoginController = require("user/LoginController");
+    var AuthController = require("auth/AuthController");
 
+    /**
+     * Backbone.History that authenticates the user before allowing access to any routes.
+     *
+     * @class AuthenticatingHistory
+     */
     return PreRouteHistory.extend({
         preRoute: function (fragment) {
-            if (LoginController.getCurrentUser().get("isLoggedIn")) {
+            if (AuthController.getCurrentUser().get("isLoggedIn")) {
                 return Promise.resolved();
             } else {
-                return LoginController.attemptLogin(this.options.region);
+                return AuthController.attemptLogin(this.options.region);
             }
         }
     });

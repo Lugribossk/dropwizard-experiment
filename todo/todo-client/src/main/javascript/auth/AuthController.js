@@ -4,13 +4,13 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
-    var LoginForm = require("user/LoginForm");
-    var User = require("user/User");
+    var LoginForm = require("auth/LoginForm");
+    var User = require("tbone/auth/User");
     var Logger = require("tbone/util/Logger");
     var OAuth2AccessToken = require("tbone/auth/OAuth2AccessToken");
     var Promise = require("tbone/util/Promise");
 
-    var log = new Logger("LoginController");
+    var log = new Logger("AuthController");
     var STORAGE_KEY = "accessToken";
     var currentUser = new User();
 
@@ -37,6 +37,9 @@ define(function (require) {
         }
     }
 
+    /**
+     * @class AuthController
+     */
     return Marionette.Controller.extend({
         initialize: function () {
             this._loginSuccess = new $.Deferred();
@@ -56,10 +59,19 @@ define(function (require) {
                 });
         }
     }, {
+        /**
+         * Get the current user.
+         * This is always the same object, even if the user changes.
+         *
+         * @returns {User}
+         */
         getCurrentUser: function () {
             return currentUser;
         },
-        
+
+        /**
+         * Log out the current user.
+         */
         logout: function () {
             currentUser.clear();
             window.localStorage.removeItem(STORAGE_KEY);

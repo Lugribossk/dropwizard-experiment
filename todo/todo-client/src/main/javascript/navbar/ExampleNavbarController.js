@@ -5,7 +5,7 @@ define(function (require) {
     var Backbone = require("backbone");
     var Marionette = require("marionette");
     var ExampleNavbar = require("./ExampleNavbar");
-    var LoginController = require("user/LoginController");
+    var AuthController = require("auth/AuthController");
     var TboneController = require("tbone/TboneController");
 
     return TboneController.extend({
@@ -22,7 +22,7 @@ define(function (require) {
         }
     }, {
         showNavbar: function (region) {
-            this._showModel(LoginController.getCurrentUser(), region);
+            this._showModel(AuthController.getCurrentUser(), region);
         }
     });
 });

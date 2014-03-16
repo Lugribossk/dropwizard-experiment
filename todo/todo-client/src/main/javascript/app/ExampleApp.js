@@ -7,9 +7,7 @@ define(function (require) {
     var Logger = require("tbone/util/Logger");
     var ExampleNavbarController = require("navbar/ExampleNavbarController");
     var ExampleRouter = require("app/ExampleRouter");
-    var ExampleAuthentication = require("app/ExampleAuthentication");
-    var User = require("user/User");
-    var LoginController = require("user/LoginController");
+    var AuthenticatingHistory = require("auth/AuthenticatingHistory");
     var DeferredRegion = require("tbone/view/DeferredRegion");
     require("less!./ExampleApp");
 
@@ -29,11 +27,11 @@ define(function (require) {
     app.addInitializer(Logger.initialize);
 
     app.addInitializer(function () {
-        ExampleAuthentication.initialize();
+        AuthenticatingHistory.initialize();
 
         var router = new ExampleRouter({region: this.content});
 
-        // These are actually options for ExampleAuthentication.
+        // These are actually options for AuthenticatingHistory.
         Backbone.history.start({
             region: this.content
         });

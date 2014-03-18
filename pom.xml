@@ -189,6 +189,34 @@
         </pluginManagement>
     </build>
 
+    <!-- The exec plugin requires the full filename with .cmd on Windows for npm and grunt.
+     So use profiles to define properties with the correct values. -->
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <executable>.cmd</executable>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>nix</id>
+            <activation>
+                <os>
+                    <family>!windows</family>
+                </os>
+            </activation>
+            <properties>
+                <executable/>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>

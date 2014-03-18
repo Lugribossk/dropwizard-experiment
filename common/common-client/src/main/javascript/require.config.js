@@ -7,7 +7,7 @@ require.config({
         stickit: "common/common-client/bower_components/backbone.stickit/backbone.stickit",
         associations: "common/common-client/bower_components/backbone-associations/backbone-associations",
 
-        jquery: "common/common-client/bower_components/jquery/jquery",
+        jquery: "common/common-client/bower_components/jquery/dist/jquery",
         underscore: "common/common-client/bower_components/lodash/dist/lodash",
         Handlebars: "common/common-client/bower_components/handlebars/handlebars",
 

@@ -21,7 +21,7 @@ module.exports = function (config) {
         preprocessors: {
             "todo/todo-client/src/main/javascript/**/*.js": ["coverage"]
         },
-        logLevel: "DEBUG",
+        //logLevel: "DEBUG",
         reporters: ["progress", "junit", "coverage"],
         junitReporter: {
             outputFile: "todo/todo-client/target/test-results.xml"

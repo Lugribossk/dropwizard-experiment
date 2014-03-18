@@ -20,7 +20,7 @@ module.exports = function (config) {
         preprocessors: {
             "common/common-client/src/main/javascript/**/*.js": ["coverage"]
         },
-        logLevel: "DEBUG",
+        //logLevel: "DEBUG",
         reporters: ["progress", "junit", "coverage"],
         junitReporter: {
             outputFile: "common/common-client/target/test-results.xml"

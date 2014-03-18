@@ -50,7 +50,7 @@ define(function (require) {
 
                 model.save();
 
-                var ajaxData = $.ajax.mostRecentCall.args[0].data;
+                var ajaxData = $.ajax.calls.mostRecent().args[0].data;
                 expect(ajaxData).toEqual(JSON.stringify({
                     firstName: "John",
                     lastName: "Smith"

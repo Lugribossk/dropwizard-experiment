@@ -5,30 +5,30 @@ define(function (require) {
     var Promise = require("common/util/Promise");
 
     describe("Promise", function () {
-        it("rejected() should return a rejected promise", function () {
+        it("rejected() should return a rejected promise", function (done) {
             var promise = Promise.rejected("a", "b");
 
             expect(promise.state()).toBe("rejected");
-            return promise
-                .then(null, function (a, b) {
-                    expect(a).toBe("a");
-                    expect(b).toBe("b");
-                });
+            promise.always(function (a, b) {
+                expect(a).toBe("a");
+                expect(b).toBe("b");
+                done();
+            });
         });
 
-        it("resolved() should return a resolved promise", function () {
+        it("resolved() should return a resolved promise", function (done) {
             var promise = Promise.resolved("a", "b");
 
             expect(promise.state()).toBe("resolved");
-            return promise
-                .then(function (a, b) {
-                    expect(a).toBe("a");
-                    expect(b).toBe("b");
-                });
+            promise.always(function (a, b) {
+                expect(a).toBe("a");
+                expect(b).toBe("b");
+                done();
+            });
         });
 
         describe("all()", function () {
-            it("should resolve with the values of its arguments", function () {
+            it("should resolve with the values of its arguments", function (done) {
                 var def1 = new $.Deferred();
                 var def2 = new $.Deferred();
                 var all = Promise.all([def1, def2, "c"]);
@@ -37,12 +37,13 @@ define(function (require) {
                 def2.resolve("b");
 
                 expect(all.state()).toBe("resolved");
-                return all.then(function (abc) {
+                all.always(function (abc) {
                     expect(abc).toEqual(["a", "b", "c"]);
+                    done();
                 });
             });
 
-            it("should progress as its arguments resolve", function () {
+            it("should progress as its arguments resolve", function (done) {
                 var def1 = new $.Deferred();
                 var def2 = new $.Deferred();
                 var all = Promise.all([def1, def2, "c"]);
@@ -56,12 +57,13 @@ define(function (require) {
                 def1.resolve("a");
                 def2.resolve("b");
 
-                return all.then(function () {
+                all.always(function () {
                     expect(step).toBe(3);
+                    done();
                 });
             });
 
-            it("should reject if one of its arguments reject", function () {
+            it("should reject if one of its arguments reject", function (done) {
                 var def1 = new $.Deferred();
                 var def2 = new $.Deferred();
                 var all = Promise.all([def1, def2, "c"]);
@@ -70,14 +72,15 @@ define(function (require) {
                 def2.reject();
 
                 expect(all.state()).toBe("rejected");
-                return all.then(null, function () {
+                all.always(function () {
                     expect(true).toBe(true);
+                    done();
                 });
             });
         });
 
         describe("any()", function () {
-            it("should resolve with the value of any of its arguments that resolve", function () {
+            it("should resolve with the value of any of its arguments that resolve", function (done) {
                 var def1 = new $.Deferred();
                 var def2 = new $.Deferred();
                 var any = Promise.any([def1, def2, "c"]);
@@ -86,12 +89,13 @@ define(function (require) {
                 def2.reject();
 
                 expect(any.state()).toBe("resolved");
-                return any.then(function (ac) {
+                any.always(function (ac) {
                     expect(ac).toEqual(["a", "c"]);
+                    done();
                 });
             });
 
-            it("should progress as its arguments resolve", function () {
+            it("should progress as its arguments resolve", function (done) {
                 var def1 = new $.Deferred();
                 var def2 = new $.Deferred();
                 var any = Promise.any([def1, def2, "c"]);
@@ -105,12 +109,13 @@ define(function (require) {
                 def1.reject();
                 def2.resolve("b");
 
-                return any.then(function () {
+                any.always(function () {
                     expect(step).toBe(2);
+                    done();
                 });
             });
 
-            it("should not reject even if all its arguments reject", function () {
+            it("should not reject even if all its arguments reject", function (done) {
                 var def1 = new $.Deferred();
                 var def2 = new $.Deferred();
                 var any = Promise.any([def1, def2]);
@@ -119,8 +124,9 @@ define(function (require) {
                 def2.reject();
 
                 expect(any.state()).toBe("resolved");
-                return any.then(function (values) {
+                any.always(function (values) {
                     expect(values).toEqual([]);
+                    done();
                 });
             });
         });

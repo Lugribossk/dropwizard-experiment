@@ -106,7 +106,7 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
     private static File createSlugArchive(File jarFile, File configFile) throws IOException {
         DeployCommand.log.info("Creating slug archive...");
         try {
-            File slugArchive = TgzArchive.create(ImmutableSet.of(jarFile, configFile), "app");
+            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile), "app");
             long size = slugArchive.length();
             DeployCommand.log.info("Created slug archive with a size of {} bytes.", size);
             if (size > SLUG_SIZE_LIMIT) {

@@ -3,6 +3,7 @@ package bo.gotthardt.deploy;
 import bo.gotthardt.application.BuildToolConfiguration;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.Resources;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import jp.co.flect.heroku.platformapi.PlatformApi;
@@ -16,8 +17,14 @@ import net.sourceforge.argparse4j.inf.Subparser;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 
+/**
+ * Dropwizard command for deploying to Heroku.
+ *
+ * Usage: deploy --application my-app-1234 --jar todo/todo-server/target/todo-server-0.0.1-SNAPSHOT.jar --configuration todo/todo-server/src/main/resources/configuration.yml build/src/main/resources/deploy.yml
+ */
 @Slf4j
 public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
     private static final long SLUG_SIZE_LIMIT = 300 * 1024 * 1024;
@@ -39,8 +46,8 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
 
         File jarFile = (File) namespace.get("jar");
         File configFile = (File) namespace.get("configuration");
-        DeployCommand.log.info("Found jar file: {}", jarFile.getAbsolutePath());
-        DeployCommand.log.info("Found configuration file: {}", configFile.getAbsolutePath());
+        log.info("Found jar file: {}", jarFile.getAbsolutePath());
+        log.info("Found configuration file: {}", configFile.getAbsolutePath());
 
         File slugArchive = createSlugArchive(jarFile, configFile);
 
@@ -49,44 +56,69 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
         Slug slug = uploadSlug(appName, processTypes, slugArchive);
 
         releaseSlug(appName, slug);
+        log.info("Deployment complete!");
     }
 
     private App validateAppName(String appName) {
-        DeployCommand.log.info("Validating app name...");
+        log.info("Validating app name...");
         try {
             App app = heroku.getApp(appName);
-            DeployCommand.log.info("Found app: '{}' with id {}.", appName, app.getId());
+            log.info("Found app: '{}' with id {}.", appName, app.getId());
             return app;
         } catch (IOException e) {
-            DeployCommand.log.error("Unable to find app.", e);
-            System.exit(-1);
+            log.error("Unable to find app.", e);
+            quit();
             return null;
         }
     }
 
-    private Slug uploadSlug(String appName, Map<String, String> processTypes, File slugArchive) {
-        DeployCommand.log.info("Uploading slug to Heroku...");
+    private File createSlugArchive(File jarFile, File configFile) throws IOException {
+        DeployCommand.log.info("Creating slug archive...");
         try {
-            Slug slug;
-            slug = heroku.createSlug(appName, processTypes, slugArchive);
-            DeployCommand.log.info("Uploaded slug with id {}.", slug.getId());
+            File javaConfig = new File(Resources.getResource("system.properties").toURI());
+            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile, javaConfig), "app");
+            long size = slugArchive.length();
+            log.info("Created slug archive with a size of {} bytes.", size);
+            if (size > SLUG_SIZE_LIMIT) {
+                log.warn("Slug size is over the Heroku limit of {} bytes.", SLUG_SIZE_LIMIT);
+            } else if (size > SLUG_SIZE_WARNING) {
+                log.warn("Slug size is approaching the Heroku limit of {} bytes.", SLUG_SIZE_LIMIT);
+            }
+            return slugArchive;
+        } catch (IOException | URISyntaxException e) {
+            log.error("Unable to create slug archive", e);
+            quit();
+            return null;
+        }
+    }
+
+    private static Map<String, String> createProcessTypes(File jarFile, File configFile) {
+        return ImmutableMap.of("web", "java -Ddw.server.connector.port=$PORT -jar " + jarFile.getName() + " server " + configFile.getName());
+    }
+
+    private Slug uploadSlug(String appName, Map<String, String> processTypes, File slugArchive) {
+        log.info("Uploading slug to Heroku, this may take a few minutes...");
+        try {
+            Slug slug = heroku.createSlug(appName, processTypes, slugArchive, "TODO");
+            log.info("Uploaded slug with id {}.", slug.getId());
             return slug;
         } catch (IOException e) {
-            DeployCommand.log.error("Unable to create slug.", e);
-            System.exit(-1);
+            log.error("Unable to create slug.", e);
+            slugArchive.delete();
+            quit();
             return null;
         }
     }
 
     private Release releaseSlug(String appName, Slug slug) {
-        DeployCommand.log.info("Releasing slug...");
+        log.info("Releasing slug...");
         try {
             Release release = heroku.createRelease(appName, slug.getId(), "DeployCommand");
-            DeployCommand.log.info("Released as v{}.", release.getVersion());
+            log.info("Slug released as version {}.", release.getVersion());
             return release;
         } catch (IOException e) {
-            DeployCommand.log.error("Unable to release slug to app.", e);
-            System.exit(-1);
+            log.error("Unable to release slug to app.", e);
+            quit();
             return null;
         }
     }
@@ -99,26 +131,12 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
         super.configure(subparser);
     }
 
-    private static Map<String, String> createProcessTypes(File jarFile, File configFile) {
-        return ImmutableMap.of("web", "java -jar " + jarFile.getName() + " server " + configFile.getName());
-    }
-
-    private static File createSlugArchive(File jarFile, File configFile) throws IOException {
-        DeployCommand.log.info("Creating slug archive...");
+    private static void quit() {
         try {
-            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile), "app");
-            long size = slugArchive.length();
-            DeployCommand.log.info("Created slug archive with a size of {} bytes.", size);
-            if (size > SLUG_SIZE_LIMIT) {
-                DeployCommand.log.warn("Slug size is over the Heroku limit of {} bytes.", SLUG_SIZE_LIMIT);
-            } else if (size > SLUG_SIZE_WARNING) {
-                DeployCommand.log.warn("Slug size is approaching the Heroku limit of {} bytes.", SLUG_SIZE_LIMIT);
-            }
-            return slugArchive;
-        } catch (IOException e) {
-            DeployCommand.log.error("Unable to create slug archive", e);
-            System.exit(-1);
-            return null;
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            // Blah
         }
+        System.exit(-1);
     }
 }

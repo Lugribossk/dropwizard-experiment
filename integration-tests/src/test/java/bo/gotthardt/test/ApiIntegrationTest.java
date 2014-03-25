@@ -12,11 +12,11 @@ import java.util.logging.Logger;
  * @author Bo Gotthardt
  */
 public abstract class ApiIntegrationTest {
-    protected static final InMemoryEbeanServer ebean = new InMemoryEbeanServer();
+    protected static final InMemoryEbeanServer db = new InMemoryEbeanServer();
 
     @Before
     public void clearDatabase() {
-        ebean.clear();
+        db.clear();
     }
 
     @Before

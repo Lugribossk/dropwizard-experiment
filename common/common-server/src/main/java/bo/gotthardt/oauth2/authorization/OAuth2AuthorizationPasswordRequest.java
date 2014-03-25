@@ -16,8 +16,8 @@ public class OAuth2AuthorizationPasswordRequest implements OAuth2AuthorizationRe
     private final String password;
 
     @Override
-    public Optional<User> getValidUser(EbeanServer ebean) {
-        User user = ebean.find(User.class).where().eq("username", username).findUnique();
+    public Optional<User> getValidUser(EbeanServer db) {
+        User user = db.find(User.class).where().eq("username", username).findUnique();
 
         if (user != null && user.getPassword().equalsPlaintext(password)) {
             return Optional.of(user);

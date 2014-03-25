@@ -20,7 +20,7 @@ public class TodoListResourceTest extends ApiIntegrationTest {
     private static final DummyAuthProvider authProvider = new DummyAuthProvider();
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new TodoListResource(ebean))
+            .addResource(new TodoListResource(db))
             .addResource(authProvider)
             .addResource(new ListFilteringProvider())
             .build();
@@ -28,13 +28,13 @@ public class TodoListResourceTest extends ApiIntegrationTest {
     @Test
     public void blah() {
         User user = new User("test", "blah");
-        ebean.save(user);
+        db.save(user);
         authProvider.setUser(user);
 
         TodoList list = new TodoList("testlist", user);
         list.getItems().add(new TodoItem("testitem1"));
         list.getItems().add(new TodoItem("testitem2"));
-        ebean.save(list);
+        db.save(list);
 
         assertThat(GET("/todolists/" + list.getId()))
                 .hasJsonContent(list);

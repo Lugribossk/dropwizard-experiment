@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
  */
 @Path("/todolists")
 public class TodoListResource extends RestrictedRestResource<TodoList> {
-    public TodoListResource(EbeanServer ebean) {
-        super(new CrudService<>(TodoList.class, ebean));
+    public TodoListResource(EbeanServer db) {
+        super(new CrudService<>(TodoList.class, db));
     }
 }

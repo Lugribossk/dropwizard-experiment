@@ -248,6 +248,11 @@
                 <version>${dropwizard.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-db</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm</artifactId>
                 <version>3.3.1-RC2</version>

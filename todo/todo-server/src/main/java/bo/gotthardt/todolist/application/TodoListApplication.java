@@ -38,10 +38,10 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        EbeanServer ebean = ebeanBundle.getEbeanServer();
+        EbeanServer db = ebeanBundle.getEbeanServer();
 
-        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebean)));
-        environment.jersey().register(new UserResource(ebean));
+        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, db)));
+        environment.jersey().register(new UserResource(db));
 
         environment.jersey().register(new ListFilteringProvider());
 
@@ -58,6 +58,6 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         User user = new User("test", "test");
         user.setName("Test Testsen");
         user.setEmail("example@example.com");
-        ebean.save(user);
+        db.save(user);
     }
 }

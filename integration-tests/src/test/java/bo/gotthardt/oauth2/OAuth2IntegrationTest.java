@@ -31,10 +31,10 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 public class OAuth2IntegrationTest extends ApiIntegrationTest {
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new OAuth2AccessTokenResource(ebean))
-            .addResource(new UserResource(ebean))
+            .addResource(new OAuth2AccessTokenResource(db))
+            .addResource(new UserResource(db))
             .addResource(new OAuth2AuthorizationRequestProvider())
-            .addResource(new OAuthProvider<>(new OAuth2Authenticator(ebean), "realm"))
+            .addResource(new OAuthProvider<>(new OAuth2Authenticator(db), "realm"))
             .build();
 
     private User user;
@@ -51,7 +51,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
         OAuth2AccessToken token = response.getEntity(OAuth2AccessToken.class);
         // The token sent in the response won't have any user information, but if we get it from the database it will have.
-        assertThat(ebean.find(OAuth2AccessToken.class, token.getAccessToken()).getUser().getId())
+        assertThat(db.find(OAuth2AccessToken.class, token.getAccessToken()).getUser().getId())
                 .isEqualTo(user.getId());
     }
 
@@ -60,7 +60,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         assertThat(POST("/token", loginParameters("testuser", "WRONGPASSWORD"), MediaType.APPLICATION_FORM_URLENCODED_TYPE))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
-        assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
+        assertThat(db.find(OAuth2AccessToken.class).findRowCount())
                 .isEqualTo(0);
     }
 
@@ -69,7 +69,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         assertThat(POST("/token", loginParameters("DOESNOTEXIST", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
-        assertThat(ebean.find(OAuth2AccessToken.class).findRowCount())
+        assertThat(db.find(OAuth2AccessToken.class).findRowCount())
                 .isEqualTo(0);
     }
 
@@ -126,19 +126,19 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     @Test
     public void shouldInvalidateTokens() {
         OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
-        ebean.save(token);
+        db.save(token);
 
         ClientResponse response = resources.client().resource("/token")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
                 .delete(ClientResponse.class);
-        ebean.refresh(token);
+        db.refresh(token);
 
         assertThat(token.isValid()).isFalse();
     }
 
     private User createUser() {
         User user = new User("testuser", "testpass");
-        ebean.save(user);
+        db.save(user);
         return user;
     }
 

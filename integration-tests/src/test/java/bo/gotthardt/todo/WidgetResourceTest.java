@@ -25,7 +25,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
  * @author Bo Gotthardt
  */
 public class WidgetResourceTest extends ApiIntegrationTest {
-    private static final CrudService<Widget> service = new CrudService<>(Widget.class, ebean);
+    private static final CrudService<Widget> service = new CrudService<>(Widget.class, db);
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new WidgetResource(service))
@@ -35,7 +35,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetOneItem() {
         Widget p = new Widget("Test");
-        ebean.save(p);
+        db.save(p);
 
         assertThat(GET("/widgets/" + p.getId()))
                 .hasStatus(Response.Status.OK)
@@ -52,9 +52,9 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetAllItems() {
         Widget p1 = new Widget("Test1");
-        ebean.save(p1);
+        db.save(p1);
         Widget p2 = new Widget("Test2");
-        ebean.save(p2);
+        db.save(p2);
 
         assertThat(GET("/widgets"))
                 .hasStatus(Response.Status.OK)
@@ -64,9 +64,9 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetItemsMatchingQuery() {
         Widget p1 = new Widget("Test1");
-        ebean.save(p1);
+        db.save(p1);
         Widget p2 = new Widget("Test2");
-        ebean.save(p2);
+        db.save(p2);
 
         assertThat(GET("/widgets?q=2"))
                 .hasStatus(Response.Status.OK)
@@ -76,11 +76,11 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetItemsAccordingToLimitAndOffest() {
         Widget p1 = new Widget("Test1");
-        ebean.save(p1);
+        db.save(p1);
         Widget p2 = new Widget("Test2");
-        ebean.save(p2);
+        db.save(p2);
         Widget p3 = new Widget("Test3");
-        ebean.save(p3);
+        db.save(p3);
 
         assertThat(GET("/widgets?limit=1&offset=1"))
                 .hasStatus(Response.Status.OK)
@@ -90,11 +90,11 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetAllItemsWhenLimitIs0() {
         Widget p1 = new Widget("Test1");
-        ebean.save(p1);
+        db.save(p1);
         Widget p2 = new Widget("Test2");
-        ebean.save(p2);
+        db.save(p2);
         Widget p3 = new Widget("Test3");
-        ebean.save(p3);
+        db.save(p3);
 
         assertThat(GET("/widgets?limit=0&offset=1"))
                 .hasStatus(Response.Status.OK)
@@ -109,7 +109,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
         assertThat(POST("/widgets", input))
                 .hasStatus(Response.Status.OK);
 
-        List<Widget> savedItems = ebean.find(Widget.class).findList();
+        List<Widget> savedItems = db.find(Widget.class).findList();
         assertThat(savedItems).hasSize(1);
         assertThat(savedItems.get(0).getName()).isEqualTo("Test1");
     }
@@ -117,13 +117,13 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldUpdatePuttedItem() {
         Widget p = new Widget("Test1");
-        ebean.save(p);
+        db.save(p);
 
         ObjectNode input = resources.getObjectMapper().createObjectNode();
         input.put("name", "Test2");
 
         ClientResponse response = PUT("/widgets/" + p.getId(), input);
-        ebean.refresh(p);
+        db.refresh(p);
 
         assertThat(response)
                 .hasStatus(Response.Status.OK)
@@ -134,7 +134,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldNotOverwriteIdFromPuttedItem() {
         Widget p = new Widget("Test1");
-        ebean.save(p);
+        db.save(p);
         long oldId = p.getId();
 
         ObjectNode input = resources.getObjectMapper().createObjectNode();
@@ -142,7 +142,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
         input.put("id", oldId + 100);
 
         ClientResponse response = PUT("/widgets/" + oldId, input);
-        ebean.refresh(p);
+        db.refresh(p);
 
         assertThat(response)
                 .hasStatus(Response.Status.OK)

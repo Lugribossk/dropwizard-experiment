@@ -38,8 +38,3 @@ When creating run configurations for tests, add the same VM options as above.
 This ensures that Ebean is activated for the tests, even when not running them via Maven (where a plugin handles it).
 
 You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
-
-
-# Deployment
-
-deploy --application my-heroku --jar todo/todo-server/target/todo-server-0.0.1-SNAPSHOT.jar --configuration todo/todo-server/src/main/resources/configuration.yml build/src/main/resources/deploy.yml

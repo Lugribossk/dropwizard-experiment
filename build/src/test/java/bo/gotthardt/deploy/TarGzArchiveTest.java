@@ -7,7 +7,6 @@ import com.google.common.io.Files;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,12 +30,8 @@ public class TarGzArchiveTest {
         input = File.createTempFile("qwerty", ".txt");
         Files.append("test", input, Charsets.UTF_8);
         unpackDir = Files.createTempDir();
-    }
-
-    @After
-    public void teardown() {
-        input.delete();
-        unpackDir.delete();
+        input.deleteOnExit();
+        unpackDir.deleteOnExit();
     }
 
     @Test

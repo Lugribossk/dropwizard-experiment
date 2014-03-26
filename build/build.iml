@@ -71,7 +71,7 @@
     <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-json:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.argparse4j:argparse4j:0.4.3" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.toolchain.setuid:jetty-setuid-java:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: jp.co.flect:heroku-platform-api:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: jp.co.flect:heroku-platform-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.4" level="project" />
@@ -88,6 +88,8 @@
     <orderEntry type="library" name="Maven: org.tukaani:xz:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.12.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:1.5.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:1.9.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:1.0" level="project" />
   </component>
 </module>
 

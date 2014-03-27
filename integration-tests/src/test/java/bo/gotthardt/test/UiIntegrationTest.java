@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
  * @author Bo Gotthardt
@@ -22,7 +23,10 @@ public abstract class UiIntegrationTest {
 
     @BeforeClass
     public static void setupWebDriver() {
-        driver = new FirefoxDriver();
+        DesiredCapabilities caps = new DesiredCapabilities();
+        //caps.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy("localhost:8888"));
+
+        driver = new FirefoxDriver(caps);
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 

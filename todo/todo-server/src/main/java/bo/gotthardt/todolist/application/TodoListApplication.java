@@ -14,6 +14,7 @@ import com.avaje.ebean.EbeanServer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.Getter;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 import javax.servlet.DispatcherType;
@@ -24,6 +25,7 @@ import java.util.EnumSet;
  * @author Bo Gotthardt
  */
 public class TodoListApplication extends Application<TodoListConfiguration> {
+    @Getter
     private EbeanBundle ebeanBundle;
 
     public static void main(String... args) throws Exception {

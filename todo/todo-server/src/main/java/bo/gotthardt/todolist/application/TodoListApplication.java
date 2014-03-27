@@ -7,6 +7,7 @@ import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.CrudService;
+import bo.gotthardt.todo.TodoClientBundle;
 import bo.gotthardt.todolist.rest.UserResource;
 import bo.gotthardt.todolist.rest.WidgetResource;
 import com.avaje.ebean.EbeanServer;
@@ -34,6 +35,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle = new EbeanBundle();
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
+        bootstrap.addBundle(new TodoClientBundle());
     }
 
     @Override

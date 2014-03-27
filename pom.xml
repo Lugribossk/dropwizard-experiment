@@ -236,6 +236,11 @@
                 <artifactId>todo-server</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>bo.gotthardt.stack</groupId>
+                <artifactId>todo-client</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.dropwizard</groupId>
@@ -250,6 +255,11 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-db</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-assets</artifactId>
                 <version>${dropwizard.version}</version>
             </dependency>
             <dependency>

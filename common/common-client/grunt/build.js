@@ -9,7 +9,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.config.set("requirejs", {
         options: {
-            //baseUrl: "src/javascript",
             mainConfigFile: "../../common/common-client/src/main/javascript/require.config.js",
             findNestedDependencies: true,
             almond: true,
@@ -19,8 +18,9 @@ module.exports = function (grunt) {
         },
         build: {
             options: {
-                //name: "blah",
-                out: "target/test.js"
+                // The starting slash here seems to be critical.
+                name: "/todo/todo-client/src/main/javascript/main.js",
+                out: "target/dist/main.js"
             }
         }
     });
@@ -42,7 +42,7 @@ module.exports = function (grunt) {
             },
             files: [{
                 src: "src/main/javascript/index.html",
-                dest: "target/index.html"
+                dest: "target/dist/index.html"
             }]
         }
     });

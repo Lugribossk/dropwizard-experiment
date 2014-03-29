@@ -4,10 +4,14 @@ import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -33,5 +37,10 @@ public abstract class UiIntegrationTest {
     @AfterClass
     public static void teardownWebDriver() {
         driver.quit();
+    }
+
+    @After
+    public void clearLocalStorage() {
+        ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
     }
 }

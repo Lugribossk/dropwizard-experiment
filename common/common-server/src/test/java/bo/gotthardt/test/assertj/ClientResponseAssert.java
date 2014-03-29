@@ -15,7 +15,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 /**
  * @author Bo Gotthardt
  */
-public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, ClientResponse> {
+public class ClientResponseAssert extends BaseAssert<ClientResponseAssert, ClientResponse> {
     private static final ObjectMapper MAPPER;
 
     static {
@@ -59,19 +59,5 @@ public class ClientResponseAssert extends AbstractAssert<ClientResponseAssert, C
         }
 
         return this;
-    }
-
-    /**
-     * Compare the specified actual and expected values, and throw a ComparisonFailure if they are not equal.
-     * The type of the values are Strings to allow us to use ComparisonFailure for IDE integration.
-     *
-     * @param actual the actual value
-     * @param expected the expected value
-     * @param message the message to show on failure
-     */
-    private static void compare(String actual, String expected, String message) {
-        if (actual == null || !actual.equals(expected)) {
-            throw new junit.framework.ComparisonFailure(message, expected, actual);
-        }
     }
 }

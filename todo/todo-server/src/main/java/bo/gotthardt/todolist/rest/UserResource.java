@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author Bo Gotthardt
  */
-@Path("/users")
+@Path("/api/users")
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
 public class UserResource {

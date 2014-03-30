@@ -1,17 +1,13 @@
 package bo.gotthardt.test;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public abstract class PageObject<T extends LoadableComponent<T>> extends LoadableComponent<T> {
+public abstract class PageObject {
     protected static String BASE_URL = "http://localhost:8056/static/";
 
     protected WebDriver driver;
@@ -20,7 +16,10 @@ public abstract class PageObject<T extends LoadableComponent<T>> extends Loadabl
         this.driver = driver;
 
         PageFactory.initElements(driver, this);
+        load();
     }
+
+    protected abstract void load();
 
     protected void waitFor(By locator, String message) {
         new WebDriverWait(driver, 5)
@@ -33,4 +32,5 @@ public abstract class PageObject<T extends LoadableComponent<T>> extends Loadabl
                 .withMessage(message)
                 .until(ExpectedConditions.visibilityOf(element));
     }
+
 }

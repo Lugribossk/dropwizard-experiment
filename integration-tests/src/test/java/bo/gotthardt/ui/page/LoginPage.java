@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
-public class LoginPage extends PageObject<LoginPage> {
+public class LoginPage extends PageObject {
     @FindBy(id = "username")
     private WebElement username;
     @FindBy(id = "password")
@@ -26,7 +26,7 @@ public class LoginPage extends PageObject<LoginPage> {
         password.sendKeys(pass);
         submitButton.click();
 
-        return new DashboardPage(driver).get();
+        return new DashboardPage(driver);
     }
 
     public LoginPage loginWithWrongCredentials(String name, String pass) {
@@ -35,19 +35,18 @@ public class LoginPage extends PageObject<LoginPage> {
         submitButton.click();
 
         waitFor(wrongPasswordAlert, "Wrong password warning");
-        isLoaded();
 
-        return this;
+        return new LoginPage(driver);
     }
 
     @Override
     protected void load() {
-        driver.get(BASE_URL);
-    }
-
-    @Override
-    protected void isLoaded() throws Error {
         assertThat(username).isVisible();
         assertThat(password).isVisible();
+    }
+
+    public static LoginPage go(WebDriver driver) {
+        driver.get(BASE_URL);
+        return new LoginPage(driver);
     }
 }

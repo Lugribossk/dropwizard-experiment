@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 /**
  * @author Bo Gotthardt
  */
-@Path("/widgets")
+@Path("/api/widgets")
 public class WidgetResource extends RestResource<Widget> {
     public WidgetResource(CrudService<Widget> service) {
         super(service);

@@ -37,7 +37,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle = new EbeanBundle();
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
-        //bootstrap.addBundle(new TodoClientBundle());
+        bootstrap.addBundle(new TodoClientBundle());
     }
 
     @Override
@@ -48,6 +48,8 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         environment.jersey().register(new UserResource(db));
 
         environment.jersey().register(new ListFilteringProvider());
+
+        environment.jersey().setUrlPattern("/api");
 
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

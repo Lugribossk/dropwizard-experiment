@@ -37,7 +37,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle = new EbeanBundle();
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
-        bootstrap.addBundle(new TodoClientBundle());
+        //bootstrap.addBundle(new TodoClientBundle());
     }
 
     @Override

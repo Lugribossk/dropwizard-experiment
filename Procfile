@@ -1,1 +1,0 @@
-web: java -Ddw.server.connector.port=$PORT -jar todo/todo-server/target/todo-server-0.0.1-SNAPSHOT.jar server todo/todo-server/src/main/resources/configuration.yml

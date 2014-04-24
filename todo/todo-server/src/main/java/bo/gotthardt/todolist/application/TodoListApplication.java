@@ -49,7 +49,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
         environment.jersey().register(new ListFilteringProvider());
 
-        environment.jersey().setUrlPattern("/api");
+        environment.jersey().setUrlPattern("/api/*");
 
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

@@ -163,6 +163,11 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.7.0.201403182114</version>
+                    <configuration>
+                        <includes>
+                            <include>bo.gotthardt.*</include>
+                        </includes>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>jacoco-initialize</id>

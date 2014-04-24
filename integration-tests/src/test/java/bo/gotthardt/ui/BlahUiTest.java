@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BlahUiTest extends UiIntegrationTest {
     @Test
     public void blah() {
-        driver.get("http://localhost:8080/static/");
+        driver.get("http://localhost:8080/");
 
         assertThat(driver.getTitle()).isEqualTo("Backbone stuff");
     }
@@ -23,7 +23,7 @@ public class BlahUiTest extends UiIntegrationTest {
     @Test
     public void blah2() {
         db.save(new User("test2", "test2"));
-        driver.get("http://localhost:8080/static/");
+        driver.get("http://localhost:8080/");
 
         driver.findElement(By.id("username")).sendKeys("test2");
         driver.findElement(By.id("password")).sendKeys("test2");

@@ -15,7 +15,7 @@ define(function (require) {
             email: null
         },
 
-        urlRoot: "http://localhost:8080/users/",
+        urlRoot: "http://localhost:8080/api/users/",
 
         computed: {
             isLoggedIn: {

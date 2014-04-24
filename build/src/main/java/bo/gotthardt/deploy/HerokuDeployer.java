@@ -16,6 +16,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+/**
+ * Deploy a jar file to a Heroku app.
+ *
+ * See https://blog.heroku.com/archives/2013/12/20/programmatically_release_code_to_heroku_using_the_platform_api and
+ * https://devcenter.heroku.com/articles/platform-api-deploying-slugs
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class HerokuDeployer {

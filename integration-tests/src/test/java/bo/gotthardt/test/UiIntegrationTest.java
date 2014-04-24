@@ -3,6 +3,7 @@ package bo.gotthardt.test;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
 import com.avaje.ebean.EbeanServer;
+import com.google.common.io.Resources;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -19,7 +20,7 @@ public abstract class UiIntegrationTest {
     protected static EbeanServer db;
 
     @ClassRule
-    public static DropwizardAppRule<TodoListConfiguration> appRule = new DropwizardAppRule<>(TodoListApplication.class, "integration-tests/src/test/resources/integration.yml");
+    public static DropwizardAppRule<TodoListConfiguration> appRule = new DropwizardAppRule<>(TodoListApplication.class, "src/test/resources/integration.yml");
 
     @BeforeClass
     public static void setupWebDriver() {

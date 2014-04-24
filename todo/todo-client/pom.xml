@@ -12,7 +12,6 @@
 
     <artifactId>todo-client</artifactId>
     <name>Todo - Client</name>
-    <packaging>jar</packaging>
 
     <build>
         <resources>

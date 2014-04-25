@@ -34,7 +34,7 @@
         <!-- Assign the build timestamp to a new property to work around a Maven bug (http://jira.codehaus.org/browse/MRESOURCES-99).-->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
-        <dropwizard.version>0.7.0-rc2</dropwizard.version>
+        <dropwizard.version>0.7.0</dropwizard.version>
     </properties>
 
     <build>
@@ -45,8 +45,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.1</version>
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
@@ -162,7 +162,12 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.6.4.201312101107</version>
+                    <version>0.7.0.201403182114</version>
+                    <configuration>
+                        <includes>
+                            <include>bo.gotthardt.*</include>
+                        </includes>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>jacoco-initialize</id>
@@ -236,6 +241,11 @@
                 <artifactId>todo-server</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>bo.gotthardt.stack</groupId>
+                <artifactId>todo-client</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.dropwizard</groupId>
@@ -245,6 +255,16 @@
             <dependency>
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-auth</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-db</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-assets</artifactId>
                 <version>${dropwizard.version}</version>
             </dependency>
             <dependency>
@@ -270,7 +290,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>16.0.1</version>
+                <version>17.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
@@ -281,6 +301,16 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.12.6</version>
+            </dependency>
+            <dependency>
+                <groupId>jp.co.flect</groupId>
+                <artifactId>heroku-platform-api</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-archiver</artifactId>
+                <version>2.4.4</version>
             </dependency>
 
             <dependency>
@@ -304,7 +334,25 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>1.9.5</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>2.40.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.detro.ghostdriver</groupId>
+                <artifactId>phantomjsdriver</artifactId>
+                <version>1.1.0</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

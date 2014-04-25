@@ -10,5 +10,5 @@ import com.google.common.base.Optional;
  * @author Bo Gotthardt
  */
 public interface OAuth2AuthorizationRequest {
-    Optional<User> getValidUser(EbeanServer ebean);
+    Optional<User> getValidUser(EbeanServer db);
 }

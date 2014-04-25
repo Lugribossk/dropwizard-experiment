@@ -17,14 +17,14 @@ public class UserResourceTest extends ApiIntegrationTest {
     private static final DummyAuthProvider authProvider = new DummyAuthProvider();
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new UserResource(ebean))
+            .addResource(new UserResource(db))
             .addResource(authProvider)
             .build();
 
     @Test
     public void blah() {
         User user = new User("test", "blah");
-        ebean.save(user);
+        db.save(user);
         authProvider.setUser(user);
 
         assertThat(GET("/users/" + user.getId()))

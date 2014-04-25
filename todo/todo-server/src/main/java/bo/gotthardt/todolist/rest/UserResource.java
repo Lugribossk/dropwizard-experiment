@@ -20,12 +20,12 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
 public class UserResource {
-    private final EbeanServer ebean;
+    private final EbeanServer db;
 
     @GET
     @Path("/{id}")
     public User one(@Auth User user, @PathParam("id") long id) {
-        User item = ebean.find(User.class, id);
+        User item = db.find(User.class, id);
 
         if (item == null) {
             throw new NotFoundException(id);

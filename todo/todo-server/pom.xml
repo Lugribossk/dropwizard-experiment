@@ -63,6 +63,10 @@
             <groupId>bo.gotthardt.stack</groupId>
             <artifactId>common-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>todo-client</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.dropwizard</groupId>
@@ -71,6 +75,10 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-auth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-db</artifactId>
         </dependency>
 
         <dependency>

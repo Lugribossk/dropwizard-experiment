@@ -15,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CrudService<T extends Persistable> {
     private final Class<T> type;
-    private final EbeanServer ebean;
+    private final EbeanServer db;
 
     public T fetchById(long id) {
-        T item = ebean.find(type, id);
+        T item = db.find(type, id);
 
         if (item == null) {
             throw new NotFoundException(id);
@@ -28,7 +28,7 @@ public class CrudService<T extends Persistable> {
     }
 
     public List<T> fetchByFilter(ListFiltering filter) {
-        Query<T> dbQuery = ebean.find(type);
+        Query<T> dbQuery = db.find(type);
 
         filter.applyToQuery(dbQuery);
 
@@ -36,7 +36,7 @@ public class CrudService<T extends Persistable> {
     }
 
     public T create(T item) {
-        ebean.save(item);
+        db.save(item);
         return item;
     }
 
@@ -44,14 +44,14 @@ public class CrudService<T extends Persistable> {
         assertExists(id);
 
         item.setId(id);
-        ebean.update(item);
+        db.update(item);
         return item;
     }
 
     public void delete(long id) {
         assertExists(id);
 
-        ebean.delete(type, id);
+        db.delete(type, id);
     }
 
     /**
@@ -61,7 +61,7 @@ public class CrudService<T extends Persistable> {
      */
     protected void assertExists(long id) {
         // Presumably this is (slightly) faster than retrieving the object.
-        if (ebean.find(type).where().eq("id", id).findRowCount() != 1) {
+        if (db.find(type).where().eq("id", id).findRowCount() != 1) {
             throw new NotFoundException(id);
         }
     }

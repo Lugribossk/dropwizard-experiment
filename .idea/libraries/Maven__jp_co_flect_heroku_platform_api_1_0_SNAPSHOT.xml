@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: jp.co.flect:heroku-platform-api:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/jp/co/flect/heroku-platform-api/1.0-SNAPSHOT/heroku-platform-api-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/jp/co/flect/heroku-platform-api/1.0-SNAPSHOT/heroku-platform-api-1.0-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/jp/co/flect/heroku-platform-api/1.0-SNAPSHOT/heroku-platform-api-1.0-SNAPSHOT-sources.jar!/" />
+      <root url="file://$PROJECT_DIR$/../heroku-platform-api/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

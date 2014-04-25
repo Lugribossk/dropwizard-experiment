@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2Authenticator implements Authenticator<String, User> {
-    private final EbeanServer ebean;
+    private final EbeanServer db;
 
     @Override
     public Optional<User> authenticate(String credentials) {
-        OAuth2AccessToken token = ebean.find(OAuth2AccessToken.class, credentials);
+        OAuth2AccessToken token = db.find(OAuth2AccessToken.class, credentials);
 
         if (token == null) {
             log.info("Access token '{}' not found.", credentials);

@@ -1,8 +1,8 @@
 package bo.gotthardt.todolist.application;
 
-import bo.gotthardt.ebean.EbeanConfiguration;
 import bo.gotthardt.ebean.HasEbeanConfiguration;
 import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
 import lombok.Getter;
 
 /**
@@ -10,5 +10,5 @@ import lombok.Getter;
  */
 @Getter
 public class TodoListConfiguration extends Configuration implements HasEbeanConfiguration {
-    private EbeanConfiguration ebean;
+    private DataSourceFactory database;
 }

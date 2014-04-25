@@ -7,12 +7,14 @@ import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.CrudService;
+import bo.gotthardt.todo.TodoClientBundle;
 import bo.gotthardt.todolist.rest.UserResource;
 import bo.gotthardt.todolist.rest.WidgetResource;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.Getter;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 import javax.servlet.DispatcherType;
@@ -23,6 +25,7 @@ import java.util.EnumSet;
  * @author Bo Gotthardt
  */
 public class TodoListApplication extends Application<TodoListConfiguration> {
+    @Getter
     private EbeanBundle ebeanBundle;
 
     public static void main(String... args) throws Exception {
@@ -34,16 +37,19 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle = new EbeanBundle();
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
+        bootstrap.addBundle(new TodoClientBundle());
     }
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        EbeanServer ebean = ebeanBundle.getEbeanServer();
+        EbeanServer db = ebeanBundle.getEbeanServer();
 
-        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, ebean)));
-        environment.jersey().register(new UserResource(ebean));
+        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, db)));
+        environment.jersey().register(new UserResource(db));
 
         environment.jersey().register(new ListFilteringProvider());
+
+        environment.jersey().setUrlPattern("/api/*");
 
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -58,6 +64,6 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         User user = new User("test", "test");
         user.setName("Test Testsen");
         user.setEmail("example@example.com");
-        ebean.save(user);
+        db.save(user);
     }
 }

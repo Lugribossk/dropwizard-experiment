@@ -9,7 +9,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-requirejs");
     grunt.config.set("requirejs", {
         options: {
-            //baseUrl: "src/javascript",
             mainConfigFile: "../../common/common-client/src/main/javascript/require.config.js",
             findNestedDependencies: true,
             almond: true,
@@ -19,9 +18,32 @@ module.exports = function (grunt) {
         },
         build: {
             options: {
-                //name: "blah",
-                out: "target/test.js"
+                // The starting slash here seems to be critical.
+                name: "/todo/todo-client/src/main/javascript/main.js",
+                out: "target/dist/main.js"
             }
+        }
+    });
+
+    grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.config.set("concat", {
+        vendorcss: {
+            options: {
+                process: function (src, path) {
+                    return src.replace(/url\(\'?(.*?)(?:(?:\?|\#).*?)?\'?\)/g, function (url, filePath) {
+                        var newFilePath = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+                        var srcPath = path.substring(0, path.lastIndexOf("/")) + "/" + filePath;
+
+                        grunt.file.copy(srcPath, "target/dist/vendor/" + newFilePath);
+
+                        return url.replace(filePath, "vendor/" + newFilePath);
+                    });
+                }
+            },
+            src:  ["../../common/common-client/bower_components/bootstrap/dist/css/bootstrap.min.css",
+                   "../../common/common-client/bower_components/font-awesome/css/font-awesome.min.css",
+                   "../../common/common-client/bower_components/Ladda/dist/ladda-themeless.min.css"],
+            dest: "target/dist/vendor.css"
         }
     });
 
@@ -34,38 +56,37 @@ module.exports = function (grunt) {
                     replacement: "<%= revision %> <%= grunt.template.today(\"yyyy/mm/dd HH:MM:ss Z\") %>"
                 }, {
                     pattern: /\s*<!-- \${css-start}[\S\s]*?\${css-end} -->/,
-                    replacement: "\n<link rel=\"stylesheet\" href=\"styling.css\">"
+                    replacement: "\n<link rel=\"stylesheet\" href=\"vendor.css?v=<%= revision %>\">"
                 }, {
                     pattern: /\s*<!-- \${scripts-start}[\S\s]*?\${scripts-end} -->/,
-                    replacement: "\n<script src=\"main.js\"></script>"
+                    replacement: "\n<script src=\"main.js?v=<%= revision %>\"></script>"
                 }]
             },
             files: [{
                 src: "src/main/javascript/index.html",
-                dest: "target/index.html"
+                dest: "target/dist/index.html"
             }]
         }
     });
 
-    grunt.loadNpmTasks("grunt-git-describe");
-    grunt.config.set("git-describe", {
+    grunt.loadNpmTasks("grunt-git-revision");
+    grunt.config.set("revision", {
         options: {
-            // Requires version 2.1.0 of the plugin.
-            prop: "revision"
-        },
-        revision: {}
+            property: "revision"
+        }
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.config.set("clean", {
-        build: ["target/*"]
+        build: ["target/dist/*"]
     });
 
 
     grunt.registerTask("build", [
         "clean:build",
         "requirejs:build",
-        "git-describe:revision",
+        "concat:vendorcss",
+        "revision",
         "string-replace:html"
     ]);
 };

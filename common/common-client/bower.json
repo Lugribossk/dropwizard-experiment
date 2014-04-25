@@ -2,7 +2,7 @@
   "name": "Dropwizard-experiment",
   "version": "0.1.0",
   "dependencies": {
-    "backbone": "~1.1.2",
+    "backbone": "1.1.0",
     "backbone.marionette": "~1.6.4",
     "backbone.stickit": "https://github.com/NYTimes/backbone.stickit.git#~0.7.0",
     "backbone-associations": "~0.6.1",

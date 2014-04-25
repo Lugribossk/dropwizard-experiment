@@ -28,10 +28,10 @@ public class OAuth2Bundle implements ConfiguredBundle<Object> { // Should really
 
     @Override
     public void run(Object configuration, Environment environment) throws Exception {
-        EbeanServer ebean = ebeanBundle.getEbeanServer();
-        environment.jersey().register(new OAuth2AccessTokenResource(ebean));
+        EbeanServer db = ebeanBundle.getEbeanServer();
+        environment.jersey().register(new OAuth2AccessTokenResource(db));
         environment.jersey().register(new OAuth2AuthorizationRequestProvider());
 
-        environment.jersey().register(new OAuthProvider<>(new OAuth2Authenticator(ebean), "realm"));
+        environment.jersey().register(new OAuthProvider<>(new OAuth2Authenticator(db), "realm"));
     }
 }

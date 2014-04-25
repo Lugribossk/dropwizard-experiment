@@ -25,14 +25,16 @@
         <module name="build" />
         <module name="common-server" />
         <module name="integration-tests" />
+        <module name="todo-client" />
         <module name="todo-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="build" target="1.7" />
-      <module name="common-server" target="1.7" />
-      <module name="integration-tests" target="1.7" />
-      <module name="todo-server" target="1.7" />
+      <module name="build" target="1.8" />
+      <module name="common-server" target="1.8" />
+      <module name="integration-tests" target="1.8" />
+      <module name="todo-client" target="1.8" />
+      <module name="todo-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -17,13 +17,13 @@ import static org.mockito.Mockito.when;
  * @author Bo Gotthardt
  */
 public class CrudServiceTest {
-    private EbeanServer ebean = mock(EbeanServer.class);
-    private CrudService<TestItem> service = new CrudService<>(TestItem.class, ebean);
+    private EbeanServer db = mock(EbeanServer.class);
+    private CrudService<TestItem> service = new CrudService<>(TestItem.class, db);
 
     @Test
     public void fetchShouldFindInDatabase() {
         TestItem item = new TestItem();
-        when(ebean.find(TestItem.class, 1L)).thenReturn(item);
+        when(db.find(TestItem.class, 1L)).thenReturn(item);
 
         assertThat(service.fetchById(1)).isEqualTo(item);
     }

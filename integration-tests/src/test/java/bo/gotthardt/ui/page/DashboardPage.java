@@ -17,7 +17,7 @@ public class DashboardPage extends PageObject {
     }
 
     @Override
-    protected void load() throws Error {
+    protected void onLoad() throws Error {
         waitFor(By.tagName("h1"), "Header");
         assertThat(header).containsText("Dashboard");
     }

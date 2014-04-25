@@ -40,7 +40,7 @@ public class LoginPage extends PageObject {
     }
 
     @Override
-    protected void load() {
+    protected void onLoad() {
         assertThat(username).isVisible();
         assertThat(password).isVisible();
     }

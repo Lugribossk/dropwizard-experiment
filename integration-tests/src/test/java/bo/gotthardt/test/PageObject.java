@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class PageObject {
-    protected static String BASE_URL = "http://localhost:8056/static/";
+    protected static String BASE_URL = "http://localhost:8056/";
 
     protected WebDriver driver;
 
@@ -16,10 +16,10 @@ public abstract class PageObject {
         this.driver = driver;
 
         PageFactory.initElements(driver, this);
-        load();
+        onLoad();
     }
 
-    protected abstract void load();
+    protected abstract void onLoad();
 
     protected void waitFor(By locator, String message) {
         new WebDriverWait(driver, 5)

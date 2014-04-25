@@ -23,7 +23,7 @@ public abstract class UiIntegrationTest {
     protected static EbeanServer db;
 
     @ClassRule
-    public static DropwizardAppRule<TodoListConfiguration> appRule = new DropwizardAppRule<>(TodoListApplication.class, "integration-tests/src/test/resources/integration.yml");
+    public static DropwizardAppRule<TodoListConfiguration> appRule = new DropwizardAppRule<>(TodoListApplication.class, "src/test/resources/integration.yml");
 
     @BeforeClass
     public static void setupWebDriver() {

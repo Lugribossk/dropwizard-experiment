@@ -16,11 +16,18 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+/**
+ * Deploy a jar file to a Heroku app.
+ *
+ * See https://blog.heroku.com/archives/2013/12/20/programmatically_release_code_to_heroku_using_the_platform_api and
+ * https://devcenter.heroku.com/articles/platform-api-deploying-slugs
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class HerokuDeployer {
     private static final long SLUG_SIZE_LIMIT = 300 * 1024 * 1024;
     private static final long SLUG_SIZE_WARNING = Math.round(SLUG_SIZE_LIMIT * 0.80);
+    private static final String JAVA_VERSION = "jre1.8.0_05";
 
     private final PlatformApi herokuApi;
 
@@ -53,8 +60,8 @@ public class HerokuDeployer {
     private File createSlugArchive(File jarFile, File configFile) {
         log.info("Creating slug archive...");
         try {
-            File javaConfig = new File(Resources.getResource("system.properties").toURI());
-            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile, javaConfig), "app");
+            File jre = new File(Resources.getResource(JAVA_VERSION).toURI());
+            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile, jre), "app");
             slugArchive.deleteOnExit();
 
             long size = slugArchive.length();
@@ -72,7 +79,7 @@ public class HerokuDeployer {
     }
 
     private Map<String, String> createProcessTypes(File jarFile, File configFile) {
-        return ImmutableMap.of("web", "java -Ddw.server.connector.port=$PORT -jar " + jarFile.getName() + " server " + configFile.getName());
+        return ImmutableMap.of("web", JAVA_VERSION + "/bin/java -Ddw.server.connector.port=$PORT -jar " + jarFile.getName() + " server " + configFile.getName());
     }
 
     private Slug uploadSlug(String appName, Map<String, String> processTypes, File slugArchive, String revision) {

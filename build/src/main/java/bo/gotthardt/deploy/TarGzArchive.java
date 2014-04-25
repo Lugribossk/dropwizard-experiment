@@ -27,7 +27,12 @@ public class TarGzArchive {
         TarArchiver tarArchive = new TarArchiver();
         tarArchive.enableLogging(new ConsoleLogger(Logger.LEVEL_DISABLED, "console"));
         for (File file : files) {
-            tarArchive.addFile(file, folder + "/" + file.getName());
+            // The starting ./ in the folder name is required for Heroku to be able to unpack the files correctly.
+            if (file.isFile()) {
+                tarArchive.addFile(file, "./" + folder + "/" + file.getName());
+            } else if (file.isDirectory()) {
+                tarArchive.addDirectory(file, "./" + folder + "/" + file.getName() + "/");
+            }
         }
 
         File tarFile = File.createTempFile("TarGzArchive", ".tar");
@@ -41,7 +46,7 @@ public class TarGzArchive {
         GZipArchiver gzipArchive = new GZipArchiver();
         gzipArchive.addFile(input, input.getName());
 
-        File gzFile = File.createTempFile("TarGzArchive", ".tar.gz");
+        File gzFile = File.createTempFile("TarGzArchive", ".tgz");
         gzipArchive.setDestFile(gzFile);
         gzipArchive.createArchive();
         

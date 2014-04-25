@@ -14,7 +14,7 @@ import java.io.File;
 /**
  * Dropwizard command for deploying to Heroku.
  *
- * Usage: java -jar blah.jar deploy --application my-app-1234 --jar todo/todo-server/target/todo-server-0.0.1-SNAPSHOT.jar --configuration todo/todo-server/src/main/resources/configuration.yml build/src/main/resources/deploy.yml
+ * Usage: java -jar build-blah.jar deploy --application my-app-1234 --jar todo/todo-server/target/todo-server-0.0.1-SNAPSHOT.jar --configuration todo/todo-server/src/main/resources/heroku.yml build/src/main/resources/deploy.yml
  */
 @Slf4j
 public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {

@@ -39,7 +39,7 @@ public class TarGzArchiveTest {
         File output = TarGzArchive.create(ImmutableSet.of(input), "");
 
         assertThat(output).exists();
-        assertThat(output.getName()).endsWith(".tar.gz");
+        assertThat(output.getName()).endsWith(".tgz");
 
         List<File> unpackedFiles = unpack(output);
 

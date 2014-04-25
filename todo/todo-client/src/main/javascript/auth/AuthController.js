@@ -15,7 +15,7 @@ define(function (require) {
     var currentUser = new User();
 
     function useToken(token) {
-        token.addToRequestsFor("http://localhost:8080/");
+        token.addToRequestsFor("/api/");
         window.localStorage.setItem(STORAGE_KEY, token.get("accessToken"));
         return User.fetchById("current")
             .then(function (user) {

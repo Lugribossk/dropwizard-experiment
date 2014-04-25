@@ -30,7 +30,6 @@ require.config({
 
         test: "common/common-client/src/test/javascript",
         "jasmine-jquery": "common/common-client/bower_components/jasmine-jquery/lib/jasmine-jquery",
-        "jasmine-as-promised": "common/common-client/bower_components/jasmine-as-promised/src/jasmine-as-promised",
         "es5-shim": "common/common-client/bower_components/es5-shim/es5-shim"
     },
     shim: {

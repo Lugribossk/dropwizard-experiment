@@ -30,7 +30,7 @@ define(function (require) {
     }, {
         fetchByLogin: function (username, password) {
             return this.fetchById(null, {
-                url: "http://localhost:8080/api/token",
+                url: "/api/token",
                 data: {
                     username: username,
                     password: password,

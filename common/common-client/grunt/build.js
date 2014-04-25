@@ -56,10 +56,10 @@ module.exports = function (grunt) {
                     replacement: "<%= revision %> <%= grunt.template.today(\"yyyy/mm/dd HH:MM:ss Z\") %>"
                 }, {
                     pattern: /\s*<!-- \${css-start}[\S\s]*?\${css-end} -->/,
-                    replacement: "\n<link rel=\"stylesheet\" href=\"vendor.css\">"
+                    replacement: "\n<link rel=\"stylesheet\" href=\"vendor.css?v=<%= revision %>\">"
                 }, {
                     pattern: /\s*<!-- \${scripts-start}[\S\s]*?\${scripts-end} -->/,
-                    replacement: "\n<script src=\"main.js\"></script>"
+                    replacement: "\n<script src=\"main.js?v=<%= revision %>\"></script>"
                 }]
             },
             files: [{
@@ -69,13 +69,11 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-git-describe");
-    grunt.config.set("git-describe", {
+    grunt.loadNpmTasks("grunt-git-revision");
+    grunt.config.set("revision", {
         options: {
-            // Requires version 2.1.0 of the plugin.
-            prop: "revision"
-        },
-        revision: {}
+            property: "revision"
+        }
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -88,7 +86,7 @@ module.exports = function (grunt) {
         "clean:build",
         "requirejs:build",
         "concat:vendorcss",
-        "git-describe:revision",
+        "revision",
         "string-replace:html"
     ]);
 };

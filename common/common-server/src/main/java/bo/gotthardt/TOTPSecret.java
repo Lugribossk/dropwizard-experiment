@@ -20,20 +20,26 @@ public class TOTPSecret {
         new SecureRandom().nextBytes(key);
     }
 
-    public String getEncoded() {
-        return BaseEncoding.base32().encode(key).toUpperCase();
+    public String getEncoded(String issuer, String accountName) {
+        return "otpauth://totp/" + issuer + ":" + accountName + "?secret=" + BaseEncoding.base32().encode(key).toUpperCase() + "&issuer=" + issuer;
     }
 
-    public boolean equalsToken(int token, DateTime now) {
-        int previousToken = tokenAt(now.minusSeconds(30).getMillis() / 30);
-        int currentToken = tokenAt(now.getMillis() / 30);
-        int nextToken = tokenAt(now.plusSeconds(30).getMillis() / 30);
+    public boolean isSameTokenAt(int token, DateTime time) {
+        int previousToken = generateToken(time.minusSeconds(30));
+        int currentToken = generateToken(time);
+        int nextToken = generateToken(time.plusSeconds(30));
 
         return token == previousToken || token == currentToken || token == nextToken;
     }
 
-    public int tokenAt(long time) {
+    public int generateToken(DateTime time) {
+        return tokenAt(time.getMillis() / 30000);
+    }
+
+    private int tokenAt(long time) {
         byte[] data = ByteBuffer.allocate(8).putLong(time).array();
+
+        // Borrowed from https://github.com/wstrange/GoogleAuth/blob/master/src/main/java/com/warrenstrange/googleauth/GoogleAuthenticator.java
 
         // Building the secret key specification for the HmacSHA1 algorithm.
         SecretKeySpec signKey = new SecretKeySpec(key, "HmacSHA1");
@@ -69,9 +75,7 @@ public class TOTPSecret {
 
             return (int) truncatedHash;
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return 0;
     }
 }

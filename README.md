@@ -24,7 +24,7 @@ Create Karma run configurations and point them at the karma.conf.js configuratio
 ## Java backend
 
 ### Running
-Create an IntelliJ run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\src\main\resources\configuration.yml`
+Create an IntelliJ run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\config\config.yml`
 and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\3.2.2\avaje-ebeanorm-agent-3.2.2.jar`
 
 Or run `mvn package` and then `java -jar todo\todo-server\target\todo-server-0.0.1-SNAPSHOT.jar` with the same arguments as above (but not the VM options).

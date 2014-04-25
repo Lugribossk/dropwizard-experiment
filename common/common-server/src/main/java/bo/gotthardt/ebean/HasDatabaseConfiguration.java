@@ -5,6 +5,6 @@ import io.dropwizard.db.DataSourceFactory;
 /**
  * @author Bo Gotthardt
  */
-public interface HasEbeanConfiguration {
+public interface HasDatabaseConfiguration {
     public DataSourceFactory getDatabase();
 }

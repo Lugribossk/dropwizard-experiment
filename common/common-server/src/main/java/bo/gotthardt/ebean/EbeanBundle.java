@@ -14,7 +14,7 @@ import io.dropwizard.setup.Environment;
 /**
  * @author Bo Gotthardt
  */
-public class EbeanBundle implements ConfiguredBundle<HasEbeanConfiguration> {
+public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
     private EbeanServer ebeanServer;
 
     @Override
@@ -23,7 +23,7 @@ public class EbeanBundle implements ConfiguredBundle<HasEbeanConfiguration> {
     }
 
     @Override
-    public void run(HasEbeanConfiguration configuration, Environment environment) throws Exception {
+    public void run(HasDatabaseConfiguration configuration, Environment environment) throws Exception {
         ServerConfig serverConfig = getServerConfig(configuration.getDatabase());
         ebeanServer = EbeanServerFactory.create(serverConfig);
         Preconditions.checkNotNull(ebeanServer);

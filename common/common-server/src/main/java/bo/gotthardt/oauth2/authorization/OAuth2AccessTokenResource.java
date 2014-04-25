@@ -31,7 +31,7 @@ import javax.ws.rs.core.MediaType;
 @Slf4j
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
-@Path("/api/token")
+@Path("/token")
 public class OAuth2AccessTokenResource {
     private static final Duration TOKEN_LIFETIME = Duration.standardDays(365);
 

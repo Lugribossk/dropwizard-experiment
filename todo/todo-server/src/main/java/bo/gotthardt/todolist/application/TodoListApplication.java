@@ -8,8 +8,10 @@ import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
-import bo.gotthardt.todolist.rest.UserResource;
+import bo.gotthardt.user.EmailVerificationResource;
+import bo.gotthardt.user.UserResource;
 import bo.gotthardt.todolist.rest.WidgetResource;
+import bo.gotthardt.user.PasswordResetService;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -46,6 +48,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
         environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, db)));
         environment.jersey().register(new UserResource(db));
+        environment.jersey().register(new EmailVerificationResource(db, new PasswordResetService(db)));
 
         environment.jersey().register(new ListFilteringProvider());
 

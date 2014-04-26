@@ -8,7 +8,7 @@
     </extension>
     <option name="MAIN_CLASS_NAME" value="bo.gotthardt.todolist.application.TodoListApplication" />
     <option name="VM_PARAMETERS" value="-javaagent:$MAVEN_REPOSITORY$/org/avaje/ebeanorm/avaje-ebeanorm-agent/3.2.2/avaje-ebeanorm-agent-3.2.2.jar" />
-    <option name="PROGRAM_PARAMETERS" value="server todo/todo-server/src/main/resources/configuration.yml" />
+    <option name="PROGRAM_PARAMETERS" value="server todo/todo-server/config/config.yml" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />

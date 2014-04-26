@@ -1,16 +1,15 @@
-package bo.gotthardt.todolist.rest;
+package bo.gotthardt.user;
 
 import bo.gotthardt.exception.NotFoundException;
 import bo.gotthardt.exception.UnauthorizedException;
+import bo.gotthardt.model.HashedValue;
 import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.auth.Auth;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -19,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @RequiredArgsConstructor
+@Slf4j
 public class UserResource {
     private final EbeanServer db;
 
@@ -42,5 +42,18 @@ public class UserResource {
     @Path("/current")
     public User current(@Auth User user) {
         return user;
+    }
+
+    @POST
+    @Path("/current/password")
+    public void changePasswordLoggedIn(@Auth User user, @FormParam("currentPassword") String currentPassword, @FormParam("newPassword") String newPassword) {
+        if (user.getPassword().equalsPlaintext(currentPassword)) {
+            user.setPassword(new HashedValue(newPassword));
+            db.save(user);
+
+            log.info("Changed password for user {}", user);
+        } else {
+            throw new UnauthorizedException();
+        }
     }
 }

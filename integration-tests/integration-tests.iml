@@ -96,6 +96,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:1.9.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:1.6.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-joda-time:1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-java:2.40.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:2.40.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:2.39.0" level="project" />

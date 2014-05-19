@@ -20,6 +20,12 @@ define(function (require) {
             "test2/:id": function (id) {
 
             },
+            "resetpassword": function () {
+
+            },
+            "verify/:id": function (id) {
+
+            },
             "*unmatched": function (route) {
                 log.warn("Unmatched route", route);
                 Backbone.history.navigate("", true);

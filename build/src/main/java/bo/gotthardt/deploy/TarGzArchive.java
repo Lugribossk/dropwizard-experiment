@@ -14,6 +14,7 @@ import java.util.Set;
 public class TarGzArchive {
     /**
      * Unpack a .tar.gz archive and return the folder it was unpacked in.
+     *
      * @param tarGz The archive
      * @return The unpacked folder
      */

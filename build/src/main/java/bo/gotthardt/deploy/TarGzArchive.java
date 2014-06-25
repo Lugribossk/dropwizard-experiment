@@ -1,7 +1,9 @@
 package bo.gotthardt.deploy;
 
+import com.google.common.io.Files;
 import org.codehaus.plexus.archiver.gzip.GZipArchiver;
 import org.codehaus.plexus.archiver.tar.TarArchiver;
+import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 
@@ -10,6 +12,24 @@ import java.io.IOException;
 import java.util.Set;
 
 public class TarGzArchive {
+    /**
+     * Unpack a .tar.gz archive and return the folder it was unpacked in.
+     * @param tarGz The archive
+     * @return The unpacked folder
+     */
+    public static File unpack(File tarGz) {
+        File unpackDir = Files.createTempDir();
+        unpackDir.deleteOnExit();
+
+        TarGZipUnArchiver unArchiver = new TarGZipUnArchiver(tarGz);
+        // Needed to avoid a null pointer...
+        unArchiver.enableLogging(new ConsoleLogger(Logger.LEVEL_DISABLED, "console"));
+        unArchiver.setDestDirectory(unpackDir);
+        unArchiver.extract();
+
+        return unpackDir;
+    }
+
     /**
      * Create a .tar.gz archive file that contains the specified files.
      * The archive will be located in a temporary folder.

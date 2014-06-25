@@ -1,6 +1,7 @@
 package bo.gotthardt.deploy;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Files;
 import jp.co.flect.heroku.platformapi.PlatformApi;
 import jp.co.flect.heroku.platformapi.model.App;
 import jp.co.flect.heroku.platformapi.model.Release;
@@ -22,13 +23,18 @@ import static org.mockito.Mockito.*;
 public class HerokuDeployerTest {
     private File jarFile;
     private File configFile;
+    private File jreDir;
 
     @Before
     public void setup() throws IOException {
         jarFile = File.createTempFile("test", ".jar");
         configFile = File.createTempFile("test", ".yml");
+        jreDir = Files.createTempDir();
+        File.createTempFile("test", "", jreDir);
+
         jarFile.deleteOnExit();
         configFile.deleteOnExit();
+        jreDir.deleteOnExit();
     }
 
     @Test
@@ -42,7 +48,7 @@ public class HerokuDeployerTest {
                 .thenReturn(new Release());
 
         HerokuDeployer deployer = new HerokuDeployer(heroku);
-        deployer.deploy("testapp", File.createTempFile("test", ".jar"), File.createTempFile("test", ".yml"), "test");
+        deployer.deploy("testapp", jarFile, configFile, jreDir, "test");
 
         verify(heroku).createRelease("testapp", "slugid", "HerokuDeployer");
     }

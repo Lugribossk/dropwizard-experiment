@@ -3,7 +3,6 @@ package bo.gotthardt.deploy;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.io.Resources;
 import jp.co.flect.heroku.platformapi.PlatformApi;
 import jp.co.flect.heroku.platformapi.model.App;
 import jp.co.flect.heroku.platformapi.model.Release;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 /**
@@ -27,18 +25,21 @@ import java.util.Map;
 public class HerokuDeployer {
     private static final long SLUG_SIZE_LIMIT = 300 * 1024 * 1024;
     private static final long SLUG_SIZE_WARNING = Math.round(SLUG_SIZE_LIMIT * 0.80);
-    private static final String JAVA_VERSION = "jre1.8.0_05";
 
     private final PlatformApi herokuApi;
 
-    public Release deploy(String appName, File jarFile, File configFile, String revision) {
+    public Release deploy(String appName, File jarFile, File configFile, File jreDir, String revision) {
         Preconditions.checkState(jarFile.exists(), "Jar file not found.");
         Preconditions.checkState(configFile.exists(), "Configuration file not found.");
+        Preconditions.checkState(jreDir.exists(), "JRE directory not found.");
+        Preconditions.checkState(jreDir.listFiles().length == 1, "JRE directory must contain a single subdirectory with a JRE in it.");
 
         validateAppName(appName);
 
-        File slugArchive = createSlugArchive(jarFile, configFile);
-        Map<String, String> processTypes = createProcessTypes(jarFile, configFile);
+        File slugArchive = createSlugArchive(jarFile, configFile, jreDir);
+
+        String jreVersion = jreDir.listFiles()[0].getName();
+        Map<String, String> processTypes = createProcessTypes(jarFile.getName(), configFile.getName(), jreVersion);
 
         Slug slug = uploadSlug(appName, processTypes, slugArchive, revision);
         return releaseSlug(appName, slug);
@@ -57,11 +58,10 @@ public class HerokuDeployer {
         }
     }
 
-    private File createSlugArchive(File jarFile, File configFile) {
+    private File createSlugArchive(File jarFile, File configFile, File jreDir) {
         log.info("Creating slug archive...");
         try {
-            File jre = new File(Resources.getResource(JAVA_VERSION).toURI());
-            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile, jre), "app");
+            File slugArchive = TarGzArchive.create(ImmutableSet.of(jarFile, configFile, jreDir), "app");
             slugArchive.deleteOnExit();
 
             long size = slugArchive.length();
@@ -72,14 +72,14 @@ public class HerokuDeployer {
                 log.warn("Slug size is approaching the Heroku limit of {} bytes.", SLUG_SIZE_LIMIT);
             }
             return slugArchive;
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             log.error("Unable to create slug archive.", e);
             throw new RuntimeException(e);
         }
     }
 
-    private Map<String, String> createProcessTypes(File jarFile, File configFile) {
-        return ImmutableMap.of("web", JAVA_VERSION + "/bin/java -Ddw.server.connector.port=$PORT -jar " + jarFile.getName() + " server " + configFile.getName());
+    private Map<String, String> createProcessTypes(String jarFilename, String configFilename, String jreVersion) {
+        return ImmutableMap.of("web", jreVersion + "/bin/java -Ddw.server.connector.port=$PORT -jar " + jarFilename + " server " + configFilename);
     }
 
     private Slug uploadSlug(String appName, Map<String, String> processTypes, File slugArchive, String revision) {

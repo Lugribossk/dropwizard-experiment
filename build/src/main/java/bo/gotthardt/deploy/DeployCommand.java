@@ -18,6 +18,8 @@ import java.io.File;
  */
 @Slf4j
 public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
+    private static final String JAVA_VERSION = "jre-8u5-linux-x64.gz";
+
     public DeployCommand() {
         super("deploy", "blah");
     }
@@ -29,12 +31,16 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
         String appName = namespace.getString("application");
         File jarFile = namespace.get("jar");
         File configFile = namespace.get("configuration");
+        File jrePack =  new File("build/jre/" + JAVA_VERSION);
 
-        log.info("Found jar file: {}", jarFile.getAbsolutePath());
-        log.info("Found configuration file: {}", configFile.getAbsolutePath());
+        log.info("Using jar file: {}", jarFile.getAbsolutePath());
+        log.info("Using configuration file: {}", configFile.getAbsolutePath());
+        log.info("Using JRE: {}", jrePack.getAbsolutePath());
+
+        File jreDir = TarGzArchive.unpack(jrePack);
 
         PlatformApi heroku = PlatformApi.fromApiKey(credentials.getUsername(), credentials.getApiKey());
-        new HerokuDeployer(heroku).deploy(appName, jarFile, configFile, "TODO"); // TODO revision
+        new HerokuDeployer(heroku).deploy(appName, jarFile, configFile, jreDir, "TODO"); // TODO revision
 
         log.info("Deployment complete!");
     }

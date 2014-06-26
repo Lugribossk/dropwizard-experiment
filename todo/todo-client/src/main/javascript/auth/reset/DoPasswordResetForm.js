@@ -11,15 +11,23 @@ define(function (require) {
 		return values[0] === values[1];
 	}
 
+	function passwordIsLongEnough(value) {
+		return value.length > 8;
+	}
+
 	return Form.extend({
 		template: template,
 
 		bindings: {
 			"#password1": "password1",
 			"#password2": "password2",
-			".alert": {
+			".identical-passwords": {
 				observe: ["password1", "password2"],
 				visible: passwordsAreIdentical
+			},
+			".password-length": {
+				observe: ["password1"],
+				visible: passwordIsLongEnough
 			}
 		},
 
@@ -27,7 +35,9 @@ define(function (require) {
 			return this.controller.changePassword(this.model.get("password1"));
 		},
 
-		allowSubmit: passwordsAreIdentical,
+		allowSubmit: function (values) {
+			return passwordsAreIdentical(values) && passwordIsLongEnough(values);
+		},
 
 		initialize: function () {
 			this.model = new Backbone.Model({

@@ -1,12 +1,12 @@
 package bo.gotthardt.test;
 
+import bo.gotthardt.ebean.EbeanEntities;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
-import com.google.common.collect.ImmutableList;
 import lombok.Delegate;
 
 /**
@@ -37,7 +37,9 @@ public class InMemoryEbeanServer implements EbeanServer {
         config.setDataSourceConfig(dbConfig);
         config.setDefaultServer(true);
 
-        config.setPackages(ImmutableList.of("bo.gotthardt.model"));
+        for (Class<?> entity : EbeanEntities.getEntities()) {
+            config.addClass(entity);
+        }
 
         config.setDdlGenerate(true);
         config.setDdlRun(true);

@@ -4,6 +4,14 @@ define(function (require) {
     var Logger = require("common/util/Logger");
 
     describe("Logger", function () {
+        beforeEach(function () {
+            Logger.setAllLogLevels(Logger.LogLevel.DEBUG);
+        });
+
+        afterEach(function () {
+            Logger.setAllLogLevels(Logger.LogLevel.OFF);
+        });
+
         describe("info()", function () {
             it("should print name and arguments with console.info by default", function () {
                 spyOn(console, "info");

@@ -7,7 +7,7 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
-import lombok.Delegate;
+import lombok.experimental.Delegate;
 
 /**
  * In-memory EbeanServer for use in unit/integration tests.
@@ -18,11 +18,6 @@ public class InMemoryEbeanServer implements EbeanServer {
     @Delegate(types=EbeanServer.class)
     private final EbeanServer server;
     private final DdlGenerator ddl;
-
-    public void clear() {
-        ddl.runScript(false, ddl.generateDropDdl());
-        ddl.runScript(false, ddl.generateCreateDdl());
-    }
 
     public InMemoryEbeanServer() {
         // Create in-memory database configuration.
@@ -46,5 +41,10 @@ public class InMemoryEbeanServer implements EbeanServer {
 
         server = EbeanServerFactory.create(config);
         ddl = ((SpiEbeanServer) server).getDdlGenerator();
+    }
+
+    public void clear() {
+        ddl.runScript(false, ddl.generateDropDdl());
+        ddl.runScript(false, ddl.generateCreateDdl());
     }
 }

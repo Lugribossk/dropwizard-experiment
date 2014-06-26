@@ -11,7 +11,8 @@ define(function (require) {
             DEBUG: 2,
             INFO: 3,
             WARN: 4,
-            ERROR: 5
+            ERROR: 5,
+            OFF: 6
         };
 
     function noop() {}

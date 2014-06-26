@@ -14,18 +14,32 @@ define(function (require) {
 
 		events: {
 			"submit": function () {
-				var button = Ladda.create(this.ui.submit.get(0));
-				button.start();
-				this.view.onFormSubmit()
-					.always(function () {
-						button.stop();
-					});
+				var scope = this;
+				// setTimeout so an error in the code won't stop us from returning false and blocking the submit.
+				setTimeout(function () {
+					var button = Ladda.create(scope.ui.submit.get(0));
+					button.start();
+					scope.view.onFormSubmit()
+						.always(function () {
+							button.stop();
+						});
+
+				}, 0);
 
 				return false;
 			}
 		}
 	}));
 
+	/**
+	 * A form with an intelligent submit button.
+	 *
+	 * @cfg {Function} onFormSubmit
+	 * @cfg {Function} [allowSubmit]
+	 * @cfg {String[]} [requiredProperties]
+	 *
+	 * @class Form
+	 */
 	return TboneView.extend({
 		tagName: "form",
 
@@ -39,16 +53,21 @@ define(function (require) {
 
 		constructor: function () {
 			TboneView.prototype.constructor.apply(this, arguments);
+			var scope = this;
 
 			this.listenTo(this, "render", function () {
-				var required = this.options.requiredProperties || _.keys(this.model.attributes);
+				var required = this.requiredProperties || _.keys(this.model.attributes);
 				this.addBinding(null, "button[type=submit]", {
 					observe: required,
 					update: function (el, values) {
 						var allPropsHaveValue = _.every(values, function (value) {
 							return !!value;
 						});
-						el.prop("disabled", !allPropsHaveValue);
+						var extraValidation = true;
+						if (scope.allowSubmit && !scope.allowSubmit(values)) {
+							extraValidation = false;
+						}
+						el.prop("disabled", !(allPropsHaveValue && extraValidation));
 					}
 				});
 			});

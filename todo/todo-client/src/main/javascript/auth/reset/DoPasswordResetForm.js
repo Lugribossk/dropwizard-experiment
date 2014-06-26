@@ -7,7 +7,9 @@ define(function (require) {
 	var Form = require("common/ui/Form");
 	var template = require("hbars!./DoPasswordResetForm");
 
-	// TODO Disable submit button when passwords do not match.
+	function passwordsAreIdentical(values) {
+		return values[0] === values[1];
+	}
 
 	return Form.extend({
 		template: template,
@@ -17,15 +19,15 @@ define(function (require) {
 			"#password2": "password2",
 			".alert": {
 				observe: ["password1", "password2"],
-				visible: function (values) {
-					return values[0] === values[1];
-				}
+				visible: passwordsAreIdentical
 			}
 		},
 
 		onFormSubmit: function () {
 			return this.controller.changePassword(this.model.get("password1"));
 		},
+
+		allowSubmit: passwordsAreIdentical,
 
 		initialize: function () {
 			this.model = new Backbone.Model({

@@ -11,4 +11,5 @@ import com.google.common.base.Optional;
  */
 public interface OAuth2AuthorizationRequest {
     Optional<User> getValidUser(EbeanServer db);
+    String getCacheKey();
 }

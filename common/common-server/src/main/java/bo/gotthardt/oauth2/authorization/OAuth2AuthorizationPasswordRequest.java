@@ -25,4 +25,9 @@ public class OAuth2AuthorizationPasswordRequest implements OAuth2AuthorizationRe
             return Optional.absent();
         }
     }
+
+    @Override
+    public String getCacheKey() {
+        return password;
+    }
 }

@@ -41,7 +41,10 @@ public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
         config.setName("main");
         config.setDataSourceConfig(getDataSourceConfig(dbConfig));
         config.setDefaultServer(true);
-        config.setPackages(ImmutableList.of("bo.gotthardt.model"));
+
+        for (Class<?> entity : EbeanEntities.getEntities()) {
+            config.addClass(entity);
+        }
 
         // Automatically create db tables on startup. TODO remove this when using a proper database.
         config.setDdlGenerate(true);

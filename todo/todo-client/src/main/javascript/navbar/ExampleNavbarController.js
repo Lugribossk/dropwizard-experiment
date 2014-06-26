@@ -22,7 +22,7 @@ define(function (require) {
         }
     }, {
         showNavbar: function (region) {
-            this._showModel(AuthController.getCurrentUser(), region);
+            this._showView(region, AuthController.getCurrentUser());
         }
     });
 });

@@ -30,7 +30,10 @@ public class PasswordResetService {
                     .lt("expirationDate", DateTime.now())
                     .findUnique();
 
-            if (verify == null) {
+            if (verify != null) {
+                verify.setExpirationDate(DateTime.now().plus(TOKEN_LIFETIME));
+                db.save(verify);
+            } else {
                 verify = new EmailVerification(user, TOKEN_LIFETIME, EmailVerification.Type.PASSWORD_RESET);
                 db.save(verify);
             }

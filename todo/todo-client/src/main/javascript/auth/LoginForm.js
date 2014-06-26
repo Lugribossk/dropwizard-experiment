@@ -3,54 +3,28 @@ define(function (require) {
     var $ = require("jquery");
     var _ = require("underscore");
     var Backbone = require("backbone");
-    var Marionette = require("marionette");
-    var TboneView = require("common/TboneView");
-    var template = require("hbars!./LoginForm");
-    var Ladda = require("ladda");
+	var Form = require("common/ui/Form");
+	var template = require("hbars!./LoginForm");
 
-    return TboneView.extend({
+    return Form.extend({
         template: template,
 
-        tagName: "form",
-
-        attributes: {
-            role: "form"
-        },
-
         ui: {
-            submit: "button[type=submit]",
             warning: ".alert"
         },
 
         bindings: {
             "#username": "username",
-            "#password": "password",
-            "button[type=submit]": {
-                observe: ["username", "password"],
-                update: function (el, values) {
-                    el.prop("disabled", !(values[0] && values[1]));
-                }
-            }
+            "#password": "password"
         },
 
-        events: {
-            "submit": function () {
-                var scope = this;
-                scope.ui.warning.hide();
-                // TODO why does this work here but not in onRender?
-                var button = Ladda.create(this.ui.submit.get(0));
-                button.start();
-
-                this.controller.tryCredentials(this.model.get("username"), this.model.get("password"))
-                    .fail(function () {
-                        scope.ui.warning.show();
-                    })
-                    .always(function () {
-                        button.stop();
-                    });
-
-                return false;
-            }
+        onFormSubmit: function () {
+            var scope = this;
+            this.ui.warning.hide();
+            return this.controller.tryCredentials(this.model.get("username"), this.model.get("password"))
+                .fail(function () {
+                    scope.ui.warning.show();
+                });
         },
 
         initialize: function () {

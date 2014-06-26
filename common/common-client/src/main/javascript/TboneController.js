@@ -14,21 +14,28 @@ define(function (require) {
             }
         }
     }, {
-        _showModel: function (modelPromise, region, viewOptions) {
+        _showView: function (region, modelPromise, viewType, viewOptions) {
             var ThisClass = this;
 
             region.show($.when(modelPromise)
                 .then(function (model) {
-                    var controller = new ThisClass({
-                        model: model,
+                    var controllerArgs = {
                         region: region
-                    });
+                    };
 
-                    var ViewClass = controller.viewType;
-                    var view = new ViewClass(_.extend({
-                        controller: controller,
-                        model: model
-                    }, viewOptions));
+                    if (model) {
+                        controllerArgs.model = model;
+                    }
+                    var controller = new ThisClass(controllerArgs);
+
+                    var ViewClass = controller.viewType || viewType;
+                    var viewArgs = {
+                        controller: controller
+                    };
+                    if (model) {
+                        viewArgs.model = model;
+                    }
+                    var view = new ViewClass(_.extend(viewArgs, viewOptions));
                     controller.listenTo(view, "close", controller.close);
 
                     return view;

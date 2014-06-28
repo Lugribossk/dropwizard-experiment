@@ -2,16 +2,18 @@ package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
+import bo.gotthardt.email.EmailService;
+import bo.gotthardt.email.Emails;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
-import bo.gotthardt.user.EmailVerificationResource;
-import bo.gotthardt.user.UserResource;
 import bo.gotthardt.todolist.rest.WidgetResource;
+import bo.gotthardt.user.EmailVerificationResource;
 import bo.gotthardt.user.PasswordResetService;
+import bo.gotthardt.user.UserResource;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -45,10 +47,11 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
         EbeanServer db = ebeanBundle.getEbeanServer();
+        EmailService email = Emails.createService(configuration);
 
         environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, db)));
         environment.jersey().register(new UserResource(db));
-        environment.jersey().register(new EmailVerificationResource(db, new PasswordResetService(db)));
+        environment.jersey().register(new EmailVerificationResource(db, new PasswordResetService(db, email)));
 
         environment.jersey().register(new ListFilteringProvider());
 

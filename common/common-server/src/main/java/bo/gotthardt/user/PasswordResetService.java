@@ -1,5 +1,6 @@
 package bo.gotthardt.user;
 
+import bo.gotthardt.email.EmailService;
 import bo.gotthardt.model.EmailVerification;
 import bo.gotthardt.model.HashedValue;
 import bo.gotthardt.model.User;
@@ -17,6 +18,7 @@ import org.joda.time.Duration;
 public class PasswordResetService {
     private static final Duration TOKEN_LIFETIME = Duration.standardDays(2);
     private final EbeanServer db;
+    private final EmailService email;
 
     public void requestPasswordReset(String username) {
         User user = db.find(User.class).where().disjunction()
@@ -39,6 +41,7 @@ public class PasswordResetService {
             }
 
             log.info("Emailing link to '{}' to {}", verify.getUrl(), user.getEmail());
+            email.send(user.getEmail(), "Password reset", "Password reset: " + verify.getUrl());
         }
     }
 

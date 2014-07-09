@@ -7,6 +7,8 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
+
 /**
  * Email service that uses SendGrid.
  *
@@ -17,6 +19,7 @@ public class SendGridEmailService implements EmailService {
     private final EmailServiceConfiguration config;
     private final SendGrid sendGrid;
 
+    @Inject
     public SendGridEmailService(SendGridConfiguration sendGridConfig, EmailServiceConfiguration emailconfig) {
         config = emailconfig;
         sendGrid = new SendGrid(sendGridConfig.getUsername(), sendGridConfig.getPassword());

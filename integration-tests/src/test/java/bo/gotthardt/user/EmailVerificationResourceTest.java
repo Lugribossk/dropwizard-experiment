@@ -1,5 +1,6 @@
 package bo.gotthardt.user;
 
+import bo.gotthardt.email.LoggerEmailService;
 import bo.gotthardt.model.EmailVerification;
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.ApiIntegrationTest;
@@ -21,7 +22,7 @@ import static org.assertj.jodatime.api.Assertions.assertThat;
  * @author Bo Gotthardt
  */
 public class EmailVerificationResourceTest extends ApiIntegrationTest {
-    private static final PasswordResetService service = new PasswordResetService(db);
+    private static final PasswordResetService service = new PasswordResetService(db, new LoggerEmailService());
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new EmailVerificationResource(db, service))

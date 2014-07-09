@@ -2,9 +2,9 @@ package bo.gotthardt.user;
 
 import bo.gotthardt.model.EmailVerification;
 import com.avaje.ebean.EbeanServer;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -13,11 +13,16 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/verifications")
 @Produces(MediaType.APPLICATION_JSON)
-@RequiredArgsConstructor
 @Slf4j
 public class EmailVerificationResource {
     private final EbeanServer db;
     private final PasswordResetService service;
+
+    @Inject
+    public EmailVerificationResource(EbeanServer db, PasswordResetService service) {
+        this.db = db;
+        this.service = service;
+    }
 
     @GET
     @Path("/{token}")

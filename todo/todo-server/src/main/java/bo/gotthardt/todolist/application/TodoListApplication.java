@@ -3,7 +3,8 @@ package bo.gotthardt.todolist.application;
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.email.EmailService;
-import bo.gotthardt.email.Emails;
+import bo.gotthardt.email.EmailServiceProvider;
+import bo.gotthardt.email.sendgrid.HasSendGridConfiguration;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
@@ -12,9 +13,9 @@ import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
 import bo.gotthardt.todolist.rest.WidgetResource;
 import bo.gotthardt.user.EmailVerificationResource;
-import bo.gotthardt.user.PasswordResetService;
 import bo.gotthardt.user.UserResource;
 import com.avaje.ebean.EbeanServer;
+import com.google.inject.*;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -46,12 +47,11 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        EbeanServer db = ebeanBundle.getEbeanServer();
-        EmailService email = Emails.createService(configuration);
+        Injector injector = createInjector(configuration);
 
-        environment.jersey().register(new WidgetResource(new CrudService<>(Widget.class, db)));
-        environment.jersey().register(new UserResource(db));
-        environment.jersey().register(new EmailVerificationResource(db, new PasswordResetService(db, email)));
+        environment.jersey().register(injector.getInstance(WidgetResource.class));
+        environment.jersey().register(injector.getInstance(UserResource.class));
+        environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
 
         environment.jersey().register(new ListFilteringProvider());
 
@@ -70,6 +70,22 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         User user = new User("test", "test");
         user.setName("Test Testsen");
         user.setEmail("example@example.com");
-        db.save(user);
+        ebeanBundle.getEbeanServer().save(user);
+    }
+
+    private Injector createInjector(TodoListConfiguration configuration) {
+        return Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(new TypeLiteral<HasSendGridConfiguration>(){}).toInstance(configuration);
+                bind(EbeanServer.class).toProvider(ebeanBundle).asEagerSingleton();
+                bind(EmailService.class).toProvider(EmailServiceProvider.class);
+            }
+
+            @Provides
+            public CrudService<Widget> getWidgetService(EbeanServer db) {
+                return new CrudService<>(Widget.class, db);
+            }
+        });
     }
 }

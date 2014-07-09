@@ -5,25 +5,38 @@ import bo.gotthardt.model.EmailVerification;
 import bo.gotthardt.model.HashedValue;
 import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
+import javax.inject.Inject;
+
 /**
+ * Service for requesting and executing a password reset via email.
+ *
  * @author Bo Gotthardt
  */
-@RequiredArgsConstructor
 @Slf4j
 public class PasswordResetService {
     private static final Duration TOKEN_LIFETIME = Duration.standardDays(2);
     private final EbeanServer db;
     private final EmailService email;
 
-    public void requestPasswordReset(String username) {
+    @Inject
+    public PasswordResetService(EbeanServer db, EmailService email) {
+        this.db = db;
+        this.email = email;
+    }
+
+    /**
+     * Request a password reset link be mail to the user with the specified username or email address.
+     *
+     * @param usernameOrEmail The username or email.
+     */
+    public void requestPasswordReset(String usernameOrEmail) {
         User user = db.find(User.class).where().disjunction()
-                .eq("username", username)
-                .eq("email", username).findUnique();
+                .eq("username", usernameOrEmail)
+                .eq("email", usernameOrEmail).findUnique();
 
         if (user != null) {
             EmailVerification verify = db.find(EmailVerification.class).where()
@@ -45,6 +58,12 @@ public class PasswordResetService {
         }
     }
 
+    /**
+     * Use the specified password reset token ID to reset the associated password.
+     *
+     * @param token The token.
+     * @param newPassword The new password.
+     */
     public void doPasswordReset(String token, String newPassword) {
         EmailVerification verify = db.find(EmailVerification.class, token);
 

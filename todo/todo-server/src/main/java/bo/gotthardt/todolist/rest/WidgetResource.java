@@ -4,6 +4,7 @@ import bo.gotthardt.model.Widget;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.rest.RestResource;
 
+import javax.inject.Inject;
 import javax.ws.rs.Path;
 
 /**
@@ -11,6 +12,7 @@ import javax.ws.rs.Path;
  */
 @Path("/widgets")
 public class WidgetResource extends RestResource<Widget> {
+    @Inject
     public WidgetResource(CrudService<Widget> service) {
         super(service);
     }

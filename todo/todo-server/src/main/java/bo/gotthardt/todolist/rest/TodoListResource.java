@@ -5,6 +5,7 @@ import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.rest.RestrictedRestResource;
 import com.avaje.ebean.EbeanServer;
 
+import javax.inject.Inject;
 import javax.ws.rs.Path;
 
 /**
@@ -12,6 +13,7 @@ import javax.ws.rs.Path;
  */
 @Path("/todolists")
 public class TodoListResource extends RestrictedRestResource<TodoList> {
+    @Inject
     public TodoListResource(EbeanServer db) {
         super(new CrudService<>(TodoList.class, db));
     }

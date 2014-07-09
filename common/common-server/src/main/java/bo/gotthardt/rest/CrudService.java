@@ -5,17 +5,22 @@ import bo.gotthardt.exception.NotFoundException;
 import bo.gotthardt.jersey.provider.ListFiltering;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
-import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
  * @author Bo Gotthardt
  */
-@RequiredArgsConstructor
 public class CrudService<T extends Persistable> {
     private final Class<T> type;
     private final EbeanServer db;
+
+    @Inject
+    public CrudService(Class<T> type, EbeanServer db) {
+        this.type = type;
+        this.db = db;
+    }
 
     public T fetchById(long id) {
         T item = db.find(type, id);

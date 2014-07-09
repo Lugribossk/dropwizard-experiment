@@ -15,6 +15,6 @@ import lombok.Getter;
 @Getter
 public class TodoListConfiguration extends Configuration implements HasDatabaseConfiguration, HasEmailServiceConfiguration, HasSendGridConfiguration {
     private DataSourceFactory database;
-    private EmailServiceConfiguration email;
+    private EmailServiceConfiguration email = new EmailServiceConfiguration();
     private SendGridConfiguration sendGrid;
 }

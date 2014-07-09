@@ -6,9 +6,9 @@ import bo.gotthardt.model.HashedValue;
 import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.auth.Auth;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -17,10 +17,14 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
-@RequiredArgsConstructor
 @Slf4j
 public class UserResource {
     private final EbeanServer db;
+
+    @Inject
+    public UserResource(EbeanServer db) {
+        this.db = db;
+    }
 
     @GET
     @Path("/{id}")

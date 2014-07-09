@@ -22,5 +22,8 @@
   "devDependencies": {
     "jasmine-jquery": "2.0.5",
     "es5-shim": "3.4.0"
+  },
+  "resolutions": {
+    "jquery": "2.1.1"
   }
 }

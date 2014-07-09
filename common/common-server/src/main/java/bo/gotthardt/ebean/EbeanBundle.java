@@ -5,16 +5,17 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
+import javax.inject.Provider;
+
 /**
  * @author Bo Gotthardt
  */
-public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
+public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration>, Provider<EbeanServer> {
     private EbeanServer ebeanServer;
 
     @Override
@@ -34,6 +35,11 @@ public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
     public EbeanServer getEbeanServer() {
         Preconditions.checkNotNull(ebeanServer, "Ebean server not created yet (this happens during 'run' i.e. after 'initialize').");
         return ebeanServer;
+    }
+
+    @Override
+    public EbeanServer get() {
+        return getEbeanServer();
     }
 
     private static ServerConfig getServerConfig(DataSourceFactory dbConfig) {

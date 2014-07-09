@@ -2,6 +2,8 @@ package bo.gotthardt.email;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
+
 /**
  * Email service that logs to console instead of actually sending.
  *
@@ -9,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class LoggerEmailService implements EmailService {
+    @Inject
+    public LoggerEmailService() { }
+
     @Override
     public void send(String toAddress, String subject, String htmlContent) {
         log.info("Intended to send email to {} with subject '{}'.", toAddress, subject);

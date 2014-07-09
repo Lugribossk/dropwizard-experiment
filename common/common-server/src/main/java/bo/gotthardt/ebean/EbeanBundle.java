@@ -5,15 +5,16 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Bo Gotthardt
  */
+@Slf4j
 public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
     private EbeanServer ebeanServer;
 
@@ -41,6 +42,8 @@ public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
         config.setName("main");
         config.setDataSourceConfig(getDataSourceConfig(dbConfig));
         config.setDefaultServer(true);
+
+        log.info("Connecting to database on '{}' with username '{}'.", config.getDataSourceConfig().getUrl(), config.getDataSourceConfig().getUsername());
 
         for (Class<?> entity : EbeanEntities.getEntities()) {
             config.addClass(entity);

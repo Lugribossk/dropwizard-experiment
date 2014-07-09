@@ -93,6 +93,7 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpasyncclient:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore-nio:4.3.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.rabbitmq:amqp-client:3.3.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: io.dropwizard:dropwizard-testing:0.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.sun.jersey.jersey-test-framework:jersey-test-framework-core:1.18.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />

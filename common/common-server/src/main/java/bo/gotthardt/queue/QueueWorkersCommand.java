@@ -2,20 +2,17 @@ package bo.gotthardt.queue;
 
 import bo.gotthardt.queue.rabbitmq.HasRabbitMQConfiguration;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
+import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
-import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Environment;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -24,17 +21,17 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 public class QueueWorkersCommand<T extends Configuration & HasRabbitMQConfiguration & HasWorkerConfigurations> extends EnvironmentCommand<T> {
     private final RabbitMQBundle rabbitMq;
-    private final Map<String, Class<?>> queues;
+    @Setter
+    private Injector injector;
 
-    public QueueWorkersCommand(Application<T> application, RabbitMQBundle rabbitMq, Map<String, Class<?>> queues) {
+    public QueueWorkersCommand(Application<T> application, RabbitMQBundle rabbitMq) {
         super(application, "workers", "Runs message queue worker threads.");
         this.rabbitMq = rabbitMq;
-        this.queues = queues;
     }
 
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
-        Injector injector = createInjector();
+        Preconditions.checkNotNull(injector, "Injector not set, perhaps the run() execution order changed?");
 
         List<WorkerConfiguration> workerConfigurations = configuration.getWorkers();
 
@@ -46,24 +43,7 @@ public class QueueWorkersCommand<T extends Configuration & HasRabbitMQConfigurat
                 QueueWorker<?> worker = injector.getInstance(workerClass);
                 executorService.submit(worker);
             }
-            log.info("Created {} threads for worker [}.", config.getThreads(), workerClass.getSimpleName());
-        });
-    }
-
-    private Injector createInjector() {
-        return Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                queues.forEach((name, klass) -> {
-                    queueBind(klass, name);
-                });
-            }
-
-            private <S> void queueBind(Class<S> type, String name) {
-                bind(new TypeLiteral<MessageQueue<S>>(){})
-                        .annotatedWith(Names.named(name))
-                        .toProvider(() -> rabbitMq.getQueue(name));
-            }
+            log.info("Created {} thread{} for worker {}.", config.getThreads(), config.getThreads() > 1 ? "s" : "", workerClass.getSimpleName());
         });
     }
 }

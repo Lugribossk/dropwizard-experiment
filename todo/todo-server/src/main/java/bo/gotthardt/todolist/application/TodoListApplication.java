@@ -9,6 +9,7 @@ import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
+import bo.gotthardt.queue.MessageQueue;
 import bo.gotthardt.queue.QueueWorkersCommand;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import bo.gotthardt.rest.CrudService;
@@ -17,28 +18,35 @@ import bo.gotthardt.todolist.rest.WidgetResource;
 import bo.gotthardt.user.EmailVerificationResource;
 import bo.gotthardt.user.UserResource;
 import com.avaje.ebean.EbeanServer;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Stopwatch;
 import com.google.inject.*;
+import com.google.inject.name.Names;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Bo Gotthardt
  */
+@Slf4j
 public class TodoListApplication extends Application<TodoListConfiguration> {
     @Getter
     private EbeanBundle ebeanBundle;
     private RabbitMQBundle rabbitMqBundle;
+    private QueueWorkersCommand<TodoListConfiguration> workersCommand;
 
     public static void main(String... args) throws Exception {
+        Stopwatch startupTimer = Stopwatch.createStarted();
         new TodoListApplication().run(args);
+        log.info("Startup took {} ms.", startupTimer.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 
     @Override
@@ -51,12 +59,15 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
         bootstrap.addBundle(new TodoClientBundle());
 
-        bootstrap.addCommand(new QueueWorkersCommand<>(this, rabbitMqBundle, ImmutableMap.of("username", User.class)));
+        // The anonymous subclass seems to be needed for the config type to be picked up correctly.
+        workersCommand = new QueueWorkersCommand<TodoListConfiguration>(this, rabbitMqBundle) {};
+        bootstrap.addCommand(workersCommand);
     }
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
         Injector injector = createInjector(configuration);
+        workersCommand.setInjector(injector);
 
         environment.jersey().register(injector.getInstance(WidgetResource.class));
         environment.jersey().register(injector.getInstance(UserResource.class));
@@ -80,6 +91,8 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         user.setName("Test Testsen");
         user.setEmail("example@example.com");
         ebeanBundle.getEbeanServer().save(user);
+
+        rabbitMqBundle.getQueue("username").publish(user);
     }
 
     private Injector createInjector(TodoListConfiguration configuration) {
@@ -89,6 +102,10 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
                 bind(new TypeLiteral<HasSendGridConfiguration>(){}).toInstance(configuration);
                 bind(EbeanServer.class).toProvider(ebeanBundle).asEagerSingleton();
                 bind(EmailService.class).toProvider(EmailServiceProvider.class);
+
+                bind(new TypeLiteral<MessageQueue<User>>(){})
+                        .annotatedWith(Names.named("username"))
+                        .toProvider(() -> rabbitMqBundle.getQueue("username"));
             }
 
             @Provides

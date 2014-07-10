@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="TodoListApplication" type="Application" factoryName="Application" singleton="true" nameIsGenerated="true">
+  <configuration default="false" name="TodoListApplication server" type="Application" factoryName="Application" singleton="true">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
       <pattern>
         <option name="PATTERN" value="bo.gotthardt.todolist.application.*" />

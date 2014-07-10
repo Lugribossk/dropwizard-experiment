@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * @author Bo Gotthardt
  */
 @RequiredArgsConstructor
-public class RabbitMQHealthCheck extends HealthCheck {
+class RabbitMQHealthCheck extends HealthCheck {
     private final RabbitMQBundle rabbitMQ;
 
     @Override

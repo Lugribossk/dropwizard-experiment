@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author Bo Gotthardt
  */
 @Slf4j
-public class RabbitMQMessageQueue<T> implements MessageQueue<T> {
+class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     private static ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     private final Channel channel;

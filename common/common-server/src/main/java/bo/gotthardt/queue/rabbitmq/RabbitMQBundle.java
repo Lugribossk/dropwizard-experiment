@@ -1,6 +1,7 @@
 package bo.gotthardt.queue.rabbitmq;
 
 import bo.gotthardt.queue.MessageQueue;
+import com.google.common.base.Preconditions;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -38,15 +39,17 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
 
         log.info("Connecting to RabbitMQ on '{}' with username '{}'.", factory.getHost(), factory.getUsername());
 
+        connection = factory.newConnection();
+        channel = connection.createChannel();
+        channel.basicQos(1);
+
         environment.lifecycle().manage(this);
         environment.healthChecks().register("rabbitmq", new RabbitMQHealthCheck(this));
     }
 
     @Override
     public void start() throws Exception {
-        connection = factory.newConnection();
-        channel = connection.createChannel();
-        channel.basicQos(1);
+        // Connection and channel init code should really be in here, but it has to be earlier in the startup to be ready when Guice initializes.
     }
 
     @Override
@@ -60,6 +63,7 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
     }
 
     public <T> MessageQueue<T> getQueue(String queueName) {
+        Preconditions.checkNotNull(channel, "Channel not initialized.");
         return new RabbitMQMessageQueue<>(channel, queueName);
     }
 }

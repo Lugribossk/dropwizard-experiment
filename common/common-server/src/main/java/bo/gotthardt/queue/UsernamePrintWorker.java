@@ -17,6 +17,6 @@ public class UsernamePrintWorker extends QueueWorker<User> {
 
     @Override
     protected void process(User message) {
-        System.out.println(message.getUsername());
+        System.out.println("Username: " + message.getUsername());
     }
 }

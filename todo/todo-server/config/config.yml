@@ -10,3 +10,7 @@ database:
   password:
   url: jdbc:h2:mem:tests;DB_CLOSE_DELAY=-1
   driverClass: org.h2.Driver
+
+workers:
+  - worker: bo.gotthardt.queue.UsernamePrintWorker
+    threads: 1

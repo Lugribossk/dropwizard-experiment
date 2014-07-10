@@ -20,7 +20,6 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
     private final ConnectionFactory factory = new ConnectionFactory();
     @Getter(AccessLevel.PACKAGE)
     private Connection connection;
-    @Getter(AccessLevel.PACKAGE)
     private Channel channel;
 
     @Override
@@ -30,7 +29,7 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
 
     @Override
     public void run(HasRabbitMQConfiguration configuration, Environment environment) throws Exception {
-        RabbitMQConfiguration rabbitMQ = configuration.getRabbitMQ();
+        RabbitMQConfiguration rabbitMQ = configuration.getRabbitMq();
         factory.setHost(rabbitMQ.getHost());
         factory.setUsername(rabbitMQ.getUsername());
         factory.setPassword(rabbitMQ.getPassword());
@@ -60,7 +59,7 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
         }
     }
 
-    public MessageQueue getQueue(String queueName) {
-        return new MessageQueue(channel, queueName);
+    public <T> MessageQueue<T> getQueue(String queueName) {
+        return new RabbitMQMessageQueue<>(channel, queueName);
     }
 }

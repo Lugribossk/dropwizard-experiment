@@ -1,37 +1,37 @@
 package bo.gotthardt.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.client.Channel;
+import com.google.common.base.Stopwatch;
 import com.rabbitmq.client.QueueingConsumer;
 import io.dropwizard.jackson.Jackson;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
+ * A worker runs a processing function on messages from a specific message queue.
+ *
  * @author Bo Gotthardt
  */
 @Slf4j
-@RequiredArgsConstructor
 abstract public class QueueWorker<T> implements Runnable {
     private static ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-    private final MessageQueue<T> queue;
     private final Class<T> type;
+    private final MessageQueue<T> queue;
 
-    abstract boolean process(T message) throws Exception;
+    public QueueWorker(Class<T> type, MessageQueue<T> queue) {
+        this.type = type;
+        this.queue = queue;
+    }
 
+    protected abstract void process(T message);
+
+    @Override
     public void run() {
-        Channel channel = queue.getChannel();
-        QueueingConsumer consumer = new QueueingConsumer(channel);
-        try {
-            channel.basicConsume(queue.getName(), false, consumer);
-        } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
-        }
+        QueueingConsumer consumer = queue.consume();
 
+        //noinspection InfiniteLoopStatement
         while (true) {
             QueueingConsumer.Delivery delivery;
             try {
@@ -42,28 +42,19 @@ abstract public class QueueWorker<T> implements Runnable {
             }
             long deliveryTag = delivery.getEnvelope().getDeliveryTag();
 
-            boolean processed;
             try {
                 T message = MAPPER.readValue(delivery.getBody(), type);
 
                 log.trace("Received message '{}' with data '{}'.", deliveryTag, new String(delivery.getBody()));
-                processed = process(message);
+                Stopwatch timer = Stopwatch.createStarted();
+
+                process(message);
+
+                queue.acknowledge(delivery);
+                log.info("Processed {} message '{}' succesfully in {} ms.", type.getSimpleName(), deliveryTag, timer.stop().elapsed(TimeUnit.MILLISECONDS));
             } catch (Exception e) {
                 log.warn("Processing message failed with exception:", e);
-                processed = false;
-            }
-
-            try {
-                if (processed) {
-                    log.info("Processed message '{}' succesfully.", deliveryTag);
-                    channel.basicAck(deliveryTag, false);
-                } else {
-                    log.info("Processing message '{}' failed.", deliveryTag);
-                    channel.basicNack(deliveryTag, false, true);
-                }
-            } catch (IOException e) {
-                // TODO
-                throw new RuntimeException(e);
+                queue.reject(delivery);
             }
         }
     }

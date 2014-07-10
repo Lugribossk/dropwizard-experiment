@@ -9,12 +9,15 @@ import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
+import bo.gotthardt.queue.QueueWorkersCommand;
+import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
 import bo.gotthardt.todolist.rest.WidgetResource;
 import bo.gotthardt.user.EmailVerificationResource;
 import bo.gotthardt.user.UserResource;
 import com.avaje.ebean.EbeanServer;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.*;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -32,6 +35,7 @@ import java.util.EnumSet;
 public class TodoListApplication extends Application<TodoListConfiguration> {
     @Getter
     private EbeanBundle ebeanBundle;
+    private RabbitMQBundle rabbitMqBundle;
 
     public static void main(String... args) throws Exception {
         new TodoListApplication().run(args);
@@ -40,9 +44,14 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     @Override
     public void initialize(Bootstrap<TodoListConfiguration> bootstrap) {
         ebeanBundle = new EbeanBundle();
+        rabbitMqBundle = new RabbitMQBundle();
+
         bootstrap.addBundle(ebeanBundle);
+        bootstrap.addBundle(rabbitMqBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
         bootstrap.addBundle(new TodoClientBundle());
+
+        bootstrap.addCommand(new QueueWorkersCommand<>(this, rabbitMqBundle, ImmutableMap.of("username", User.class)));
     }
 
     @Override

@@ -92,7 +92,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         user.setEmail("example@example.com");
         ebeanBundle.getEbeanServer().save(user);
 
-        rabbitMqBundle.getQueue("username").publish(user);
+        rabbitMqBundle.getQueue("username", User.class).publish(user);
     }
 
     private Injector createInjector(TodoListConfiguration configuration) {
@@ -105,7 +105,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
                 bind(new TypeLiteral<MessageQueue<User>>(){})
                         .annotatedWith(Names.named("username"))
-                        .toProvider(() -> rabbitMqBundle.getQueue("username"));
+                        .toProvider(() -> rabbitMqBundle.getQueue("username", User.class));
             }
 
             @Provides

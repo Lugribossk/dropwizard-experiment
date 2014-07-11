@@ -14,7 +14,7 @@ public class UsernamePrintWorker extends QueueWorker<User> {
 
     @Inject
     public UsernamePrintWorker(@Named("username") MessageQueue<User> queue) {
-        super(User.class, queue);
+        super(queue);
     }
 
     @Override

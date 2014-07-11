@@ -18,7 +18,6 @@ public interface MessageQueue<T> {
     /**
      * Get/wait for messages from the queue and run the specified processing function on them.
      * @param processor The processing function.
-     * @param type The class of T.
      */
-    void consume(Function<T, Void> processor, Class<T> type);
+    void consume(Function<T, Void> processor);
 }

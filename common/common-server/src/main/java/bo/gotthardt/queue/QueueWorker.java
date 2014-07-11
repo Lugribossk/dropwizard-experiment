@@ -1,7 +1,5 @@
 package bo.gotthardt.queue;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * A worker that runs a processing function on messages from a specific message queue.
  * Subclass this to create workers for specific tasks.
@@ -12,13 +10,10 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Bo Gotthardt
  */
-@Slf4j
 abstract public class QueueWorker<T> implements Runnable {
-    private final Class<T> type;
-    private final MessageQueue<T> queue;
+    protected final MessageQueue<T> queue;
 
-    public QueueWorker(Class<T> type, MessageQueue<T> queue) {
-        this.type = type;
+    public QueueWorker(MessageQueue<T> queue) {
         this.queue = queue;
     }
 
@@ -26,6 +21,6 @@ abstract public class QueueWorker<T> implements Runnable {
 
     @Override
     public void run() {
-        queue.consume(this::process, type);
+        queue.consume(this::process);
     }
 }

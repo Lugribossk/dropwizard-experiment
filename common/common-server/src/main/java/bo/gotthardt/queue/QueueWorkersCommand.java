@@ -43,7 +43,10 @@ public class QueueWorkersCommand<T extends Configuration & HasWorkerConfiguratio
 
         workerConfigurations.forEach(config -> {
             Class<? extends QueueWorker> workerClass = config.getWorker();
-            ExecutorService executorService = environment.lifecycle().executorService(workerClass.getSimpleName() + "-%d").maxThreads(config.getThreads()).build();
+            ExecutorService executorService = environment.lifecycle()
+                    .executorService(workerClass.getSimpleName() + "-%d")
+                    .maxThreads(config.getThreads())
+                    .build();
 
             for (int i = 0; i < config.getThreads(); i++) {
                 QueueWorker<?> worker = injector.getInstance(workerClass);

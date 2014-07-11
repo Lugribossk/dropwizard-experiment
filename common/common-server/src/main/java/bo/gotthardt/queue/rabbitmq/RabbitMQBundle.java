@@ -70,8 +70,8 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
      * @param <T> The type of messages in the queue.
      * @return The queue.
      */
-    public <T> MessageQueue<T> getQueue(String queueName) {
+    public <T> MessageQueue<T> getQueue(String queueName, Class<T> type) {
         Preconditions.checkNotNull(channel, "Channel not initialized.");
-        return new RabbitMQMessageQueue<>(channel, queueName);
+        return new RabbitMQMessageQueue<>(channel, queueName, type);
     }
 }

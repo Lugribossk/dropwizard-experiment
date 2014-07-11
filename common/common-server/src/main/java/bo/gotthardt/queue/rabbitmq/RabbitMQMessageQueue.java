@@ -14,7 +14,7 @@ import java.util.function.Function;
 /**
  * RabbitMQ implementation of {@link bo.gotthardt.queue.MessageQueue}.
  *
- * To instantiate, see {@link bo.gotthardt.queue.rabbitmq.RabbitMQBundle#getQueue(String)}.
+ * To instantiate, see {@link bo.gotthardt.queue.rabbitmq.RabbitMQBundle#getQueue(String, Class)}.
  *
  * @author Bo Gotthardt
  */
@@ -24,10 +24,12 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
 
     private final Channel channel;
     private final String name;
+    private final Class<T> type;
 
-    RabbitMQMessageQueue(Channel channel, String name) {
+    RabbitMQMessageQueue(Channel channel, String name, Class<T> type) {
         this.channel = channel;
         this.name = name;
+        this.type = type;
         try {
             channel.queueDeclare(name, true, false, false, null);
         } catch (IOException e) {
@@ -50,7 +52,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     }
 
     @Override
-    public void consume(Function<T, Void> processor, Class<T> type) {
+    public void consume(Function<T, Void> processor) {
         Consumer consumer = new FunctionConsumer<>(channel, processor, type);
 
         try {

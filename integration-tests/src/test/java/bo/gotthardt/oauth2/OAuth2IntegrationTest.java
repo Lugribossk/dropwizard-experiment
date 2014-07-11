@@ -40,7 +40,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     private User user;
 
     @Before
-    public void blah() {
+    public void setup() {
         user = createUser();
     }
 

@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+
 /**
  * Dropwizard bundle for using RabbitMQ message queues.
  *
@@ -73,5 +75,19 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
     public <T> MessageQueue<T> getQueue(String queueName, Class<T> type) {
         Preconditions.checkNotNull(channel, "Channel not initialized.");
         return new RabbitMQMessageQueue<>(channel, queueName, type);
+    }
+
+    /**
+     * Delete all messages in the specified queue.
+     * <b>ONLY for testing!</b>
+     * @param queue The queue.
+     */
+    void purgeQueue(MessageQueue<?> queue) {
+        try {
+            channel.queuePurge(queue.getName());
+        } catch (IOException e) {
+            // TODO
+            throw new RuntimeException(e);
+        }
     }
 }

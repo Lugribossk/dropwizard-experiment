@@ -16,8 +16,22 @@ public interface MessageQueue<T> {
     void publish(T message);
 
     /**
-     * Get/wait for messages from the queue and run the specified processing function on them.
+     * Continually wait for messages from the queue and run the specified processing function on them when they arrive.
+     * If the processing function throws an exception, the current message will not be removed from the queue.
      * @param processor The processing function.
      */
     void consume(Function<T, Void> processor);
+
+    /**
+     * Get the next message in the queue, blocking until there is one.
+     * <b>You probably want to use {@link #consume(Function)} instead.</b>
+     * @return The message.
+     */
+    T consumeNext();
+
+    /**
+     * Get the name of this queue.
+     * @return The name.
+     */
+    String getName();
 }

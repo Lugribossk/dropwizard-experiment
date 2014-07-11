@@ -4,8 +4,10 @@ import bo.gotthardt.queue.MessageQueue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.GetResponse;
 import com.rabbitmq.client.MessageProperties;
 import io.dropwizard.jackson.Jackson;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -23,6 +25,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     private static ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     private final Channel channel;
+    @Getter
     private final String name;
     private final Class<T> type;
 
@@ -57,6 +60,17 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
 
         try {
             channel.basicConsume(name, false, consumer);
+        } catch (IOException e) {
+            // TODO
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public T consumeNext() {
+        try {
+            GetResponse response = channel.basicGet(name, true);
+            return RabbitMQMessageQueue.MAPPER.readValue(response.getBody(), type);
         } catch (IOException e) {
             // TODO
             throw new RuntimeException(e);

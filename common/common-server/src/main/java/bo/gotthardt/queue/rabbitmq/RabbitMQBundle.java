@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Dropwizard bundle for using RabbitMQ message queues.
+ *
  * @author Bo Gotthardt
  */
 @Slf4j
@@ -62,6 +64,12 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
         }
     }
 
+    /**
+     * Get the message queue with the specified name.
+     * @param queueName The queue name.
+     * @param <T> The type of messages in the queue.
+     * @return The queue.
+     */
     public <T> MessageQueue<T> getQueue(String queueName) {
         Preconditions.checkNotNull(channel, "Channel not initialized.");
         return new RabbitMQMessageQueue<>(channel, queueName);

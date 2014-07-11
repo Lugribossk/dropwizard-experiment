@@ -1,18 +1,24 @@
 package bo.gotthardt.queue;
 
-import com.rabbitmq.client.QueueingConsumer;
+import java.util.function.Function;
 
 /**
  * A named queue of messages of a particular type.
+ * Messages are published to the queue and then consumed asynchronously by a separate worker.
  *
  * @author Bo Gotthardt
  */
 public interface MessageQueue<T> {
+    /**
+     * Publish a message.
+     * @param message The message.
+     */
     void publish(T message);
 
-    QueueingConsumer consume();
-
-    void acknowledge(QueueingConsumer.Delivery delivery);
-
-    void reject(QueueingConsumer.Delivery delivery);
+    /**
+     * Get/wait for messages from the queue and run the specified processing function on them.
+     * @param processor The processing function.
+     * @param type The class of T.
+     */
+    void consume(Function<T, Void> processor, Class<T> type);
 }

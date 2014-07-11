@@ -12,5 +12,5 @@ database:
   driverClass: org.h2.Driver
 
 workers:
-  - worker: bo.gotthardt.queue.UsernamePrintWorker
+  - worker: bo.gotthardt.todolist.worker.UsernamePrintWorker
     threads: 1

@@ -4,6 +4,8 @@ import com.codahale.metrics.health.HealthCheck;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Health check for RabbitMQ connection.
+ *
  * @author Bo Gotthardt
  */
 @RequiredArgsConstructor

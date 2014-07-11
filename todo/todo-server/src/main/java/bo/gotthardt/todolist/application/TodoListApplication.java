@@ -60,7 +60,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         bootstrap.addBundle(new TodoClientBundle());
 
         // The anonymous subclass seems to be needed for the config type to be picked up correctly.
-        workersCommand = new QueueWorkersCommand<TodoListConfiguration>(this, rabbitMqBundle) {};
+        workersCommand = new QueueWorkersCommand<TodoListConfiguration>(this) {};
         bootstrap.addCommand(workersCommand);
     }
 

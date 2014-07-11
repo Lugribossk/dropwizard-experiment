@@ -1,7 +1,5 @@
 package bo.gotthardt.queue;
 
-import bo.gotthardt.queue.rabbitmq.HasRabbitMQConfiguration;
-import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
@@ -16,17 +14,25 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * Dropwizard command for running message queue workers.
+ * Can be configured with which worker classes to instantiate, and how many threads of each.
+ *
+ * Due to weirdness with the Dropwizard initialization order, a Guice Injector must be set after creation.
+ * Make sure it has been set up for providing all the dependencies required for the workers being used.
+ *
  * @author Bo Gotthardt
  */
 @Slf4j
-public class QueueWorkersCommand<T extends Configuration & HasRabbitMQConfiguration & HasWorkerConfigurations> extends EnvironmentCommand<T> {
-    private final RabbitMQBundle rabbitMq;
+public class QueueWorkersCommand<T extends Configuration & HasWorkerConfigurations> extends EnvironmentCommand<T> {
     @Setter
     private Injector injector;
 
-    public QueueWorkersCommand(Application<T> application, RabbitMQBundle rabbitMq) {
+    /**
+     * Constructor.
+     * @param application The application running this command.
+     */
+    public QueueWorkersCommand(Application<T> application) {
         super(application, "workers", "Runs message queue worker threads.");
-        this.rabbitMq = rabbitMq;
     }
 
     @Override

@@ -97,6 +97,8 @@
     <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.rabbitmq:amqp-client:3.3.4" level="project" />
+    <orderEntry type="library" name="Maven: org.quartz-scheduler:quartz:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: c3p0:c3p0:0.9.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: io.dropwizard:dropwizard-testing:0.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.sun.jersey.jersey-test-framework:jersey-test-framework-core:1.18.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />

@@ -10,7 +10,7 @@ import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.queue.MessageQueue;
-import bo.gotthardt.queue.QueueWorkersCommand;
+import bo.gotthardt.queue.WorkersCommand;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
@@ -41,7 +41,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     @Getter
     private EbeanBundle ebeanBundle;
     private RabbitMQBundle rabbitMqBundle;
-    private QueueWorkersCommand<TodoListConfiguration> workersCommand;
+    private WorkersCommand<TodoListConfiguration> workersCommand;
 
     public static void main(String... args) throws Exception {
         Stopwatch startupTimer = Stopwatch.createStarted();
@@ -60,7 +60,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         bootstrap.addBundle(new TodoClientBundle());
 
         // The anonymous subclass seems to be needed for the config type to be picked up correctly.
-        workersCommand = new QueueWorkersCommand<TodoListConfiguration>(this) {};
+        workersCommand = new WorkersCommand<TodoListConfiguration>(this) {};
         bootstrap.addCommand(workersCommand);
     }
 

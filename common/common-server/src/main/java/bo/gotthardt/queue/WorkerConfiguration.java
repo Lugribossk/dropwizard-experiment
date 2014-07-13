@@ -3,7 +3,7 @@ package bo.gotthardt.queue;
 import lombok.Getter;
 
 /**
- * Configuration for a {@link bo.gotthardt.queue.QueueWorker} subclass that {@link bo.gotthardt.queue.QueueWorkersCommand} should start.
+ * Configuration for a {@link bo.gotthardt.queue.QueueWorker} subclass that {@link WorkersCommand} should start.
  *
  * @author Bo Gotthardt
  */

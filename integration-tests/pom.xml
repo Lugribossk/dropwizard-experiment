@@ -53,4 +53,13 @@
             <artifactId>phantomjsdriver</artifactId>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>skipIntegration</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>

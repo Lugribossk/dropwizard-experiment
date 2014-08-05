@@ -29,6 +29,8 @@ define(function (require) {
             } else {
                 Marionette.Region.prototype.show.call(this, viewOrPromise);
             }
+
+            return this;
         }
     });
 });

@@ -8,8 +8,8 @@ define(function (require) {
 		createTestDom: function () {
 			var test = {};
 			beforeEach(function () {
-				var el = $("<div id='test'></div>").appendTo("body");
-				var region = new Marionette.Region({el: "#test"});
+				var el = $("<div></div>").appendTo("body");
+				var region = new Marionette.Region({el: el});
 
 				test.el = el;
 				test.region = region;

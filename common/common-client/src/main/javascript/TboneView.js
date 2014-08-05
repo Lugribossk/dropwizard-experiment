@@ -7,9 +7,9 @@ define(function (require) {
 
     require("stickit");
 
-    return Marionette.Layout.extend({
+    return Marionette.LayoutView.extend({
         constructor: function (options) {
-            Marionette.Layout.prototype.constructor.apply(this, arguments);
+            Marionette.LayoutView.prototype.constructor.apply(this, arguments);
             var scope = this;
 
             if (options && options.controller) {
@@ -17,12 +17,12 @@ define(function (require) {
             }
 
             if (this.bindings) {
-                this.listenTo(this, "item:rendered", function () {
+                this.listenTo(this, "render", function () {
                     this.stickit();
                 });
             }
 
-            this.listenTo(this, "item:rendered", function () {
+            this.listenTo(this, "render", function () {
                 setTimeout(function () {
                     scope.triggerMethod("after:render");
                 }, 0);

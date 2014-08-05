@@ -43,7 +43,7 @@ define(function (require) {
             if (this.options.progress) {
                 this.options.progress
                     .progress(function (percent) {
-                        if (!scope.isClosed) {
+                        if (!scope.isDestroyed) {
                             scope.setProgress(percent);
                         }
                     });

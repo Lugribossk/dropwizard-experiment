@@ -9,7 +9,7 @@ define(function (require) {
     var TboneController = require("common/TboneController");
 
     return TboneController.extend({
-        viewType: ExampleNavbar,
+        viewClass: ExampleNavbar,
 
         initialize: function (options) {
             var region = this.options.region;
@@ -17,7 +17,7 @@ define(function (require) {
             this.listenTo(options.model, "change:isLoggedIn", function (model, isLoggedIn) {
                 region.$el.toggle(isLoggedIn);
             });
-            region.ensureEl();
+            region._ensureElement();
             region.$el.toggle(options.model.get("isLoggedIn"));
         }
     }, {

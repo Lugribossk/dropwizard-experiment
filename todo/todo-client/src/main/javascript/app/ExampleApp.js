@@ -16,11 +16,11 @@ define(function (require) {
     app.addRegions({
         content: {
             selector: "#main",
-            regionType: DeferredRegion
+            regionClass: DeferredRegion
         },
         navbar: {
             selector: "#navbar",
-            regionType: DeferredRegion
+            regionClass: DeferredRegion
         }
     });
 

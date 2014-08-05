@@ -73,7 +73,7 @@ define(function (require) {
             if (this.options.view) {
                 $.when(this.options.view)
                     .done(function (view) {
-                        scope.listenToOnce(view, "close", function () {
+                        scope.listenToOnce(view, "destroy", function () {
                             scope.$el.modal("hide");
                         });
                     });
@@ -86,7 +86,7 @@ define(function (require) {
 
             this.$el.modal();
             this.$el.one("hidden.bs.modal", function () {
-                scope.close();
+                scope.destroy();
             });
             modalOpen = true;
         },
@@ -95,9 +95,9 @@ define(function (require) {
             this.ui.okButton.focus();
         },
 
-        onClose: function () {
+        onDestroy: function () {
             modalOpen = false;
-            if (this.options.rejectOnClose) {
+            if (this.options.rejectOnDestroy) {
                 this.okPromise.reject();
             } else {
                 this.okPromise.resolve();
@@ -147,7 +147,7 @@ define(function (require) {
                 text: text,
                 cancelLabel: "Cancel",
                 okLabel: okLabel || "Ok",
-                rejectOnClose: true
+                rejectOnDestroy: true
             });
         },
 

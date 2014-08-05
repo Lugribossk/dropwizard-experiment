@@ -17,7 +17,7 @@ define(function (require) {
 				test.show = region.show.bind(region);
 			});
 			afterEach(function () {
-				test.region.close();
+				test.region.empty();
 				test.el.remove();
 				delete test.show;
 				delete test.find;

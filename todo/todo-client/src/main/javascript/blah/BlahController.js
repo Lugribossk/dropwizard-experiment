@@ -6,7 +6,7 @@ define(function (require) {
     var Marionette = require("marionette");
 
     return TboneController.extend({
-        viewType: BlahView
+        viewClass: BlahView
 
         /*showBlah: function (id) {
             this._showModel(Blah.fetchById(id));

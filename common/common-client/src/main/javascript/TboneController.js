@@ -14,7 +14,7 @@ define(function (require) {
             }
         }
     }, {
-        _showView: function (region, modelPromise, viewType, viewOptions) {
+        _showView: function (region, modelPromise, viewClass, viewOptions) {
             var ThisClass = this;
 
             region.show($.when(modelPromise)
@@ -28,7 +28,7 @@ define(function (require) {
                     }
                     var controller = new ThisClass(controllerArgs);
 
-                    var ViewClass = controller.viewType || viewType;
+                    var ViewClass = controller.viewClass || viewClass;
                     var viewArgs = {
                         controller: controller
                     };
@@ -36,7 +36,7 @@ define(function (require) {
                         viewArgs.model = model;
                     }
                     var view = new ViewClass(_.extend(viewArgs, viewOptions));
-                    controller.listenTo(view, "close", controller.close);
+                    controller.listenTo(view, "destroy", controller.destroy);
 
                     return view;
                 }));

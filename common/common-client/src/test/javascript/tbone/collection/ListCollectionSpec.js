@@ -24,7 +24,7 @@ define(function (require) {
                     tagName: "li"
                 });
                 var TestCollectionView = Marionette.CollectionView.extend({
-                    itemView: TestItemView,
+                    childView: TestItemView,
                     tagName: "ul"
                 });
                 var col = new ListCollection(["a", "b", "c"]);
@@ -46,7 +46,7 @@ define(function (require) {
                     }
                 });
                 var TestCollectionView = Marionette.CollectionView.extend({
-                    itemView: TestItemView,
+                    childView: TestItemView,
                     tagName: "ul"
                 });
                 var col = new ListCollection(["a", "b", "c"]);

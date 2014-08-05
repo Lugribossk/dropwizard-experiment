@@ -16,7 +16,7 @@ define(function (require) {
 
         },
 
-        close: function () {
+        destroy: function () {
 
         }
     };

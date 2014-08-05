@@ -17,7 +17,7 @@ define(function (require) {
         initialize: function () {
             this.initializedComponents = [];
             this.listenTo(this.options.currentUser, "change:isLoggedIn", function (model, isLoggedIn) {
-                this._closeComponents();
+                this._destroyComponents();
                 if (isLoggedIn) {
                     this._initializeComponents();
                 }
@@ -40,11 +40,11 @@ define(function (require) {
             });
         },
 
-        _closeComponents: function () {
+        _destroyComponents: function () {
             _.each(this.initializedComponents, function (component) {
                 // TODO What if a component has not finished initializing yet?
-                if (component.close) {
-                    component.close();
+                if (component.destroy) {
+                    component.destroy();
                 }
             });
             this.initializedComponents = [];

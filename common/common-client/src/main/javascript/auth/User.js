@@ -3,7 +3,6 @@ define(function (require) {
     var $ = require("jquery");
     var _ = require("underscore");
     var TboneModel = require("common/TboneModel");
-    var Promise = require("common/util/Promise");
     var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
 
     /**

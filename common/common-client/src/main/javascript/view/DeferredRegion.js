@@ -1,7 +1,7 @@
 define(function (require) {
     "use strict";
     var Marionette = require("marionette");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
 
     /**
      * @class DeferredRegion
@@ -18,12 +18,12 @@ define(function (require) {
         show: function (viewOrPromise, temporaryView) {
             var scope = this;
 
-            if (Promise.isPromise(viewOrPromise)) {
-                if (viewOrPromise.state() === "pending" && temporaryView) {
+            if (viewOrPromise instanceof Promise) {
+                if (viewOrPromise.isPending() && temporaryView) {
                     this.show(temporaryView);
                 }
 
-                viewOrPromise.done(function (actualView) {
+                viewOrPromise.then(function (actualView) {
                     scope.show(actualView);
                 });
             } else {

@@ -21,7 +21,7 @@ define(function (require) {
             // TODO use css animation instead
             var duration = timings[this.options.key] || this.options.defaultDuration || 2000;
             Promise.delay(duration, 20)
-                .progress(function (percent) {
+                .progressed(function (percent) {
                     if (!scope.isDestroyed) {
                         // Only progress towards 90% complete so the bar looks slightly better if it takes longer.
                         scope.setProgress(percent * 0.9);

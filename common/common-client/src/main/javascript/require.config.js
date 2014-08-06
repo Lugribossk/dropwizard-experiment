@@ -17,6 +17,7 @@ require.config({
         md5: "common/common-client/bower_components/JavaScript-MD5/js/md5",
         ladda: "common/common-client/bower_components/Ladda/js/ladda",
         spin: "common/common-client/bower_components/Ladda/js/spin",
+        bluebird: "common/common-client/bower_components/bluebird/js/browser/bluebird",
 
         text: "common/common-client/bower_components/requirejs-text/text",
         hbars: "common/common-client/bower_components/requirejs-handlebars/hbars",

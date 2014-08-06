@@ -22,7 +22,7 @@ define(function (require) {
             var scope = this;
             this.ui.warning.hide();
             return this.controller.tryCredentials(this.model.get("username"), this.model.get("password"))
-                .fail(function () {
+                .catch(function () {
                     scope.ui.warning.show();
                 });
         },

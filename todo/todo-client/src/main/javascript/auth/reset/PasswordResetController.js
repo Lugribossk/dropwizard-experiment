@@ -6,6 +6,7 @@ define(function (require) {
 	var RequestPasswordResetForm = require("todo/auth/reset/RequestPasswordResetForm");
 	var DoPasswordResetForm = require("todo/auth/reset/DoPasswordResetForm");
 	var EmailVerification = require("todo/auth/reset/EmailVerification");
+    var Promise = require("bluebird");
 	var Logger = require("common/util/Logger");
 
 	var log = new Logger("PasswordResetController");
@@ -23,7 +24,7 @@ define(function (require) {
 
         changePassword: function (newPassword) {
             return this.model.changePassword(newPassword)
-                .done(function () {
+                .then(function () {
                     //DashboardController.show();
                 });
         }
@@ -37,7 +38,7 @@ define(function (require) {
 				.then(function (verification) {
 					if (!verification.isPasswordReset()) {
 						log.error("Got email verification that was not for password reset:", verification);
-						return new $.Deferred().reject();
+						return Promise.reject();
 					}
 				}), DoPasswordResetForm);
         }

@@ -1,6 +1,5 @@
 define(function (require) {
     "use strict";
-    var Promise = require("common/util/Promise");
     var TboneView = require("common/TboneView");
     var template = require("hbars!./ProgressBar");
 
@@ -42,7 +41,7 @@ define(function (require) {
 
             if (this.options.progress) {
                 this.options.progress
-                    .progress(function (percent) {
+                    .progressed(function (percent) {
                         if (!scope.isDestroyed) {
                             scope.setProgress(percent);
                         }

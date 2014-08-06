@@ -6,7 +6,8 @@ define(function (require) {
     var TboneView = require("common/TboneView");
     var DeferredRegion = require("common/view/DeferredRegion");
     var Logger = require("common/util/Logger");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
+    var Promises = require("common/util/Promises");
     var template = require("hbars!./Modal");
     var confirmTemplate = require("hbars!./ModalConfirm");
     require("bootstrap");
@@ -25,7 +26,7 @@ define(function (require) {
     function showModal(viewOptions) {
         if (modalOpen) {
             log.warn("Modal already open, ignoring request to open another");
-            return Promise.rejected();
+            return Promise.reject();
         }
         if (!modalRegion) {
             initialize();
@@ -34,7 +35,7 @@ define(function (require) {
         var modalView = new ModalView(viewOptions);
         modalRegion.show(modalView);
 
-        return modalView.okPromise;
+        return modalView.okDeferred.promise;
     }
 
     var ModalView = TboneView.extend({
@@ -60,19 +61,19 @@ define(function (require) {
         events: {
             "click .ok": function () {
                 // I guess this works because this event handler is called before the modal plugin notices that a data-dismiss element has been clicked.
-                this.okPromise.resolve();
+                this.okDeferred.resolve();
             }
         },
 
-        okPromise: null,
+        okDeferred: null,
 
         onRender: function () {
             var scope = this;
-            this.okPromise = new $.Deferred();
+            this.okDeferred = Promises.deferred();
 
             if (this.options.view) {
-                $.when(this.options.view)
-                    .done(function (view) {
+                Promise.resolve(this.options.view)
+                    .then(function (view) {
                         scope.listenToOnce(view, "destroy", function () {
                             scope.$el.modal("hide");
                         });
@@ -98,9 +99,9 @@ define(function (require) {
         onDestroy: function () {
             modalOpen = false;
             if (this.options.rejectOnDestroy) {
-                this.okPromise.reject();
+                this.okDeferred.reject();
             } else {
-                this.okPromise.resolve();
+                this.okDeferred.resolve();
             }
         },
 

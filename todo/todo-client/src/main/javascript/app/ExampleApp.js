@@ -9,6 +9,7 @@ define(function (require) {
     var ExampleRouter = require("todo/app/ExampleRouter");
     var AuthenticatingHistory = require("todo/auth/AuthenticatingHistory");
     var DeferredRegion = require("common/view/DeferredRegion");
+    var Promises = require("common/util/Promises");
     require("less!./ExampleApp");
 
     var app = new Marionette.Application();
@@ -25,6 +26,7 @@ define(function (require) {
     });
 
     app.addInitializer(Logger.initialize);
+    app.addInitializer(Promises.initialize);
 
     app.addInitializer(function () {
         AuthenticatingHistory.initialize();

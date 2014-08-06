@@ -6,28 +6,27 @@ define(function (require) {
     var Backbone = require("backbone");
     var Marionette = require("marionette");
     var PreRouteHistory = require("common/auth/PreRouteHistory");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
 
     describe("PreRouteHistory", function () {
-        it("should execute route when preRoute() resolves", function () {
+        it("should execute route when preRoute() resolves", function (done) {
             var preRoute = false;
             var route = false;
             var TestHistory = PreRouteHistory.extend({
                 preRoute: function (fragment) {
                     expect(fragment).toBe("test");
                     preRoute = true;
-                    return Promise.resolved();
+                    return Promise.resolve();
                 }
             });
             var history = new TestHistory({});
             history.route(/test/, function () {
                 route = true;
+                expect(preRoute).toBe(true);
+                done();
             });
 
             history.loadUrl("test");
-
-            expect(preRoute).toBe(true);
-            expect(route).toBe(true);
         });
 
         it("should not execute route when preRoute() rejects", function () {
@@ -37,7 +36,7 @@ define(function (require) {
                 preRoute: function (fragment) {
                     expect(fragment).toBe("test");
                     preRoute = true;
-                    return Promise.rejected();
+                    return Promise.reject();
                 }
             });
             var history = new TestHistory({});

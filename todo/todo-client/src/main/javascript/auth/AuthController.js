@@ -8,7 +8,7 @@ define(function (require) {
     var User = require("common/auth/User");
     var Logger = require("common/util/Logger");
     var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
 
     var log = new Logger("AuthController");
     var STORAGE_KEY = "accessToken";
@@ -34,11 +34,11 @@ define(function (require) {
         var token = window.localStorage.getItem(STORAGE_KEY);
         if (token) {
             return useToken(new OAuth2AccessToken({accessToken: token}))
-                .done(function (user) {
+                .then(function (user) {
                     log.info("Logged in from saved token as", user.get("username"));
                 });
         } else {
-            return Promise.rejected();
+            return Promise.reject();
         }
     }
 
@@ -47,18 +47,25 @@ define(function (require) {
      */
     return Marionette.Controller.extend({
         initialize: function () {
-            this._loginSuccess = new $.Deferred();
+            var scope = this;
+            this._loginSuccess = new Promise(function (resolve) {
+                scope._loginSuccessResolve = resolve;
+            });
         },
+
+        // TODO Fix this to work after logout.
+        _loginSuccess: null,
+        _loginSuccessResolve: null,
 
         tryCredentials: function (username, password) {
             var scope = this;
             return OAuth2AccessToken.fetchByLogin(username, password)
                 .then(useToken)
-                .done(function (user) {
+                .then(function (user) {
                     log.info("Logged in as", user.get("username"));
-                    scope._loginSuccess.resolve();
+                    scope._loginSuccessResolve();
                 })
-                .fail(function () {
+                .catch(function () {
                     log.info("Login failed with username", username);
                     // Don't reject the loginSuccess promise here, as the user can try to login multiple times.
                 });
@@ -103,7 +110,7 @@ define(function (require) {
                         controller: controller
                     }));
 
-                    return controller._loginSuccess.promise();
+                    return controller._loginSuccess;
                 });
         }
     });

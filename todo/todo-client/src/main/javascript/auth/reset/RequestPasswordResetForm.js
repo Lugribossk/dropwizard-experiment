@@ -20,7 +20,7 @@ define(function (require) {
 		onFormSubmit: function () {
 			var scope = this;
 			this.controller.requestPasswordReset()
-				.done(function () {
+				.then(function () {
 					scope.ui.info.show();
 				});
 		},

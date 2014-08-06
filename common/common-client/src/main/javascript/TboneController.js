@@ -4,6 +4,7 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
+    var Promise = require("bluebird");
 
     return Marionette.Controller.extend({
         constructor: function (options) {
@@ -17,7 +18,7 @@ define(function (require) {
         _showView: function (region, modelPromise, viewClass, viewOptions) {
             var ThisClass = this;
 
-            region.show($.when(modelPromise)
+            region.show(Promise.resolve(modelPromise)
                 .then(function (model) {
                     var controllerArgs = {
                         region: region

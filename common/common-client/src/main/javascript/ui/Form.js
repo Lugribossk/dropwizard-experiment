@@ -52,7 +52,7 @@ define(function (require) {
 		},
 
 		constructor: function () {
-			TboneView.prototype.constructor.apply(this, arguments);
+			TboneView.prototype.constructor.apply(this, _.toArray(arguments));
 			var scope = this;
 
 			this.listenTo(this, "render", function () {

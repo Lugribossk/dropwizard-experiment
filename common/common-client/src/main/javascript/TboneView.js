@@ -9,7 +9,7 @@ define(function (require) {
 
     return Marionette.LayoutView.extend({
         constructor: function (options) {
-            Marionette.LayoutView.prototype.constructor.apply(this, arguments);
+            Marionette.LayoutView.prototype.constructor.call(this, options);
             var scope = this;
 
             if (options && options.controller) {
@@ -24,7 +24,9 @@ define(function (require) {
 
             this.listenTo(this, "render", function () {
                 setTimeout(function () {
-                    scope.triggerMethod("after:render");
+                    if (!scope.isDestroyed) {
+                        scope.triggerMethod("after:render");
+                    }
                 }, 0);
             });
         }

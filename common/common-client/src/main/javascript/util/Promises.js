@@ -15,7 +15,7 @@ define(function (require) {
 
     Promises.initialize = function () {
         Backbone.ajax = function () {
-            return Promise.resolve($.ajax.apply($, arguments));
+            return Promise.resolve($.ajax.apply($, _.toArray(arguments)));
         };
         Marionette.Deferred = Promises.deferred;
     };

@@ -15,7 +15,7 @@ define(function (require) {
 
     return Associations.AssociatedModel.extend({
         constructor: function () {
-            Associations.AssociatedModel.prototype.constructor.apply(this, arguments);
+            Associations.AssociatedModel.prototype.constructor.apply(this, _.toArray(arguments));
             var scope = this;
 
             // Computed attributes.

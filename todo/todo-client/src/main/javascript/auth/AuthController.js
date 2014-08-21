@@ -22,11 +22,13 @@ define(function (require) {
                 currentUser.clear();
                 currentUser.set(user.attributes);
                 return user;
-            }, function (err) {
+            })
+            .catch(function (err) {
                 if (err.status === 401) {
                     log.info("Saved token was rejected, deleting it.");
                     window.localStorage.removeItem(STORAGE_KEY);
                 }
+                return Promise.rejected();
             });
     }
 
@@ -68,6 +70,7 @@ define(function (require) {
                 .catch(function () {
                     log.info("Login failed with username", username);
                     // Don't reject the loginSuccess promise here, as the user can try to login multiple times.
+                    return Promise.rejected();
                 });
         }
     }, {

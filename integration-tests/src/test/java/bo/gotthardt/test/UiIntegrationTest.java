@@ -14,9 +14,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URI;
@@ -38,7 +41,7 @@ public abstract class UiIntegrationTest {
         DesiredCapabilities caps = new DesiredCapabilities();
         useSystemProxy(caps);
 
-        driver = new FirefoxDriver(caps);
+        driver = getDriver(caps);
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 
@@ -72,6 +75,22 @@ public abstract class UiIntegrationTest {
                 log.info("Detected local proxy on port {}, using for UI integration tests.", address.getPort());
                 caps.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy("localhost:" + address.getPort()));
             }
+        }
+    }
+
+    private static WebDriver getDriver(DesiredCapabilities caps) {
+        String driver = System.getenv("DRIVER");
+
+        if (driver != null && driver.toLowerCase().equals("phantomjs")) {
+            String binary = "integration-tests/node_modules/phantomjs/lib/phantom/phantomjs" + (System.getProperty("os.name").contains("Windows") ? ".exe" : "");
+            if (new File(binary).exists()) {
+                log.error("PhantomJS binary not found at '{}'. Perhaps the working directory is not the repository root?", new File(binary).getAbsolutePath());
+            }
+
+            caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary);
+            return new PhantomJSDriver(caps);
+        } else {
+            return new FirefoxDriver(caps);
         }
     }
 }

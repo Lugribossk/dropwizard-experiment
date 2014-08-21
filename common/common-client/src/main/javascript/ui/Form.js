@@ -6,6 +6,9 @@ define(function (require) {
 	var TboneView = require("common/TboneView");
 	var Ladda = require("ladda");
 	var Behaviors = require("common/view/Behaviors");
+    var Logger = require("common/util/Logger");
+
+    var log = new Logger("Form");
 
 	Behaviors.registerBehavior("FormSubmit", Marionette.Behavior.extend({
 		ui: {
@@ -14,17 +17,17 @@ define(function (require) {
 
 		events: {
 			"submit": function () {
-				var scope = this;
-				// setTimeout so an error in the code won't stop us from returning false and blocking the submit.
-				setTimeout(function () {
-					var button = Ladda.create(scope.ui.submit.get(0));
-					button.start();
-					scope.view.onFormSubmit()
-						.always(function () {
-							button.stop();
-						});
-
-				}, 0);
+				// Try catch so we always return false and block the form submit.
+                try {
+                    var button = Ladda.create(this.ui.submit.get(0));
+                    button.start();
+                    this.view.onFormSubmit()
+                        .finally(function () {
+                            button.stop();
+                        });
+                } catch (e) {
+                    log.error(e);
+                }
 
 				return false;
 			}

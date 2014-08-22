@@ -1,6 +1,8 @@
 language: java
 jdk: oraclejdk8
 before_install: npm install -g grunt-cli bower
-env: DRIVER=phantomjs
+env: WEBDRIVER=phantomjs
 services:
   - rabbitmq
+notifications:
+  email: false

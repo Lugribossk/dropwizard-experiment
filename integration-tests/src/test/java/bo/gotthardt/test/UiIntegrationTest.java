@@ -30,6 +30,8 @@ import java.util.List;
  */
 @Slf4j
 public abstract class UiIntegrationTest {
+    private static final String WEBDRIVER_ENV_NAME = "WEBDRIVER";
+    private static final String PHANTOMJS_DRIVER = "phantomjs";
     protected static WebDriver driver;
     protected static EbeanServer db;
 
@@ -79,11 +81,11 @@ public abstract class UiIntegrationTest {
     }
 
     private static WebDriver getDriver(DesiredCapabilities caps) {
-        String driver = System.getenv("DRIVER");
+        String driver = System.getenv(WEBDRIVER_ENV_NAME);
 
-        if (driver != null && driver.toLowerCase().equals("phantomjs")) {
+        if (driver != null && driver.toLowerCase().equals(PHANTOMJS_DRIVER)) {
             String binary = "integration-tests/node_modules/phantomjs/lib/phantom/phantomjs" + (System.getProperty("os.name").contains("Windows") ? ".exe" : "");
-            if (new File(binary).exists()) {
+            if (!new File(binary).exists()) {
                 log.error("PhantomJS binary not found at '{}'. Perhaps the working directory is not the repository root?", new File(binary).getAbsolutePath());
             }
 

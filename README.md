@@ -8,7 +8,7 @@ An experiment with creating a full stack application with Backbone, Dropwizard, 
 ### Setup
 1. Install NodeJS and npm.
 2. Globally install Grunt CLI and Bower: `npm install -g grunt-cli bower`
-3. Install individual project dependencies in their folders: `npm install` && `bower install` (Maven will also automatically do this when runngin `mvn package`.)
+3. Install individual project dependencies in their folders: `npm install` && `bower install` (Maven will also automatically do this when running `mvn install`.)
 
 ### Running
 The frontend is automatically bundled into the backend when that is built, so it is only necessary to run this directly when developing. 
@@ -33,7 +33,7 @@ Create Karma run configurations and point them at the `karma.conf.js` configurat
 3. Install RabbitMQ.
 
 ### Running server
-Run `mvn package` in the root of the project and then `java -jar todo\todo-server\target\todo-server-0.0.1-SNAPSHOT.jar server todo\todo-server\config\config.yml`.
+Run `mvn install` in the root of the project and then `java -jar todo\todo-server\target\todo-server-0.0.1-SNAPSHOT.jar server todo\todo-server\config\config.yml`.
 
 #### IntelliJ
 Create an IntelliJ run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\config\config.yml`
@@ -44,7 +44,7 @@ As above, but with the argument `workers` instead of `server`.
 
 ### Tests
 Run `maven test` or via an IDE.
-Integration tests that use a browser are run with either Firefox (the default) or PhantomJS (set the environment variable `DRIVER` to `phantomjs`).
+Integration tests that use a browser are run with either Firefox (the default) or PhantomJS (set the environment variable `WEBDRIVER` to `phantomjs`).
 
 #### IntelliJ
 When creating run configurations for tests, add the same VM options as above.

@@ -21,7 +21,7 @@ public class LoginPage extends PageObject {
         super(driver);
     }
 
-    public DashboardPage loginWithCorrectCredentials(String name, String pass) {
+    public DashboardPage loginSuccess(String name, String pass) {
         username.sendKeys(name);
         password.sendKeys(pass);
         submitButton.click();
@@ -29,7 +29,7 @@ public class LoginPage extends PageObject {
         return new DashboardPage(driver);
     }
 
-    public LoginPage loginWithWrongCredentials(String name, String pass) {
+    public LoginPage loginFail(String name, String pass) {
         username.sendKeys(name);
         password.sendKeys(pass);
         submitButton.click();

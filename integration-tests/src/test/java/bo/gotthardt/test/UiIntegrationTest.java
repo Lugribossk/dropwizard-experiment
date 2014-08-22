@@ -3,6 +3,8 @@ package bo.gotthardt.test;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebeaninternal.api.SpiEbeanServer;
+import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -15,6 +17,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
@@ -28,6 +31,11 @@ import java.net.URI;
 import java.util.List;
 
 /**
+ * Base class for UI integration tests that run via Selenium.
+ * Access to the running app's database is available via the db property.
+ *
+ * Select which browser to use by setting the WEBDRIVER environment variable to "firefox" (default), "chrome" or "phantomjs".
+ *
  * @author Bo Gotthardt
  */
 @Slf4j
@@ -44,18 +52,32 @@ public abstract class UiIntegrationTest {
         DesiredCapabilities caps = new DesiredCapabilities();
         useSystemProxy(caps);
 
-        driver = getDriver(caps);
+        driver = getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME).toLowerCase());
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 
     @AfterClass
     public static void teardownWebDriver() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @After
-    public void clearLocalStorage() {
-        ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
+    public void clearLocalStorageAndDatabase() {
+        if (driver != null) {
+            ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
+        }
+
+        SpiEbeanServer realDb = (SpiEbeanServer) db;
+        String driverClass = realDb.getServerConfig().getDataSourceConfig().getDriver();
+        if (driverClass.equals("org.h2.Driver")) {
+            DdlGenerator ddl = realDb.getDdlGenerator();
+            ddl.runScript(false, ddl.generateDropDdl());
+            ddl.runScript(false, ddl.generateCreateDdl());
+        } else {
+            log.error("Integration test does not appear to be using driver for in-memory testing, but rather {}. Not clearing database after test run.", driverClass);
+        }
     }
 
     private static String getConfigFilePath() {
@@ -68,6 +90,12 @@ public abstract class UiIntegrationTest {
         }
     }
 
+    /**
+     * Use the system proxy (i.e. Charles) if one is running.
+     * This does not seem to happen automatically, even though it does happen automatically when running the browser normally.
+     *
+     * @param caps The capabilities to modify
+     */
     private static void useSystemProxy(DesiredCapabilities caps) {
         List<java.net.Proxy> proxies = ProxySelector.getDefault().select(URI.create("http://www.google.com"));
         java.net.Proxy proxy = proxies.get(0);
@@ -81,18 +109,25 @@ public abstract class UiIntegrationTest {
         }
     }
 
-    private static WebDriver getDriver(DesiredCapabilities caps) {
-        String driver = System.getenv(WEBDRIVER_ENV_NAME);
-
-        if (driver == null) {
-            driver = "firefox";
+    /**
+     * Get the WebDriver for the selected browser.
+     *
+     * @param caps The capabilities to use.
+     * @param browser The browser to create a WebDriver client for.
+     * @return The WebDriver
+     */
+    private static WebDriver getDriver(DesiredCapabilities caps, String browser) {
+        if (browser == null) {
+            log.info("WebDriver type not specified, defaulting to Firefox.");
+            browser = "firefox";
         }
+        boolean isWindows = System.getProperty("os.name").contains("Windows");
 
-        switch (driver) {
+        switch (browser.toLowerCase()) {
             case "phantomjs":
-                String binary = "node_modules/phantomjs/lib/phantom/" + (System.getProperty("os.name").contains("Windows") ? "phantomjs.exe" : "bin/phantomjs");
-                List<String> locations = ImmutableList.of(binary,
-                                                          "integration-tests/" + binary,
+                String phantomBinary = "node_modules/phantomjs/lib/phantom/" + (isWindows ? "phantomjs.exe" : "bin/phantomjs");
+                List<String> locations = ImmutableList.of(phantomBinary,
+                                                          "integration-tests/" + phantomBinary,
                                                           "/usr/local/phantomjs/bin/phantomjs"); // Default install location on Travis CI.
 
                 for (String location : locations) {
@@ -109,10 +144,21 @@ public abstract class UiIntegrationTest {
                 throw new IllegalStateException("No PhantomJS binary found.");
 
             case "chrome":
+                String chromedriverBinary = "node_modules/chromedriver/lib/chromedriver/chromedriver" + (isWindows ? ".exe" : "");
+                if (!new File(chromedriverBinary).exists()) {
+                    chromedriverBinary = "integration-tests/" + chromedriverBinary;
+                }
+                log.info("Using ChromeDriver binary from {}", chromedriverBinary);
+
+                System.setProperty("webdriver.chrome.driver", chromedriverBinary);
+                ChromeOptions options = new ChromeOptions();
+                // Prevent annoying yellow warning bar from being displayed.
+                options.setExperimentalOption("excludeSwitches", ImmutableList.of("ignore-certificate-errors"));
+                caps.setCapability(ChromeOptions.CAPABILITY, options);
                 return new ChromeDriver(caps);
 
             default:
-                log.warn("Unknown WebDriver type '{}', defaulting to Firefox.", driver);
+                log.warn("Unknown WebDriver type '{}', defaulting to Firefox.", browser);
             case "firefox":
                 return new FirefoxDriver(caps);
         }

@@ -45,7 +45,7 @@ As above, but with the argument `workers` instead of `server`.
 
 ### Tests
 Run `maven test` or via an IDE.
-Integration tests that use a browser are run with either Firefox (the default) or PhantomJS (set the environment variable `WEBDRIVER` to `phantomjs`).
+The browser used for integration tests can be selected via the `WEBDRIVER` environment variable, either Firefox (the default), Chrome or PhantomJS.
 
 #### IntelliJ
 When creating run configurations for tests, add the same VM options as above.

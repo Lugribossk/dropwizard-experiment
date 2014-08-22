@@ -14,13 +14,21 @@ public class LoginUiTest extends UiIntegrationTest {
         db.save(new User("testuser", "testpassword"));
         LoginPage page = LoginPage.go(driver);
 
-        page.loginWithCorrectCredentials("testuser", "testpassword");
+        page.loginSuccess("testuser", "testpassword");
     }
 
     @Test
-    public void shouldStayLoggedOutWithWrongCredentials() {
+    public void shouldStayLoggedOutWithNonexistentCredentials() {
         LoginPage page = LoginPage.go(driver);
 
-        page.loginWithWrongCredentials("testuser", "WRONGPASSWORD");
+        page.loginFail("testuser", "testpassword");
+    }
+
+    @Test
+    public void shouldStayLoggedOutWithWrongPassword() {
+        db.save(new User("testuser", "testpassword"));
+        LoginPage page = LoginPage.go(driver);
+
+        page.loginFail("testuser", "WRONGpassword");
     }
 }

@@ -13,7 +13,7 @@ public class EmailServiceTest {
         TestEmailService email = new TestEmailService();
         Map<String, String> data = ImmutableMap.of("name", "World");
 
-        email.sendTemplate("test@example.com", "Test", "HelloWorld.hbs", data);
+        email.sendTemplate("test@example.com", "Test", "bo/gotthardt/email/HelloWorld.hbs", data);
 
         assertThat(email.htmlContent).isEqualTo("Hello World!");
     }

@@ -14,6 +14,7 @@ import org.junit.ClassRule;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
@@ -32,7 +33,6 @@ import java.util.List;
 @Slf4j
 public abstract class UiIntegrationTest {
     private static final String WEBDRIVER_ENV_NAME = "WEBDRIVER";
-    private static final String PHANTOMJS_DRIVER = "phantomjs";
     protected static WebDriver driver;
     protected static EbeanServer db;
 
@@ -84,26 +84,37 @@ public abstract class UiIntegrationTest {
     private static WebDriver getDriver(DesiredCapabilities caps) {
         String driver = System.getenv(WEBDRIVER_ENV_NAME);
 
-        if (driver != null && driver.toLowerCase().equals(PHANTOMJS_DRIVER)) {
-            String binary = "node_modules/phantomjs/lib/phantom/" + (System.getProperty("os.name").contains("Windows") ? "phantomjs.exe" : "bin/phantomjs");
-            List<String> locations = ImmutableList.of(binary,
-                                                    "integration-tests/" + binary,
-                                                    "/usr/local/phantomjs/bin/phantomjs"); // Default install location on Travis CI.
+        if (driver == null) {
+            driver = "firefox";
+        }
 
-            for (String location : locations) {
-                File file = new File(location);
-                if (file.exists()) {
-                    log.info("Using PhantomJS binary from {}", file.getAbsolutePath());
+        switch (driver) {
+            case "phantomjs":
+                String binary = "node_modules/phantomjs/lib/phantom/" + (System.getProperty("os.name").contains("Windows") ? "phantomjs.exe" : "bin/phantomjs");
+                List<String> locations = ImmutableList.of(binary,
+                                                          "integration-tests/" + binary,
+                                                          "/usr/local/phantomjs/bin/phantomjs"); // Default install location on Travis CI.
 
-                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, location);
-                    return new PhantomJSDriver(caps);
-                } else {
-                    log.info("PhantomJS binary not found at {}", file.getAbsolutePath());
+                for (String location : locations) {
+                    File file = new File(location);
+                    if (file.exists()) {
+                        log.info("Using PhantomJS binary from {}", file.getAbsolutePath());
+
+                        caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, location);
+                        return new PhantomJSDriver(caps);
+                    } else {
+                        log.info("PhantomJS binary not found at {}", file.getAbsolutePath());
+                    }
                 }
-            }
-            throw new IllegalStateException("No PhantomJS binary found.");
-        } else {
-            return new FirefoxDriver(caps);
+                throw new IllegalStateException("No PhantomJS binary found.");
+
+            case "chrome":
+                return new ChromeDriver(caps);
+
+            default:
+                log.warn("Unknown WebDriver type '{}', defaulting to Firefox.", driver);
+            case "firefox":
+                return new FirefoxDriver(caps);
         }
     }
 }

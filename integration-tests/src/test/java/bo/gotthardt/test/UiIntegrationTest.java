@@ -24,6 +24,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
@@ -52,7 +53,7 @@ public abstract class UiIntegrationTest {
         DesiredCapabilities caps = new DesiredCapabilities();
         useSystemProxy(caps);
 
-        driver = getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME).toLowerCase());
+        driver = getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME));
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 
@@ -116,7 +117,7 @@ public abstract class UiIntegrationTest {
      * @param browser The browser to create a WebDriver client for.
      * @return The WebDriver
      */
-    private static WebDriver getDriver(DesiredCapabilities caps, String browser) {
+    private static WebDriver getDriver(DesiredCapabilities caps, @Nullable String browser) {
         if (browser == null) {
             log.info("WebDriver type not specified, defaulting to Firefox.");
             browser = "firefox";

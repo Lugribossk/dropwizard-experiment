@@ -69,7 +69,8 @@
                         <!-- Disable weird warning. -->
                         <linkXRef>false</linkXRef>
                     </configuration>
-                    <executions>
+                    <!-- Disabled until it supports Java 8... -->
+                   <!--<executions>
                         <execution>
                             <id>checkstyle</id>
                             <phase>test</phase>
@@ -77,7 +78,7 @@
                                 <goal>checkstyle</goal>
                             </goals>
                         </execution>
-                    </executions>
+                    </executions>-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

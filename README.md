@@ -1,5 +1,6 @@
 Full stack experiment
 =====================
+[![Build Status](https://travis-ci.org/Lugribossk/dropwizard-experiment.svg?branch=master)](https://travis-ci.org/Lugribossk/dropwizard-experiment)
 
 An experiment with creating a full stack application with Backbone, Dropwizard, Ebean and RabbitMQ.
 

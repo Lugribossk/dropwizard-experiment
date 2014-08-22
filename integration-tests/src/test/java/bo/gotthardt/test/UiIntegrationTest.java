@@ -95,7 +95,7 @@ public abstract class UiIntegrationTest {
                 if (file.exists()) {
                     log.info("Using PhantomJS binary from {}", file.getAbsolutePath());
 
-                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary);
+                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, location);
                     return new PhantomJSDriver(caps);
                 } else {
                     log.info("PhantomJS binary not found at {}", file.getAbsolutePath());

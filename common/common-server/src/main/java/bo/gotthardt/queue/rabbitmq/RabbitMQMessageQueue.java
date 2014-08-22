@@ -22,7 +22,7 @@ import java.util.function.Function;
  */
 @Slf4j
 class RabbitMQMessageQueue<T> implements MessageQueue<T> {
-    private static ObjectMapper MAPPER = Jackson.newObjectMapper();
+    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     private final Channel channel;
     @Getter
@@ -70,7 +70,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     public T consumeNext() {
         try {
             GetResponse response = channel.basicGet(name, true);
-            return RabbitMQMessageQueue.MAPPER.readValue(response.getBody(), type);
+            return MAPPER.readValue(response.getBody(), type);
         } catch (IOException e) {
             // TODO
             throw new RuntimeException(e);

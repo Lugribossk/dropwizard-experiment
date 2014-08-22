@@ -4,11 +4,7 @@ jdk: oraclejdk8
 env: WEBDRIVER=phantomjs
 
 before_install: npm install -g grunt-cli bower
-after_success: cd common/common-server && mvn clean test jacoco:report coveralls:jacoco
 
 services:
   - rabbitmq
-
-notifications:
-  email: false
 

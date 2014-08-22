@@ -3,6 +3,7 @@ package bo.gotthardt.test;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
 import com.avaje.ebean.EbeanServer;
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import lombok.extern.slf4j.Slf4j;
@@ -84,20 +85,23 @@ public abstract class UiIntegrationTest {
         String driver = System.getenv(WEBDRIVER_ENV_NAME);
 
         if (driver != null && driver.toLowerCase().equals(PHANTOMJS_DRIVER)) {
-            boolean isWindows = System.getProperty("os.name").contains("Windows");
-            // Try the location installed by npm, relative to either the module or the project root.
-            String binary = "node_modules/phantomjs/lib/phantom/" + (isWindows ? "phantomjs.exe" : "bin/phantomjs");
+            String binary = "node_modules/phantomjs/lib/phantom/" + (System.getProperty("os.name").contains("Windows") ? "phantomjs.exe" : "bin/phantomjs");
+            List<String> locations = ImmutableList.of(binary,
+                                                    "integration-tests/" + binary,
+                                                    "/usr/local/phantomjs/bin/phantomjs"); // Default install location on Travis CI.
 
-            if (!new File(binary).exists()) {
-                binary = "integration-tests/" + binary;
-            }
-            if (!new File(binary).exists()) {
-                // If those don't exist, then hope it's available on the PATH.
-                binary = "phantomjs" + (isWindows ? ".exe" : "");
-            }
+            for (String location : locations) {
+                File file = new File(location);
+                if (file.exists()) {
+                    log.info("Using PhantomJS binary from {}", file.getAbsolutePath());
 
-            caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary);
-            return new PhantomJSDriver(caps);
+                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, location);
+                    return new PhantomJSDriver(caps);
+                } else {
+                    log.info("PhantomJS binary not found at {}", file.getAbsolutePath());
+                }
+            }
+            throw new IllegalStateException("No PhantomJS binary found.");
         } else {
             return new FirefoxDriver(caps);
         }

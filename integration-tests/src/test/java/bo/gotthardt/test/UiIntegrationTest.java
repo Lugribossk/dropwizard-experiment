@@ -84,8 +84,9 @@ public abstract class UiIntegrationTest {
         String driver = System.getenv(WEBDRIVER_ENV_NAME);
 
         if (driver != null && driver.toLowerCase().equals(PHANTOMJS_DRIVER)) {
-            String binary = "node_modules/phantomjs/lib/phantom/phantomjs" + (System.getProperty("os.name").contains("Windows") ? ".exe" : "");
+            String binary = "node_modules/phantomjs/lib/phantom/" + (System.getProperty("os.name").contains("Windows") ? "phantomjs.exe" : "bin/phantomjs");
             if (!new File(binary).exists()) {
+                log.info("PhantomJS binary not found at '{}', trying with 'integration-tests/'", binary);
                 binary = "integration-tests/" + binary;
             }
             if (!new File(binary).exists()) {

@@ -35,7 +35,7 @@ import java.util.List;
  * Base class for UI integration tests that run via Selenium.
  * Access to the running app's database is available via the db property.
  *
- * Select which browser to use by setting the WEBDRIVER environment variable to "firefox" (default), "chrome" or "phantomjs".
+ * Select which browser to use by setting the WEBDRIVER environment variable to "firefox", "chrome" or "phantomjs" (default).
  *
  * @author Bo Gotthardt
  */
@@ -119,17 +119,13 @@ public abstract class UiIntegrationTest {
      */
     private static WebDriver getDriver(DesiredCapabilities caps, @Nullable String browser) {
         if (browser == null) {
-            log.info("WebDriver type not specified, defaulting to Firefox.");
-            browser = "firefox";
+            log.info("WebDriver type not specified, defaulting to PhantomJS.");
+            browser = "phantomjs";
         }
 
         switch (browser.toLowerCase()) {
-            case "phantomjs":
-                String phantomBinary = WebDriverBinaryFinder.findPhantomJs();
-                caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomBinary);
-                log.info("Using PhantomJS binary from {}", phantomBinary);
-
-                return new PhantomJSDriver(caps);
+            case "firefox":
+                return new FirefoxDriver(caps);
 
             case "chrome":
                 String chromedriverBinary = WebDriverBinaryFinder.findChromeDriver();
@@ -144,9 +140,13 @@ public abstract class UiIntegrationTest {
                 return new ChromeDriver(caps);
 
             default:
-                log.warn("Unknown WebDriver type '{}', defaulting to Firefox.", browser);
-            case "firefox":
-                return new FirefoxDriver(caps);
+                log.warn("Unknown WebDriver type '{}', defaulting to PhantomJS.", browser);
+            case "phantomjs":
+                String phantomBinary = WebDriverBinaryFinder.findPhantomJs();
+                caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomBinary);
+                log.info("Using PhantomJS binary from {}", phantomBinary);
+
+                return new PhantomJSDriver(caps);
         }
     }
 }

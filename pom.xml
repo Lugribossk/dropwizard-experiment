@@ -220,6 +220,9 @@
                 </executions>
                 <configuration>
                     <skipPoms>false</skipPoms>
+                    <gitDescribe>
+                        <skip>true</skip>
+                    </gitDescribe>
                 </configuration>
                 <inherited>false</inherited>
             </plugin>

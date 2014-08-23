@@ -1,5 +1,6 @@
 package bo.gotthardt.test;
 
+import bo.gotthardt.test.util.WebDriverBinaryFinder;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
 import com.avaje.ebean.EbeanServer;
@@ -25,7 +26,6 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URI;
@@ -122,40 +122,25 @@ public abstract class UiIntegrationTest {
             log.info("WebDriver type not specified, defaulting to Firefox.");
             browser = "firefox";
         }
-        boolean isWindows = System.getProperty("os.name").contains("Windows");
 
         switch (browser.toLowerCase()) {
             case "phantomjs":
-                String phantomBinary = "node_modules/phantomjs/lib/phantom/" + (isWindows ? "phantomjs.exe" : "bin/phantomjs");
-                List<String> locations = ImmutableList.of(phantomBinary,
-                                                          "integration-tests/" + phantomBinary,
-                                                          "/usr/local/phantomjs/bin/phantomjs"); // Default install location on Travis CI.
+                String phantomBinary = WebDriverBinaryFinder.findPhantomJs();
+                caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomBinary);
+                log.info("Using PhantomJS binary from {}", phantomBinary);
 
-                for (String location : locations) {
-                    File file = new File(location);
-                    if (file.exists()) {
-                        log.info("Using PhantomJS binary from {}", file.getAbsolutePath());
-
-                        caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, location);
-                        return new PhantomJSDriver(caps);
-                    } else {
-                        log.info("PhantomJS binary not found at {}", file.getAbsolutePath());
-                    }
-                }
-                throw new IllegalStateException("No PhantomJS binary found.");
+                return new PhantomJSDriver(caps);
 
             case "chrome":
-                String chromedriverBinary = "node_modules/chromedriver/lib/chromedriver/chromedriver" + (isWindows ? ".exe" : "");
-                if (!new File(chromedriverBinary).exists()) {
-                    chromedriverBinary = "integration-tests/" + chromedriverBinary;
-                }
+                String chromedriverBinary = WebDriverBinaryFinder.findChromeDriver();
+                System.setProperty("webdriver.chrome.driver", chromedriverBinary);
                 log.info("Using ChromeDriver binary from {}", chromedriverBinary);
 
-                System.setProperty("webdriver.chrome.driver", chromedriverBinary);
-                ChromeOptions options = new ChromeOptions();
                 // Prevent annoying yellow warning bar from being displayed.
+                ChromeOptions options = new ChromeOptions();
                 options.setExperimentalOption("excludeSwitches", ImmutableList.of("ignore-certificate-errors"));
                 caps.setCapability(ChromeOptions.CAPABILITY, options);
+
                 return new ChromeDriver(caps);
 
             default:

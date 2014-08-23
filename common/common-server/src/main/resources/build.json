@@ -1,0 +1,6 @@
+{
+    "version": "${project.version}",
+    "builtAt": "${build.timestamp}",
+    "revision": "${git.commit.id}",
+    "branch": "${git.branch}"
+}

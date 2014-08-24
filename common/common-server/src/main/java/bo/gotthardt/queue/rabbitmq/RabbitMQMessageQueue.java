@@ -1,6 +1,7 @@
 package bo.gotthardt.queue.rabbitmq;
 
 import bo.gotthardt.queue.MessageQueue;
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Consumer;
@@ -28,11 +29,13 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     @Getter
     private final String name;
     private final Class<T> type;
+    private final MetricRegistry metrics;
 
-    RabbitMQMessageQueue(Channel channel, String name, Class<T> type) {
+    RabbitMQMessageQueue(Channel channel, String name, Class<T> type, MetricRegistry metrics) {
         this.channel = channel;
         this.name = name;
         this.type = type;
+        this.metrics = metrics;
         try {
             channel.queueDeclare(name, true, false, false, null);
         } catch (IOException e) {
@@ -56,7 +59,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
 
     @Override
     public void consume(Function<T, Void> processor) {
-        Consumer consumer = new FunctionConsumer<>(channel, processor, type);
+        Consumer consumer = new FunctionConsumer<>(channel, processor, type, name, metrics);
 
         try {
             channel.basicConsume(name, false, consumer);

@@ -1,5 +1,6 @@
 package bo.gotthardt.queue.rabbitmq;
 
+import com.codahale.metrics.MetricRegistry;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
 import io.dropwizard.jackson.Jackson;
@@ -19,17 +20,18 @@ import static org.mockito.Mockito.verify;
 public class RabbitMQMessageQueueTest {
     private static final String QUEUE_NAME = "test";
     private Channel channel = mock(Channel.class);
+    private MetricRegistry metrics = mock(MetricRegistry.class);
 
     @Test
     public void shouldDeclareDurableQueue() throws IOException {
-        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class);
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class, metrics);
 
         verify(channel).queueDeclare(QUEUE_NAME, true, false, false, null);
     }
 
     @Test
     public void shouldPublishPersistentMessageToQueue() throws IOException {
-        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class);
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class, metrics);
         TestMsg message = new TestMsg("blah", 5);
         byte[] messageBytes = Jackson.newObjectMapper().writeValueAsBytes(message);
 
@@ -40,7 +42,7 @@ public class RabbitMQMessageQueueTest {
 
     @Test
     public void shouldConsumeByAttachingConsumerToQueue() throws IOException {
-        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class);
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class, metrics);
 
         queue.consume(msg -> null);
 

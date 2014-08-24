@@ -1,5 +1,8 @@
 package bo.gotthardt.queue.rabbitmq;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
 import com.rabbitmq.client.AMQP;
@@ -20,35 +23,47 @@ import java.util.function.Function;
  */
 @Slf4j
 class FunctionConsumer<T> extends DefaultConsumer {
-    private static ObjectMapper MAPPER = Jackson.newObjectMapper();
+    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     private final Function<T, Void> processor;
     private final Class<T> type;
+    private final Timer duration;
+    private final Meter success;
+    private final Meter failure;
 
-    FunctionConsumer(Channel channel, Function<T, Void> processor, Class<T> type) {
+    FunctionConsumer(Channel channel, Function<T, Void> processor, Class<T> type, String name, MetricRegistry metrics) {
         super(channel);
         this.processor = processor;
         this.type = type;
+        this.duration = metrics.timer(MetricRegistry.name("queue", type.getSimpleName(), name, "duration"));
+        this.success = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "success"));
+        this.failure = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "failure"));
     }
 
     @Override
     public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
         long deliveryTag = envelope.getDeliveryTag();
 
+        Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             T message = MAPPER.readValue(body, type);
 
-            log.trace("Received message '{}' with data '{}'.", deliveryTag, new String(body));
-            Stopwatch timer = Stopwatch.createStarted();
+            if (log.isTraceEnabled()) {
+                log.trace("Received message '{}' with data '{}'.", deliveryTag, new String(body));
+            }
 
             processor.apply(message);
-            timer.stop();
-
             getChannel().basicAck(deliveryTag, false);
-            log.info("Processed {} message '{}' succesfully in {} ms.", type.getSimpleName(), deliveryTag, timer.elapsed(TimeUnit.MILLISECONDS));
+
+            success.mark();
+            log.info("Processed {} message '{}' succesfully in {} ms.", type.getSimpleName(), deliveryTag, stopwatch.elapsed(TimeUnit.MILLISECONDS));
         } catch (Exception e) {
-            log.warn("Processing message failed with exception:", e);
             getChannel().basicNack(deliveryTag, false, true);
+
+            failure.mark();
+            log.error("Processing {} message '{}' failed with exception:", type.getSimpleName(), deliveryTag, e);
+        } finally {
+            duration.update(stopwatch.stop().elapsed(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
         }
     }
 }

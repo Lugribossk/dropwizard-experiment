@@ -1,5 +1,6 @@
 package bo.gotthardt.queue.rabbitmq;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.*;
 public class FunctionConsumerTest {
     private Channel channel = mock(Channel.class);
     private Envelope envelope = mock(Envelope.class);
+    private MetricRegistry metrics = mock(MetricRegistry.class, RETURNS_DEEP_STUBS);
     private byte[] message;
 
     @Before
@@ -34,14 +36,14 @@ public class FunctionConsumerTest {
             assertThat(msg.getName()).isEqualTo("test");
             assertThat(msg.getCount()).isEqualTo(2);
             return null;
-        }, TestMsg.class);
+        }, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
     }
 
     @Test
     public void shouldAcknowledgeMessage() throws IOException {
-        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<TestMsg>(channel, msg -> null, TestMsg.class);
+        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<TestMsg>(channel, msg -> null, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
 
@@ -51,8 +53,8 @@ public class FunctionConsumerTest {
     @Test
     public void shouldRejectMessageOnException() throws IOException {
         FunctionConsumer<TestMsg> consumer = new FunctionConsumer<TestMsg>(channel, msg -> {
-            throw new RuntimeException("Nope");
-        }, TestMsg.class);
+            throw new RuntimeException("MEssage processing failed on purpose.");
+        }, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
 

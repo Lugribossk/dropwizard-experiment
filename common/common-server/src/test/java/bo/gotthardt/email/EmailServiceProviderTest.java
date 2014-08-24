@@ -13,7 +13,7 @@ public class EmailServiceProviderTest {
         TestConfiguration config = new TestConfiguration();
         config.getEmail().setEnabled(false);
 
-        EmailService email = new EmailServiceProvider(config).get();
+        EmailService email = new EmailServiceProvider(config, null).get();
 
         assertThat(email).isInstanceOf(LoggerEmailService.class);
     }

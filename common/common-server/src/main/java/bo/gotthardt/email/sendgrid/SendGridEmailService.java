@@ -2,6 +2,7 @@ package bo.gotthardt.email.sendgrid;
 
 import bo.gotthardt.email.EmailService;
 import bo.gotthardt.email.EmailServiceConfiguration;
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Strings;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
@@ -18,11 +19,13 @@ import javax.inject.Inject;
 public class SendGridEmailService implements EmailService {
     private final EmailServiceConfiguration config;
     private final SendGrid sendGrid;
+    private final MetricRegistry metrics;
 
     @Inject
-    public SendGridEmailService(SendGridConfiguration sendGridConfig, EmailServiceConfiguration emailconfig) {
-        config = emailconfig;
-        sendGrid = new SendGrid(sendGridConfig.getUsername(), sendGridConfig.getPassword());
+    public SendGridEmailService(HasSendGridConfiguration config, MetricRegistry metrics) {
+        this.config = config.getEmail();
+        this.metrics = metrics;
+        this.sendGrid = new SendGrid(config.getSendGrid().getUsername(), config.getSendGrid().getPassword());
     }
 
     @Override
@@ -32,7 +35,7 @@ public class SendGridEmailService implements EmailService {
         email.setHtml(htmlContent);
 
         email.setFrom(config.getFromEmail());
-        email.setFromName(config.getFromEmail());
+        email.setFromName(config.getFromName());
 
         if (!Strings.isNullOrEmpty(config.getOverrideReceiver())) {
             email.addTo(config.getOverrideReceiver());
@@ -42,11 +45,20 @@ public class SendGridEmailService implements EmailService {
 
         try {
             SendGrid.Response response = sendGrid.send(email);
+
             if (!response.getStatus()) {
+                metrics.meter(MetricRegistry.name("email", "send", "failure", toMetricName(toAddress))).mark();
                 log.error("Error sending email via SendGrid:", response.getMessage());
+            } else {
+                metrics.meter(MetricRegistry.name("email", "send", "success", toMetricName(toAddress))).mark();
             }
         } catch (SendGridException e) {
+            metrics.meter(MetricRegistry.name("email", "send", "failure", toMetricName(toAddress))).mark();
             log.error("Error sending email via SendGrid:", e);
         }
+    }
+
+    private static String toMetricName(String email) {
+        return email.replace(".", "-"); // TODO This probably needs to be more comprehensive.
     }
 }

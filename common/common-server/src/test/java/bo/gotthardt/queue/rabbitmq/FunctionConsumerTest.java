@@ -53,7 +53,7 @@ public class FunctionConsumerTest {
     @Test
     public void shouldRejectMessageOnException() throws IOException {
         FunctionConsumer<TestMsg> consumer = new FunctionConsumer<TestMsg>(channel, msg -> {
-            throw new RuntimeException("MEssage processing failed on purpose.");
+            throw new RuntimeException("Message processing failed on purpose.");
         }, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);

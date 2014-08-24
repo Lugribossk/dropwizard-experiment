@@ -85,7 +85,7 @@
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-io:2.0.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.5" level="project" />
     <orderEntry type="library" name="Maven: org.tukaani:xz:1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.14.2" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.14.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:1.6.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:1.9.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:1.0" level="project" />

@@ -148,7 +148,7 @@
                 <plugin>
                     <groupId>org.avaje.ebeanorm</groupId>
                     <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
-                    <version>4.1.4</version>
+                    <version>4.1.6</version>
                     <configuration>
                         <packages>bo.gotthardt.model.*</packages>
                         <transformArgs>debug=1</transformArgs>
@@ -305,17 +305,17 @@
             <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm</artifactId>
-                <version>4.1.2</version>
+                <version>4.1.6</version>
             </dependency>
             <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm-agent</artifactId>
-                <version>4.1.4</version>
+                <version>4.1.6</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.178</version>
+                <version>1.4.181</version>
             </dependency>
             <dependency>
                 <groupId>org.mindrot</groupId>
@@ -335,7 +335,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.14.2</version>
+                <version>1.14.4</version>
             </dependency>
             <dependency>
                 <groupId>jp.co.flect</groupId>
@@ -397,7 +397,7 @@
             <dependency>
                 <groupId>com.rabbitmq</groupId>
                 <artifactId>amqp-client</artifactId>
-                <version>3.3.4</version>
+                <version>3.3.5</version>
             </dependency>
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>

@@ -5,6 +5,7 @@ import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.email.EmailService;
 import bo.gotthardt.email.EmailServiceProvider;
 import bo.gotthardt.email.sendgrid.HasSendGridConfiguration;
+import bo.gotthardt.jersey.filter.BasicAuthFilter;
 import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
@@ -86,6 +87,8 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         filter.setInitParameter("allowCredentials", "true");
 
         environment.healthChecks().register("version", new VersionHealthCheck());
+
+        BasicAuthFilter.addToAdmin(environment, "test", "test");
 
         User user = new User("test", "test");
         user.setName("Test Testsen");

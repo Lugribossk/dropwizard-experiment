@@ -1,10 +1,12 @@
 language: java
 jdk: oraclejdk8
 
-env: WEBDRIVER=phantomjs
-
-before_install: npm install -g grunt-cli bower
+before_install:
+  - npm install -g grunt-cli bower
+  - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=1.0.0-$(git rev-parse --short HEAD)
 
 services:
   - rabbitmq
 
+notifications:
+  email: false

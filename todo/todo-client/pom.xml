@@ -27,7 +27,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-                    <!-- Ensure that dependencies are installed. TODO does not install grunt-cli, install manually on build server?-->
+                    <!-- Ensure that dependencies are installed. -->
                     <execution>
                         <id>npm-install</id>
                         <phase>validate</phase>
@@ -38,7 +38,7 @@
                             <executable>npm${executable}</executable>
                             <arguments>
                                 <argument>install</argument>
-                                <!-- Don't spam the MAven log output with useless missing repository field warnings. -->
+                                <!-- Don't spam the Maven log output with useless missing repository field warnings. -->
                                 <argument>--loglevel</argument>
                                 <argument>error</argument>
                             </arguments>
@@ -71,9 +71,6 @@
                             <executable>grunt${executable}</executable>
                             <arguments>
                                 <argument>maven-test</argument>
-                                <!-- Force Grunt to continue on failures so we always collect both JSLint and unit test information.
-                                     This also causes it to exit with code 0 on failures so that Maven does not immediately count it as a failed build. -->
-                                <argument>--force</argument>
                             </arguments>
                         </configuration>
                     </execution>

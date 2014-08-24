@@ -30,10 +30,12 @@ module.exports = function (grunt) {
         vendorcss: {
             options: {
                 process: function (src, path) {
+                    // Rewrite references to other files in the CSS to their new location.
                     return src.replace(/url\(\'?(.*?)(?:(?:\?|\#).*?)?\'?\)/g, function (url, filePath) {
                         var newFilePath = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
                         var srcPath = path.substring(0, path.lastIndexOf("/")) + "/" + filePath;
 
+                        // And copy those files to that location.
                         grunt.file.copy(srcPath, "target/dist/vendor/" + newFilePath);
 
                         return url.replace(filePath, "vendor/" + newFilePath);
@@ -89,4 +91,5 @@ module.exports = function (grunt) {
         "revision",
         "string-replace:html"
     ]);
+    grunt.registerTask("maven-compile", ["build"]);
 };

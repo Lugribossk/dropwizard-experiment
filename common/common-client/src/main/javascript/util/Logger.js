@@ -2,6 +2,7 @@
 define(function (require) {
     "use strict";
     var _ = require("underscore");
+    // PhantomJS *still* doesn't have Function#bind(), so load an ES5 shim for that.
     require("es5-shim");
 
     var defaultLogLevel = 2,

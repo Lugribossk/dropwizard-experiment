@@ -46,9 +46,6 @@ module.exports = function (grunt) {
         }
     });
 
-
-    grunt.registerTask("ci", [
-        "jshint:ci",
-        "karma:ci"
-    ]);
+    grunt.registerTask("default", ["jshint:dev"]);
+    grunt.registerTask("maven-test", ["jshint:dev", "karma:ci"]);
 };

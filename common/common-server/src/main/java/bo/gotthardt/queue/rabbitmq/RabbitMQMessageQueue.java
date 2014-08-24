@@ -1,6 +1,7 @@
 package bo.gotthardt.queue.rabbitmq;
 
 import bo.gotthardt.queue.MessageQueue;
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
@@ -30,12 +31,14 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     private final String name;
     private final Class<T> type;
     private final MetricRegistry metrics;
+    private Meter publish;
 
     RabbitMQMessageQueue(Channel channel, String name, Class<T> type, MetricRegistry metrics) {
         this.channel = channel;
         this.name = name;
         this.type = type;
         this.metrics = metrics;
+        this.publish = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "publish"));
         try {
             channel.queueDeclare(name, true, false, false, null);
         } catch (IOException e) {
@@ -48,6 +51,8 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     public void publish(T message) {
         try {
             channel.basicPublish("", name, MessageProperties.PERSISTENT_TEXT_PLAIN, MAPPER.writeValueAsBytes(message));
+
+            publish.mark();
             if (log.isTraceEnabled()) {
                 log.trace("Published to '{}' with data '{}'.", name, MAPPER.writeValueAsString(message));
             }

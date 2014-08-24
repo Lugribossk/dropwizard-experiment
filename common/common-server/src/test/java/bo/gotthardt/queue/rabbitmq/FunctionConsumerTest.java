@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class FunctionConsumerTest {
     private Channel channel = mock(Channel.class);
     private Envelope envelope = mock(Envelope.class);
-    private MetricRegistry metrics = mock(MetricRegistry.class, RETURNS_DEEP_STUBS);
+    private MetricRegistry metrics = new MetricRegistry();
     private byte[] message;
 
     @Before
@@ -59,6 +59,28 @@ public class FunctionConsumerTest {
         consumer.handleDelivery(null, envelope, null, message);
 
         verify(channel).basicNack(1L, false, true);
+    }
+
+    @Test
+    public void shouldRecordConsumeSuccessMetrics() throws IOException {
+        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<TestMsg>(channel, msg -> null, TestMsg.class, "name", metrics);
+
+        consumer.handleDelivery(null, envelope, null, message);
+
+        assertThat(metrics.meter("queue.TestMsg.name.consume.success").getCount()).isEqualTo(1);
+        assertThat(metrics.timer("queue.TestMsg.name.consume.duration").getCount()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldRecordConsumeFailureMetrics() throws IOException {
+        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<TestMsg>(channel, msg -> {
+            throw new RuntimeException("Message processing failed on purpose.");
+        }, TestMsg.class, "name", metrics);
+
+        consumer.handleDelivery(null, envelope, null, message);
+
+        assertThat(metrics.meter("queue.TestMsg.name.consume.failure").getCount()).isEqualTo(1);
+        assertThat(metrics.timer("queue.TestMsg.name.consume.duration").getCount()).isEqualTo(1);
     }
 
     @NoArgsConstructor

@@ -16,7 +16,7 @@ public interface MessageQueue<T> {
     void publish(T message);
 
     /**
-     * Continually wait for messages from the queue and run the specified processing function on them when they arrive.
+     * Asynchronously continually wait for messages from the queue and run the specified processing function on them when they arrive.
      * If the processing function throws an exception, the current message will not be removed from the queue.
      * @param processor The processing function.
      */

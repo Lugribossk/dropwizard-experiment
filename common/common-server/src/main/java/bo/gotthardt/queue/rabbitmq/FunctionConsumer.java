@@ -35,9 +35,9 @@ class FunctionConsumer<T> extends DefaultConsumer {
         super(channel);
         this.processor = processor;
         this.type = type;
-        this.duration = metrics.timer(MetricRegistry.name("queue", type.getSimpleName(), name, "duration"));
-        this.success = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "success"));
-        this.failure = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "failure"));
+        this.duration = metrics.timer(MetricRegistry.name("queue", type.getSimpleName(), name, "consume", "duration"));
+        this.success = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "consume", "success"));
+        this.failure = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "consume", "failure"));
     }
 
     @Override

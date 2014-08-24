@@ -11,8 +11,8 @@ import org.mockito.Matchers;
 
 import java.io.IOException;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
 /**
  * Tests for {@link bo.gotthardt.queue.rabbitmq.RabbitMQMessageQueue}.
@@ -20,18 +20,18 @@ import static org.mockito.Mockito.verify;
 public class RabbitMQMessageQueueTest {
     private static final String QUEUE_NAME = "test";
     private Channel channel = mock(Channel.class);
-    private MetricRegistry metrics = mock(MetricRegistry.class);
+    private MetricRegistry metrics = new MetricRegistry();
 
     @Test
     public void shouldDeclareDurableQueue() throws IOException {
-        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class, metrics);
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<>(channel, QUEUE_NAME, TestMsg.class, metrics);
 
         verify(channel).queueDeclare(QUEUE_NAME, true, false, false, null);
     }
 
     @Test
     public void shouldPublishPersistentMessageToQueue() throws IOException {
-        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class, metrics);
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<>(channel, QUEUE_NAME, TestMsg.class, metrics);
         TestMsg message = new TestMsg("blah", 5);
         byte[] messageBytes = Jackson.newObjectMapper().writeValueAsBytes(message);
 
@@ -42,11 +42,20 @@ public class RabbitMQMessageQueueTest {
 
     @Test
     public void shouldConsumeByAttachingConsumerToQueue() throws IOException {
-        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<TestMsg>(channel, QUEUE_NAME, TestMsg.class, metrics);
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<>(channel, QUEUE_NAME, TestMsg.class, metrics);
 
         queue.consume(msg -> null);
 
         verify(channel).basicConsume(Matchers.eq(QUEUE_NAME), Matchers.eq(false), Matchers.any(FunctionConsumer.class));
+    }
+
+    @Test
+    public void shouldRecordPublishMetrics() {
+        RabbitMQMessageQueue<TestMsg> queue = new RabbitMQMessageQueue<>(channel, QUEUE_NAME, TestMsg.class, metrics);
+
+        queue.publish(new TestMsg("blah", 5));
+
+        assertThat(metrics.meter("queue.TestMsg.test.publish").getCount()).isEqualTo(1);
     }
 
     @NoArgsConstructor

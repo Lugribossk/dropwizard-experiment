@@ -113,7 +113,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
             @Override
             protected void configure() {
                 bind(MetricRegistry.class).toInstance(environment.metrics());
-                bind(EbeanServer.class).toProvider(ebeanBundle).asEagerSingleton();
+                bind(EbeanServer.class).toInstance(ebeanBundle.getEbeanServer());
                 bind(EmailService.class).toProvider(EmailServiceProvider.class);
                 bind(new TypeLiteral<HasSendGridConfiguration>(){}).toInstance(configuration);
 

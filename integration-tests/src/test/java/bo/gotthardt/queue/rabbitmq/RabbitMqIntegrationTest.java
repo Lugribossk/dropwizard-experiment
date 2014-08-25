@@ -76,7 +76,7 @@ public class RabbitMqIntegrationTest {
 
     private static class TestConfig implements HasRabbitMQConfiguration {
         @Getter
-        private RabbitMQConfiguration rabbitMq = new RabbitMQConfiguration();
+        private RabbitMQConfiguration rabbitMq = new RabbitMQConfiguration(); // TODO Get from integration.yml
     }
 
     @NoArgsConstructor

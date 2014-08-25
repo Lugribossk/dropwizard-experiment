@@ -11,13 +11,11 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.inject.Provider;
-
 /**
  * @author Bo Gotthardt
  */
 @Slf4j
-public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration>, Provider<EbeanServer> {
+public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
     private EbeanServer ebeanServer;
 
     @Override
@@ -37,11 +35,6 @@ public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration>, 
     public EbeanServer getEbeanServer() {
         Preconditions.checkNotNull(ebeanServer, "Ebean server not created yet (this happens during 'run' i.e. after 'initialize').");
         return ebeanServer;
-    }
-
-    @Override
-    public EbeanServer get() {
-        return getEbeanServer();
     }
 
     private static ServerConfig getServerConfig(DataSourceFactory dbConfig) {

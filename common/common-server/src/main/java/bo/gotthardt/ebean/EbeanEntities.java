@@ -7,6 +7,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import java.util.Set;
 
+/**
+ * Utility class for finding the classes that Ebean should enhance.
+ */
 public class EbeanEntities {
     public static Set<Class> getEntities() {
         Reflections reflections = new Reflections("bo.gotthardt.model");

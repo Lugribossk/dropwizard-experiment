@@ -58,10 +58,13 @@ module.exports = function (grunt) {
                     replacement: "<%= revision %> <%= grunt.template.today(\"yyyy/mm/dd HH:MM:ss Z\") %>"
                 }, {
                     pattern: /\s*<!-- \${css-start}[\S\s]*?\${css-end} -->/,
-                    replacement: "\n<link rel=\"stylesheet\" href=\"vendor.css?v=<%= revision %>\">"
+                    replacement: "\n\t\t<link rel=\"stylesheet\" href=\"vendor.css?v=<%= revision %>\">"
                 }, {
                     pattern: /\s*<!-- \${scripts-start}[\S\s]*?\${scripts-end} -->/,
-                    replacement: "\n<script src=\"main.js?v=<%= revision %>\"></script>"
+                    replacement: "\n\t\t<script src=\"main.js?v=<%= revision %>\"></script>"
+                }, {
+                    pattern: /\s*\/\* \${config-start}[\S\s]*?\${config-end} \*\//,
+                    replacement: "\n\t\t\t\tapiBaseUrl: \"/api\""
                 }]
             },
             files: [{

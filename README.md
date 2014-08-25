@@ -16,8 +16,6 @@ The frontend is automatically bundled into the backend when that is built, so it
 
 Run `grunt serve` and open `http://localhost:9090/todo/todo-client/src/main/javascript/index.html`
 
-TODO How to point it at a running backend.
-
 Livereload can be activated by running `grunt watch` in another terminal.
 
 ### Tests

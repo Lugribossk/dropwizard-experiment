@@ -10,6 +10,7 @@ define(function (require) {
     var AuthenticatingHistory = require("todo/auth/AuthenticatingHistory");
     var DeferredRegion = require("common/view/DeferredRegion");
     var Promises = require("common/util/Promises");
+    var ExampleApi = require("common/api/ExampleApi");
     require("less!./ExampleApp");
 
     var app = new Marionette.Application();
@@ -27,6 +28,7 @@ define(function (require) {
 
     app.addInitializer(Logger.initialize);
     app.addInitializer(Promises.initialize);
+    app.addInitializer(ExampleApi.initialize);
 
     app.addInitializer(function () {
         AuthenticatingHistory.initialize();

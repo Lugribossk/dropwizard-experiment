@@ -3,6 +3,7 @@ define(function (require) {
     var $ = require("jquery");
     var _ = require("underscore");
     var TBoneModel = require("common/TboneModel");
+    var ExampleApi = require("common/api/ExampleApi");
 
     var prefixes = {};
 
@@ -30,7 +31,7 @@ define(function (require) {
     }, {
         fetchByLogin: function (username, password) {
             return this.fetchById(null, {
-                url: "/api/token",
+                url: ExampleApi.getBaseUrl() + "/token",
                 data: {
                     username: username,
                     password: password,

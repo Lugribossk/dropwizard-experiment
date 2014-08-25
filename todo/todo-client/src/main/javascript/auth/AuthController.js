@@ -9,13 +9,14 @@ define(function (require) {
     var Logger = require("common/util/Logger");
     var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
     var Promise = require("bluebird");
+    var ExampleApi = require("common/api/ExampleApi");
 
     var log = new Logger("AuthController");
     var STORAGE_KEY = "accessToken";
     var currentUser = new User();
 
     function useToken(token) {
-        token.addToRequestsFor("/api/");
+        token.addToRequestsFor(ExampleApi.getBaseUrl() + "/");
         window.localStorage.setItem(STORAGE_KEY, token.get("accessToken"));
         return User.fetchById("current")
             .then(function (user) {

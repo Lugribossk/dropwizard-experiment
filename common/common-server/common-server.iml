@@ -16,7 +16,7 @@
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:0.7.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:17.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.3" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-jackson:0.7.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.3" level="project" />

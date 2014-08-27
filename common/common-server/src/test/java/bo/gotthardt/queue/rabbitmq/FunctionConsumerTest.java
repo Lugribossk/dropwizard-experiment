@@ -67,8 +67,8 @@ public class FunctionConsumerTest {
 
         consumer.handleDelivery(null, envelope, null, message);
 
-        assertThat(metrics.meter("queue.TestMsg.name.consume.success").getCount()).isEqualTo(1);
-        assertThat(metrics.timer("queue.TestMsg.name.consume.duration").getCount()).isEqualTo(1);
+        assertThat(metrics.meter("queue.TestMsg.name.consume.success.count").getCount()).isEqualTo(1);
+        assertThat(metrics.timer("queue.TestMsg.name.consume.success.duration").getCount()).isEqualTo(1);
     }
 
     @Test
@@ -79,8 +79,8 @@ public class FunctionConsumerTest {
 
         consumer.handleDelivery(null, envelope, null, message);
 
-        assertThat(metrics.meter("queue.TestMsg.name.consume.failure").getCount()).isEqualTo(1);
-        assertThat(metrics.timer("queue.TestMsg.name.consume.duration").getCount()).isEqualTo(1);
+        assertThat(metrics.meter("queue.TestMsg.name.consume.failure.count").getCount()).isEqualTo(1);
+        assertThat(metrics.timer("queue.TestMsg.name.consume.failure.duration").getCount()).isEqualTo(1);
     }
 
     @NoArgsConstructor

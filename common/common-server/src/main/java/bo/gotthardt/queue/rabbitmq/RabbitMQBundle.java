@@ -1,6 +1,7 @@
 package bo.gotthardt.queue.rabbitmq;
 
 import bo.gotthardt.queue.MessageQueue;
+import bo.gotthardt.queue.MessageQueueException;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Preconditions;
 import com.rabbitmq.client.Channel;
@@ -77,6 +78,8 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
      */
     public <T> MessageQueue<T> getQueue(String queueName, Class<T> type) {
         Preconditions.checkNotNull(channel, "Channel not initialized.");
+        Preconditions.checkState(channel.isOpen(), "Channel already closed.");
+
         return new RabbitMQMessageQueue<>(channel, queueName, type, metrics);
     }
 
@@ -89,8 +92,7 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
         try {
             channel.queuePurge(queue.getName());
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
+            throw new MessageQueueException("Unable to purge queue.", e);
         }
     }
 }

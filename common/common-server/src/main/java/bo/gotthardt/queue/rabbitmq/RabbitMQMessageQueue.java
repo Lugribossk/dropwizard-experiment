@@ -1,6 +1,7 @@
 package bo.gotthardt.queue.rabbitmq;
 
 import bo.gotthardt.queue.MessageQueue;
+import bo.gotthardt.queue.MessageQueueException;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,8 +43,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
         try {
             channel.queueDeclare(name, true, false, false, null);
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
+            throw new MessageQueueException("Unable to declare queue.", e);
         }
     }
 
@@ -57,8 +57,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
                 log.trace("Published to '{}' with data '{}'.", name, MAPPER.writeValueAsString(message));
             }
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
+            throw new MessageQueueException("Unable to publish to queue.", e);
         }
     }
 
@@ -67,10 +66,10 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
         Consumer consumer = new FunctionConsumer<>(channel, processor, type, name, metrics);
 
         try {
-            channel.basicConsume(name, false, consumer);
+            String tag = channel.basicConsume(name, false, consumer);
+            log.info("Set up consumer '{}' for queue '{}'.", tag, name);
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
+            throw new MessageQueueException("Unable to set up consumer.", e);
         }
     }
 
@@ -80,8 +79,7 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
             GetResponse response = channel.basicGet(name, true);
             return MAPPER.readValue(response.getBody(), type);
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
+            throw new MessageQueueException("Unable to consume.", e);
         }
     }
 }

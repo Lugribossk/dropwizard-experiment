@@ -27,17 +27,22 @@ class FunctionConsumer<T> extends DefaultConsumer {
 
     private final Function<T, Void> processor;
     private final Class<T> type;
-    private final Timer duration;
-    private final Meter success;
-    private final Meter failure;
+
+    private final Meter successCount;
+    private final Timer successDuration;
+    private final Meter failureCount;
+    private final Timer failureDuration;
 
     FunctionConsumer(Channel channel, Function<T, Void> processor, Class<T> type, String name, MetricRegistry metrics) {
         super(channel);
         this.processor = processor;
         this.type = type;
-        this.duration = metrics.timer(MetricRegistry.name("queue", type.getSimpleName(), name, "consume", "duration"));
-        this.success = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "consume", "success"));
-        this.failure = metrics.meter(MetricRegistry.name("queue", type.getSimpleName(), name, "consume", "failure"));
+
+        String metricPrefix = "queue." + type.getSimpleName() + "." + name + ".consume";
+        this.successCount = metrics.meter(MetricRegistry.name(metricPrefix, "success", "count"));
+        this.successDuration = metrics.timer(MetricRegistry.name(metricPrefix, "success", "duration"));
+        this.failureCount = metrics.meter(MetricRegistry.name(metricPrefix, "failure", "count"));
+        this.failureDuration = metrics.timer(MetricRegistry.name(metricPrefix, "failure", "duration"));
     }
 
     @Override
@@ -55,15 +60,17 @@ class FunctionConsumer<T> extends DefaultConsumer {
             processor.apply(message);
             getChannel().basicAck(deliveryTag, false);
 
-            success.mark();
+            stopwatch.stop();
+            successCount.mark();
+            successDuration.update(stopwatch.elapsed(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
             log.info("Processed {} message '{}' succesfully in {} ms.", type.getSimpleName(), deliveryTag, stopwatch.elapsed(TimeUnit.MILLISECONDS));
         } catch (Exception e) {
             getChannel().basicNack(deliveryTag, false, true);
 
-            failure.mark();
+            stopwatch.stop();
+            failureCount.mark();
+            failureDuration.update(stopwatch.elapsed(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
             log.error("Processing {} message '{}' failed with exception:", type.getSimpleName(), deliveryTag, e);
-        } finally {
-            duration.update(stopwatch.stop().elapsed(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
         }
     }
 }

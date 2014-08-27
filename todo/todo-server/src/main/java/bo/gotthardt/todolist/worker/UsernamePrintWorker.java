@@ -3,9 +3,9 @@ package bo.gotthardt.todolist.worker;
 import bo.gotthardt.model.User;
 import bo.gotthardt.queue.MessageQueue;
 import bo.gotthardt.queue.QueueWorker;
-import com.google.inject.name.Named;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * @author Bo Gotthardt

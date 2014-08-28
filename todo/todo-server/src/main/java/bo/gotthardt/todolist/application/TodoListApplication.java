@@ -100,8 +100,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
         startupTimeMetric = environment.metrics().timer(MetricRegistry.name(TodoListApplication.class, "startup"));
 
-        User user = new User("test", "test");
-        user.setName("Test Testsen");
+        User user = new User("test", "test", "Test Testsen");
         user.setEmail("example@example.com");
         ebeanBundle.getEbeanServer().save(user);
 

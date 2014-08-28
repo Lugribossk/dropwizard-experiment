@@ -27,7 +27,7 @@ public class TodoListResourceTest extends ApiIntegrationTest {
 
     @Test
     public void blah() {
-        User user = new User("test", "blah");
+        User user = new User("test", "blah", "Blah");
         db.save(user);
         authProvider.setUser(user);
 

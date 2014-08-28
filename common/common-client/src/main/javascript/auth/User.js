@@ -27,5 +27,9 @@ define(function (require) {
                 }
             }
         }
+    }, {
+        fetchCurrent: function () {
+            return this.fetchById("current");
+        }
     });
 });

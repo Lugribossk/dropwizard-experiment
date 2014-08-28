@@ -70,6 +70,7 @@ public abstract class UiIntegrationTest {
             ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
         }
 
+        // TODO Do this with a transaction rollback instead?
         SpiEbeanServer realDb = (SpiEbeanServer) db;
         String driverClass = realDb.getServerConfig().getDataSourceConfig().getDriver();
         if (driverClass.equals("org.h2.Driver")) {

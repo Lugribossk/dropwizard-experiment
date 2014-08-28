@@ -15,7 +15,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 public class OAuth2AccessTokenTest {
     @Test
     public void shouldBeValidWhenNotExpired() {
-        User user = new User("test", "blah");
+        User user = new User("test", "blah", "Blah");
         OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
 
         assertThat(token.isValid()).isTrue();
@@ -23,7 +23,7 @@ public class OAuth2AccessTokenTest {
 
     @Test
     public void shouldNotBeValidWhenExpired() {
-        User user = new User("test", "blah");
+        User user = new User("test", "blah", "Blah");
         OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.ZERO);
 
         assertThat(token.isValid()).isFalse();

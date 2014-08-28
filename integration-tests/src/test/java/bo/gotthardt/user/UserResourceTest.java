@@ -32,7 +32,7 @@ public class UserResourceTest extends ApiIntegrationTest {
 
     @Before
     public void setupUser() {
-        user = new User("testname", "testpassword");
+        user = new User("testname", "testpassword", "Testuser");
         db.save(user);
         authProvider.setUser(user);
     }

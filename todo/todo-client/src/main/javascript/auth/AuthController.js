@@ -17,9 +17,10 @@ define(function (require) {
 
     function useToken(token) {
         token.addToRequestsFor(ExampleApi.getBaseUrl() + "/");
-        window.localStorage.setItem(STORAGE_KEY, token.get("accessToken"));
-        return User.fetchById("current")
+
+        return User.fetchCurrent()
             .then(function (user) {
+                window.localStorage.setItem(STORAGE_KEY, token.get("accessToken"));
                 currentUser.clear();
                 currentUser.set(user.attributes);
                 return user;
@@ -29,7 +30,7 @@ define(function (require) {
                     log.info("Saved token was rejected, deleting it.");
                     window.localStorage.removeItem(STORAGE_KEY);
                 }
-                return Promise.rejected();
+                return Promise.reject(new Error("Unable to get current user from token."));
             });
     }
 
@@ -41,7 +42,7 @@ define(function (require) {
                     log.info("Logged in from saved token as", user.get("username"));
                 });
         } else {
-            return Promise.reject();
+            return Promise.reject(new Error("No credentials in localStorage."));
         }
     }
 
@@ -56,7 +57,7 @@ define(function (require) {
             });
         },
 
-        // TODO Fix this to work after logout.
+        // A new login attempt will use a new instance, so it is ok that we don't reset this.
         _loginSuccess: null,
         _loginSuccessResolve: null,
 
@@ -71,7 +72,7 @@ define(function (require) {
                 .catch(function () {
                     log.info("Login failed with username", username);
                     // Don't reject the loginSuccess promise here, as the user can try to login multiple times.
-                    return Promise.rejected();
+                    return Promise.reject(new Error("Login failed."));
                 });
         }
     }, {

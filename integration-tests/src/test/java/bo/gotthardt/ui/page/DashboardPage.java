@@ -1,7 +1,6 @@
 package bo.gotthardt.ui.page;
 
 import bo.gotthardt.test.PageObject;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -22,7 +21,7 @@ public class DashboardPage extends PageObject {
 
     @Override
     protected void onLoad() throws Error {
-        waitFor(By.tagName("h1"), "Header");
+        waitFor(header, "Header");
         assertThat(header).containsText("Dashboard");
     }
 

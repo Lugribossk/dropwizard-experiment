@@ -41,6 +41,7 @@ public class LoginPage extends PageObject {
 
     @Override
     protected void onLoad() {
+        waitFor(username, "Username input");
         assertThat(username).isVisible();
         assertThat(password).isVisible();
     }

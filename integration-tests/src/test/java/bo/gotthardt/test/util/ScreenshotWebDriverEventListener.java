@@ -26,6 +26,8 @@ import java.util.Random;
 public class ScreenshotWebDriverEventListener extends AbstractWebDriverEventListener {
     private final String classPrefix;
 
+    // TODO Investigate why this also captures screenshots of non-failing tests.
+
     @Override
     public void onException(Throwable throwable, WebDriver driver) {
         // Chrome, Firefox and PhantomJS can all take screenshots.

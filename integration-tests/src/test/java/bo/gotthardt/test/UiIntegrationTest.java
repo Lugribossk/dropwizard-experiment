@@ -1,5 +1,6 @@
 package bo.gotthardt.test;
 
+import bo.gotthardt.test.util.ScreenshotWebDriverEventListener;
 import bo.gotthardt.test.util.WebDriverBinaryFinder;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
@@ -14,6 +15,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -53,7 +55,7 @@ public abstract class UiIntegrationTest {
         DesiredCapabilities caps = new DesiredCapabilities();
         useSystemProxy(caps);
 
-        driver = getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME));
+        driver = withScreenshots(getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME)));
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 
@@ -147,7 +149,14 @@ public abstract class UiIntegrationTest {
                 caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomBinary);
                 log.info("Using PhantomJS binary from {}", phantomBinary);
 
-                return new PhantomJSDriver(caps);
+                PhantomJSDriver driver = new PhantomJSDriver(caps);
+                // The default window size is very small.
+                driver.manage().window().setSize(new Dimension(1024, 768));
+                return driver;
         }
+    }
+
+    private static WebDriver withScreenshots(WebDriver driver) {
+        return ScreenshotWebDriverEventListener.applyTo(driver, "bo.gotthardt");
     }
 }

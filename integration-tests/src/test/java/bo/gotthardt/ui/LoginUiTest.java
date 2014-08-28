@@ -29,7 +29,8 @@ public class LoginUiTest extends UiIntegrationTest {
         db.save(new User(USERNAME, PASSWORD, NAME));
         LoginPage page = LoginPage.go(driver);
 
-        page.loginSuccess(USERNAME, PASSWORD).logout();
+        page.loginSuccess(USERNAME, PASSWORD)
+                .logout();
     }
 
     @Test

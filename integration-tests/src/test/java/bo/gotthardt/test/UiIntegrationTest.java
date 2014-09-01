@@ -1,6 +1,6 @@
 package bo.gotthardt.test;
 
-import bo.gotthardt.test.util.ScreenshotWebDriverEventListener;
+import bo.gotthardt.test.util.ReportingWebDriverEventListener;
 import bo.gotthardt.test.util.WebDriverBinaryFinder;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
@@ -22,6 +22,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
@@ -32,6 +34,7 @@ import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Base class for UI integration tests that run via Selenium.
@@ -53,9 +56,10 @@ public abstract class UiIntegrationTest {
     @BeforeClass
     public static void setupWebDriver() {
         DesiredCapabilities caps = new DesiredCapabilities();
-        useSystemProxy(caps);
+        withSystemProxy(caps);
+        withBrowserLogs(caps);
 
-        driver = withScreenshots(getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME)));
+        driver = withReports(getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME)));
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 
@@ -100,7 +104,7 @@ public abstract class UiIntegrationTest {
      *
      * @param caps The capabilities to modify
      */
-    private static void useSystemProxy(DesiredCapabilities caps) {
+    private static void withSystemProxy(DesiredCapabilities caps) {
         List<java.net.Proxy> proxies = ProxySelector.getDefault().select(URI.create("http://www.google.com"));
         java.net.Proxy proxy = proxies.get(0);
 
@@ -111,6 +115,12 @@ public abstract class UiIntegrationTest {
                 caps.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy("localhost:" + address.getPort()));
             }
         }
+    }
+
+    private static void withBrowserLogs(DesiredCapabilities caps) {
+        LoggingPreferences logs = new LoggingPreferences();
+        logs.enable(LogType.BROWSER, Level.ALL);
+        caps.setCapability(CapabilityType.LOGGING_PREFS, logs);
     }
 
     /**
@@ -156,7 +166,7 @@ public abstract class UiIntegrationTest {
         }
     }
 
-    private static WebDriver withScreenshots(WebDriver driver) {
-        return ScreenshotWebDriverEventListener.applyTo(driver, "bo.gotthardt");
+    private static WebDriver withReports(WebDriver driver) {
+        return ReportingWebDriverEventListener.applyTo(driver, "bo.gotthardt");
     }
 }

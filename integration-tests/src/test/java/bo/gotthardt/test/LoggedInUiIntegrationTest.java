@@ -11,7 +11,6 @@ public class LoggedInUiIntegrationTest extends UiIntegrationTest {
 
     @Before
     public void login() {
-        // TODO consider setting Oauth token directly in localStorage to finish this faster.
         user = new User("testuser", "testpassword", "Test Testsen");
         dashboard = LoginPage.go(driver).loginSuccess("testuser", "testpassword");
     }

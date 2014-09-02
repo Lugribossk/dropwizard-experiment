@@ -40,7 +40,7 @@ public class BuildInfo {
 
     public static BuildInfo create() {
         try {
-            String info = Resources.toString(Resources.getResource("build.json"), Charsets.UTF_8);
+            String info = Resources.toString(Resources.getResource("bo/gotthardt/application/build.json"), Charsets.UTF_8);
             return Jackson.newObjectMapper().readValue(info, BuildInfo.class);
         } catch (IOException e) {
             log.warn("Unable to read and map build information.", e);

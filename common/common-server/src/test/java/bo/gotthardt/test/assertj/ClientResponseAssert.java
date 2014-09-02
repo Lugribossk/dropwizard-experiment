@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.jackson.Jackson;
-import org.assertj.core.api.AbstractAssert;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -36,10 +35,18 @@ public class ClientResponseAssert extends BaseAssert<ClientResponseAssert, Clien
     }
 
     public ClientResponseAssert hasContentType(MediaType type) {
+        return hasContentType(type.getType());
+    }
+
+    public ClientResponseAssert hasContentType(com.google.common.net.MediaType type) {
+        return hasContentType(type.type());
+    }
+
+    public ClientResponseAssert hasContentType(String type) {
         isNotNull();
 
         assertThat(actual.getType()).isNotNull();
-        compare(actual.getType().getType(), type.getType(), "Content type");
+        compare(actual.getType().getType(), type, "Content type");
 
         return this;
     }

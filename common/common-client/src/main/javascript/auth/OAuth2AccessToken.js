@@ -30,7 +30,7 @@ define(function (require) {
         }
     }, {
         fetchByLogin: function (username, password) {
-            return this.fetchById(null, {
+            return this.fetch({
                 url: ExampleApi.getBaseUrl() + "/token",
                 data: {
                     username: username,

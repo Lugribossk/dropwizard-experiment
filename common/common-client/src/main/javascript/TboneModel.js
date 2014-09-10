@@ -49,16 +49,21 @@ define(function (require) {
             return json;
         }
     }, {
-        fetchById: function (id, fetchArgs) {
-            var args = {};
-            args[this.prototype.idAttribute] = id;
+        fetch: function (fetchArgs, modelArgs) {
             var ThisClass = this;
-            var model = new ThisClass(args);
+            var model = new ThisClass(modelArgs || {});
 
             return model.fetch(fetchArgs)
                 .then(function () {
                     return model;
                 });
+        },
+
+        fetchById: function (id) {
+            var args = {};
+            args[this.prototype.idAttribute] = id;
+
+            return this.fetch(null, args);
         }
     });
 });

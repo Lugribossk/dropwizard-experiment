@@ -1,5 +1,9 @@
 package bo.gotthardt.queue;
 
+import com.google.common.base.Preconditions;
+
+import java.util.function.Function;
+
 /**
  * A worker that runs a processing function on messages from a specific message queue.
  * Subclass this to create workers for specific tasks.
@@ -12,6 +16,7 @@ package bo.gotthardt.queue;
  */
 abstract public class QueueWorker<T> implements Runnable {
     protected final MessageQueue<T> queue;
+    protected Function<Void, Void> cancel;
 
     public QueueWorker(MessageQueue<T> queue) {
         this.queue = queue;
@@ -21,6 +26,11 @@ abstract public class QueueWorker<T> implements Runnable {
 
     @Override
     public void run() {
-        queue.consume(this::process);
+        cancel = queue.consume(this::process);
+    }
+
+    public void cancel() {
+        Preconditions.checkNotNull(cancel, "Cannot cancel before run.");
+        cancel.apply(null);
     }
 }

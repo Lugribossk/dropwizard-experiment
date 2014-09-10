@@ -19,8 +19,9 @@ public interface MessageQueue<T> {
      * Asynchronously continually wait for messages from the queue and run the specified processing function on them when they arrive.
      * If the processing function throws an exception, the current message will not be removed from the queue.
      * @param processor The processing function.
+     * @return A function that cancels the consumer when run.
      */
-    void consume(Function<T, Void> processor);
+    Function<Void, Void> consume(Function<T, Void> processor);
 
     /**
      * Get the next message in the queue, blocking until there is one.

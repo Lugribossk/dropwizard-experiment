@@ -2,8 +2,11 @@
 require.config({
     baseUrl: "../../../../../",
     paths: {
-        backbone: "common/common-client/bower_components/backbone/backbone",
-        marionette: "common/common-client/bower_components/backbone.marionette/lib/backbone.marionette",
+        "real-backbone": "common/common-client/bower_components/backbone/backbone",
+        "real-marionette": "common/common-client/bower_components/backbone.marionette/lib/backbone.marionette",
+        backbone: "common/common-client/src/main/javascript/shim/backbone",
+        marionette: "common/common-client/src/main/javascript/shim/marionette",
+
         stickit: "common/common-client/bower_components/backbone.stickit/backbone.stickit",
         associations: "common/common-client/bower_components/backbone-associations/backbone-associations",
 
@@ -34,22 +37,6 @@ require.config({
         "es5-shim": "common/common-client/bower_components/es5-shim/es5-shim"
     },
     shim: {
-        backbone: {
-            deps: ["jquery", "underscore"],
-            exports: "Backbone"
-        },
-        marionette: {
-            deps: ["backbone", "underscore"],
-            exports: "Marionette"
-        },
-        stickit: {
-            deps: ["backbone", "jquery"],
-            exports: "Backbone.Stickit"
-        },
-        associations: {
-            deps: ["backbone", "underscore"],
-            exports: "Backbone.Associations"
-        },
         Handlebars: {
             exports: "Handlebars"
         },

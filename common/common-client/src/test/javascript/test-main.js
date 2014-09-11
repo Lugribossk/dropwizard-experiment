@@ -15,9 +15,8 @@
         return (/\/src\/test\/javascript\/.*?Spec\.js$/).test(file);
     });
 
-    require(["common/util/Logger", "common/util/Promises", "jasmine-jquery"].concat(allTests), function (Logger, Promises) {
+    require(["common/util/Logger", "jasmine-jquery"].concat(allTests), function (Logger) {
         Logger.setAllLogLevels(Logger.LogLevel.OFF);
-        Promises.initialize();
         // Start the test run.
         window.__karma__.start();
     });

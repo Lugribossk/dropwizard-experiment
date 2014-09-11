@@ -2,8 +2,6 @@ define(function (require) {
     "use strict";
     var $ = require("jquery");
     var _ = require("underscore");
-    var Backbone = require("backbone");
-    var Marionette = require("marionette");
     var Promise = require("bluebird");
 
     /**
@@ -13,10 +11,13 @@ define(function (require) {
      */
     function Promises() {}
 
-    Promises.initialize = function () {
+    Promises.useWithBackbone = function (Backbone) {
         Backbone.ajax = function () {
             return Promise.resolve($.ajax.apply($, _.toArray(arguments)));
         };
+    };
+
+    Promises.useWithMarionette = function (Marionette) {
         Marionette.Deferred = Promises.deferred;
     };
 

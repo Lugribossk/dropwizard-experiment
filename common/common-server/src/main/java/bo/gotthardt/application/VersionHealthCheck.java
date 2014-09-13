@@ -20,7 +20,7 @@ public class VersionHealthCheck extends HealthCheck {
         if (!buildInfo.isValid()) {
             return Result.unhealthy("Running non-Maven build, no version info available.");
         } else if (buildInfo.getVersion().contains("SNAPSHOT")) {
-            return Result.unhealthy("Running snapshot build: %s", buildInfo.getVersion());
+            return Result.healthy("Running snapshot build: %s", buildInfo.getVersion());
         } else {
             return Result.healthy(buildInfo.getVersion());
         }

@@ -3,7 +3,7 @@ jdk: oraclejdk8
 
 before_install:
   - npm install -g grunt-cli bower
-  - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=1.0.0-$(git rev-parse --short HEAD)
+  - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD)
 
 services:
   - rabbitmq

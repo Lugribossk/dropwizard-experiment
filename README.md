@@ -2,7 +2,7 @@ Full stack experiment
 =====================
 [![Build Status](https://travis-ci.org/Lugribossk/dropwizard-experiment.svg?branch=master)](https://travis-ci.org/Lugribossk/dropwizard-experiment)
 
-An experiment with creating a full stack application with Backbone, Dropwizard, Ebean and RabbitMQ.
+An experiment with creating a full stack application with Backbone, Dropwizard, Ebean, RabbitMQ and Docker.
 
 ## Javascript frontend
 
@@ -52,22 +52,26 @@ You can make this the default by adding it under Run - Edit Configurations - Def
 
 ## Continuous Integration
 The following setup works with [Codeship](https://www.codeship.io).
-### Preparation
+### Environment preparation
 ```
 wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz
 tar xvf jdk-8u20-linux-x64.tar.gz
 export JAVA_HOME=/home/rof/clone/jdk1.8.0_20
 npm install -g grunt-cli bower
-mvn versions:set -DgenerateBackupPoms=false -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
+```
+### Build
+```
+mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
 mvn install -DskipTests=true -B
 ```
-### Tests
+### Test
 ```
 mvn test -B
 ```
 ### Deploy
+(Doesn't work yet.)
 ```
-mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -B
+mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -DskipTests=true -B
 ```
 
 ## FAQ

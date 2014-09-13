@@ -8,126 +8,12 @@ RUN apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 RUN apt-get install -y oracle-java8-installer
 
-EXPOSE 8080
+EXPOSE 80
 
 #RUN mkdir -p /opt/config/
 #VOLUME /opt/config
+#ENV JAVA_TOOL_OPTIONS -Xmx=256m
 
-ENTRYPOINT ["java", "-jar", "/${project.build.finalName}.jar"]
+ENTRYPOINT ["java", "-jar", "${project.build.finalName}.jar"]
 
 ADD ${project.build.finalName}.jar /
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

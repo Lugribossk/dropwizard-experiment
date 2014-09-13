@@ -37,9 +37,6 @@ require.config({
         "es5-shim": "common/common-client/bower_components/es5-shim/es5-shim"
     },
     shim: {
-        Handlebars: {
-            exports: "Handlebars"
-        },
         bootstrap: {
             deps: ["jquery"]
         },

@@ -137,7 +137,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     }
 
     private User createUser() {
-        User user = new User("testuser", "testpass");
+        User user = new User("testuser", "testpass", "Testuser");
         db.save(user);
         return user;
     }

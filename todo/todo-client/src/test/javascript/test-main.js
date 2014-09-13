@@ -16,9 +16,8 @@
     });
 
     // Also load the app so all its dependencies will be executed, and therefore be included in the code coverage calculation.
-    require(["common/util/Logger", "common/util/Promises", "jasmine-jquery", "todo/app/ExampleApp"].concat(allTests), function (Logger, Promises) {
+    require(["common/util/Logger", "jasmine-jquery", "todo/app/ExampleApp"].concat(allTests), function (Logger) {
         Logger.setAllLogLevels(Logger.LogLevel.OFF);
-        Promises.initialize();
         // Start the test run.
         window.__karma__.start();
     });

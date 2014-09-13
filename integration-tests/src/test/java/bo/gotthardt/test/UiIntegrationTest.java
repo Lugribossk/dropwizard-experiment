@@ -1,5 +1,6 @@
 package bo.gotthardt.test;
 
+import bo.gotthardt.test.util.ReportingWebDriverEventListener;
 import bo.gotthardt.test.util.WebDriverBinaryFinder;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
@@ -14,12 +15,15 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
@@ -30,6 +34,7 @@ import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Base class for UI integration tests that run via Selenium.
@@ -51,9 +56,10 @@ public abstract class UiIntegrationTest {
     @BeforeClass
     public static void setupWebDriver() {
         DesiredCapabilities caps = new DesiredCapabilities();
-        useSystemProxy(caps);
+        withSystemProxy(caps);
+        withBrowserLogs(caps);
 
-        driver = getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME));
+        driver = withReports(getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME)));
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 
@@ -70,6 +76,7 @@ public abstract class UiIntegrationTest {
             ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
         }
 
+        // TODO Do this with a transaction rollback instead?
         SpiEbeanServer realDb = (SpiEbeanServer) db;
         String driverClass = realDb.getServerConfig().getDataSourceConfig().getDriver();
         if (driverClass.equals("org.h2.Driver")) {
@@ -97,7 +104,7 @@ public abstract class UiIntegrationTest {
      *
      * @param caps The capabilities to modify
      */
-    private static void useSystemProxy(DesiredCapabilities caps) {
+    private static void withSystemProxy(DesiredCapabilities caps) {
         List<java.net.Proxy> proxies = ProxySelector.getDefault().select(URI.create("http://www.google.com"));
         java.net.Proxy proxy = proxies.get(0);
 
@@ -108,6 +115,12 @@ public abstract class UiIntegrationTest {
                 caps.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy("localhost:" + address.getPort()));
             }
         }
+    }
+
+    private static void withBrowserLogs(DesiredCapabilities caps) {
+        LoggingPreferences logs = new LoggingPreferences();
+        logs.enable(LogType.BROWSER, Level.ALL);
+        caps.setCapability(CapabilityType.LOGGING_PREFS, logs);
     }
 
     /**
@@ -146,7 +159,14 @@ public abstract class UiIntegrationTest {
                 caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomBinary);
                 log.info("Using PhantomJS binary from {}", phantomBinary);
 
-                return new PhantomJSDriver(caps);
+                PhantomJSDriver driver = new PhantomJSDriver(caps);
+                // The default window size is very small.
+                driver.manage().window().setSize(new Dimension(1024, 768));
+                return driver;
         }
+    }
+
+    private static WebDriver withReports(WebDriver driver) {
+        return ReportingWebDriverEventListener.applyTo(driver, "bo.gotthardt");
     }
 }

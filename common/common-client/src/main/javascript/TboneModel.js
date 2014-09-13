@@ -13,6 +13,16 @@ define(function (require) {
         scope.set(name, value);
     }
 
+    function getBaseUrl() {
+        if (window.location.host === "localhost:9090") {
+            // When developing the code and the API are served from different processes on different ports.
+            return "http://localhost:8080/api";
+        } else {
+            // But after building they are served from one location.
+            return window.location.protocol + "//" + window.location.host + "/api";
+        }
+    }
+
     return Associations.AssociatedModel.extend({
         constructor: function () {
             Associations.AssociatedModel.prototype.constructor.apply(this, _.toArray(arguments));
@@ -34,6 +44,15 @@ define(function (require) {
 
         },
 
+        url: function () {
+            var url = Associations.AssociatedModel.prototype.url.call(this);
+            if (url.indexOf("/") === 0) {
+                return getBaseUrl() + url;
+            } else {
+                return url;
+            }
+        },
+
         sync: function (method, model, options) {
             options.sync = true;
             return Associations.AssociatedModel.prototype.sync.call(this, method, model, options);
@@ -49,16 +68,23 @@ define(function (require) {
             return json;
         }
     }, {
-        fetchById: function (id, fetchArgs) {
-            var args = {};
-            args[this.prototype.idAttribute] = id;
+        fetch: function (fetchArgs, modelArgs) {
             var ThisClass = this;
-            var model = new ThisClass(args);
+            var model = new ThisClass(modelArgs || {});
 
             return model.fetch(fetchArgs)
                 .then(function () {
                     return model;
                 });
-        }
+        },
+
+        fetchById: function (id) {
+            var args = {};
+            args[this.prototype.idAttribute] = id;
+
+            return this.fetch(null, args);
+        },
+
+        getBaseUrl: getBaseUrl
     });
 });

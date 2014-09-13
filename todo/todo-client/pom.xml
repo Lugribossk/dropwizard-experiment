@@ -102,8 +102,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-assets</artifactId>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>common-server</artifactId>
         </dependency>
     </dependencies>
 </project>

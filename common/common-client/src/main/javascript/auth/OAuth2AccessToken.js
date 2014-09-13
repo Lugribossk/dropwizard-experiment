@@ -3,7 +3,6 @@ define(function (require) {
     var $ = require("jquery");
     var _ = require("underscore");
     var TBoneModel = require("common/TboneModel");
-    var ExampleApi = require("common/api/ExampleApi");
 
     var prefixes = {};
 
@@ -24,14 +23,15 @@ define(function (require) {
         defaults: {
             accessToken: null
         },
+        
+        urlRoot: "/token",
 
         addToRequestsFor: function (urlPrefix) {
             prefixes[urlPrefix] = this.get("accessToken");
         }
     }, {
         fetchByLogin: function (username, password) {
-            return this.fetchById(null, {
-                url: ExampleApi.getBaseUrl() + "/token",
+            return this.fetch({
                 data: {
                     username: username,
                     password: password,

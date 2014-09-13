@@ -15,12 +15,16 @@ define(function (require) {
 				test.region = region;
 				test.find = el.find.bind(el);
 				test.show = region.show.bind(region);
+                test.input = function (selector, text) {
+                    this.find(selector).val(text).trigger("change");
+                };
 			});
 			afterEach(function () {
 				test.region.empty();
 				test.el.remove();
 				delete test.show;
 				delete test.find;
+                delete test.input;
 			});
 			return test;
 		}

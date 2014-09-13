@@ -62,9 +62,6 @@ module.exports = function (grunt) {
                 }, {
                     pattern: /\s*<!-- \${scripts-start}[\S\s]*?\${scripts-end} -->/,
                     replacement: "\n\t\t<script src=\"main.js?v=<%= revision %>\"></script>"
-                }, {
-                    pattern: /\s*\/\* \${config-start}[\S\s]*?\${config-end} \*\//,
-                    replacement: "\n\t\t\t\tapiBaseUrl: \"/api\""
                 }]
             },
             files: [{

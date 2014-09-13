@@ -34,9 +34,10 @@ public class User implements Persistable, AccessibleBy<User>, Principal {
     @JsonIgnore
     private HashedValue password;
 
-    public User(String username, String password) {
+    public User(String username, String password, String fullName) {
         this.username = username;
         this.password = new HashedValue(password);
+        this.name = fullName;
     }
 
     @Override

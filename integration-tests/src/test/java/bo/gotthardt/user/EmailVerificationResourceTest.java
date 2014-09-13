@@ -37,7 +37,7 @@ public class EmailVerificationResourceTest extends ApiIntegrationTest {
 
     @Before
     public void setupUser() {
-        user = new User("testname", "testpassword");
+        user = new User("testname", "testpassword", "Testuser");
         db.save(user);
     }
 

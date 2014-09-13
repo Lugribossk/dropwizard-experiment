@@ -1,7 +1,9 @@
 package bo.gotthardt.deploy;
 
 import bo.gotthardt.application.BuildToolConfiguration;
-import com.google.common.base.Preconditions;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import jp.co.flect.heroku.platformapi.PlatformApi;
@@ -9,14 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 
 /**
@@ -26,7 +24,7 @@ import java.nio.file.Files;
  */
 @Slf4j
 public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
-    private static final String JRE_URL = "http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jre-8u5-linux-x64.tar.gz";
+    private static final String JRE_URL = "http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jre-8u20-linux-x64.tar.gz";
 
     public DeployCommand() {
         super("deploy", "Utility to deploy an application to Heroku.\n" +
@@ -53,6 +51,7 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
         PlatformApi heroku = PlatformApi.fromApiKey(credentials.getUsername(), credentials.getApiKey());
         new HerokuDeployer(heroku).deploy(appName, jarFile, configFile, jreDir, "TODO"); // TODO revision
 
+        Unirest.shutdown();
         log.info("Deployment complete!");
     }
 
@@ -79,20 +78,20 @@ public class DeployCommand extends ConfiguredCommand<BuildToolConfiguration> {
         super.configure(subparser);
     }
 
-    private static File downloadJre(String url) throws IOException {
+    private static File downloadJre(String url) {
         File jrePack = new File("build/target/" + url.substring(url.lastIndexOf("/")));
 
         if (!jrePack.exists()) {
             log.info("Downloading JRE, this may take a moment...");
-            HttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet(url);
-            get.addHeader("Cookie", "oraclelicense=accept-securebackup-cookie");
+            try {
+                HttpResponse<InputStream> request = Unirest.get(url)
+                        .header("Cookie", "oraclelicense=accept-securebackup-cookie")
+                        .asBinary();
 
-            HttpResponse response = client.execute(get);
-            HttpEntity entity = response.getEntity();
-
-            Preconditions.checkNotNull(entity, "Unable to download JRE.");
-            Files.copy(entity.getContent(), jrePack.toPath());
+                Files.copy(request.getBody(), jrePack.toPath());
+            } catch (UnirestException | IOException e) {
+                log.error("Unable to download JRE.", e);
+            }
         }
 
         return jrePack;

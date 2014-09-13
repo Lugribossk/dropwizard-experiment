@@ -11,6 +11,7 @@ import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.cli.EnvironmentCommand;
+import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,12 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.utils.Key;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 /**
  * Dropwizard command for running message queue workers and scheduled jobs.
@@ -35,9 +38,13 @@ import java.util.concurrent.ExecutorService;
  * @author Bo Gotthardt
  */
 @Slf4j
-public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & HasScheduleConfigurations & HasQuartzConfiguration> extends EnvironmentCommand<T> {
+public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & HasScheduleConfigurations & HasQuartzConfiguration>
+        extends EnvironmentCommand<T> implements Managed {
+    private static final String GROUP_NAME = "cron";
+
     @Setter
     private Injector injector;
+    private List<QueueWorker> workers = new ArrayList<>();
 
     /**
      * Constructor.
@@ -53,6 +60,7 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
 
         if (!configuration.getWorkers().isEmpty()) {
             setupWorkers(configuration.getWorkers(), environment, injector);
+            log.info("Created {} workers.", workers.size());
         }
 
         if (!configuration.getSchedules().isEmpty()) {
@@ -61,10 +69,14 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
 
             setupSchedules(configuration.getSchedules(), quartz.getScheduler());
         }
+
+        if (configuration.getWorkers().isEmpty() && configuration.getSchedules().isEmpty()) {
+            log.error("Server started with no workers and no scheduled jobs configured. Is that on purpose?");
+        }
     }
 
-    private static void setupWorkers(List<WorkerConfiguration> workers, Environment environment, Injector injector) {
-        workers.forEach(config -> {
+    private void setupWorkers(List<WorkerConfiguration> configurations, Environment environment, Injector injector) {
+        configurations.forEach(config -> {
             Class<? extends QueueWorker> workerClass = config.getWorker();
             ExecutorService executorService = environment.lifecycle()
                     .executorService(workerClass.getSimpleName() + "-%d")
@@ -74,6 +86,7 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
             for (int i = 0; i < config.getThreads(); i++) {
                 QueueWorker<?> worker = injector.getInstance(workerClass);
                 executorService.submit(worker);
+                workers.add(worker);
             }
             log.info("Created {} thread{} for worker {}.", config.getThreads(), config.getThreads() > 1 ? "s" : "", workerClass.getSimpleName());
         });
@@ -84,8 +97,8 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
 
         schedules.forEach(config -> {
             Class<? extends Job> jobClass = config.getJob();
-            JobKey jobKey = new JobKey(config.getName(), "cron");
-            TriggerKey triggerKey = new TriggerKey(config.getName(), "cron");
+            JobKey jobKey = new JobKey(config.getName(), GROUP_NAME);
+            TriggerKey triggerKey = new TriggerKey(config.getName(), GROUP_NAME);
             configuredKeys.add(jobKey);
 
             JobDetail job = JobBuilder.newJob(jobClass)
@@ -112,14 +125,25 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
         });
 
         try {
-            Set<JobKey> existingKeys = scheduler.getJobKeys(GroupMatcher.<JobKey>jobGroupEquals("cron"));
+            Set<JobKey> existingKeys = scheduler.getJobKeys(GroupMatcher.<JobKey>jobGroupEquals(GROUP_NAME));
             Set<JobKey> removedKeys = Sets.difference(existingKeys, configuredKeys);
             scheduler.deleteJobs(Lists.newArrayList(removedKeys));
 
-            log.info("Deleted jobs that are no longer configured: {}", removedKeys.stream().map(Key::getName));
+            log.info("Jobs that are no longer configured and have been deleted: {}", removedKeys.stream().map(Key::getName).collect(Collectors.toList()));
         } catch (SchedulerException e) {
             // TODO
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void start() throws Exception {
+        // Empty on purpose.
+    }
+
+    @Override
+    public void stop() throws Exception {
+        log.info("Canceling {} workers.", workers.size());
+        workers.forEach(QueueWorker::cancel);
     }
 }

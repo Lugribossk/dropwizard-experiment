@@ -1,0 +1,7 @@
+classes
+generated-sources
+maven-archiver
+maven-status
+test-classes
+original*.jar
+*shaded.jar

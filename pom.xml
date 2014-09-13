@@ -36,6 +36,13 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
         <dropwizard.version>0.7.1</dropwizard.version>
+
+        <!-- Override these on the command line. -->
+        <docker.username>none</docker.username>
+        <docker.password>none</docker.password>
+        <docker.email>none</docker.email>
+        <docker.host>r.tutum.co</docker.host>
+        <docker.imageName>${docker.host}/${docker.username}/${project.artifactId}:${git.branch}</docker.imageName>
     </properties>
 
     <build>
@@ -143,6 +150,21 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.1</version>
+                    <!-- Thoroughly disable the default deploy plugin. -->
+                    <executions>
+                        <execution>
+                            <id>default-deploy</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
                 </plugin>
 
                 <plugin>

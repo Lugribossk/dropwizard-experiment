@@ -22,7 +22,7 @@
             <resource>
                 <directory>docker</directory>
                 <filtering>true</filtering>
-                <targetPath>${project.build.directory}/docker</targetPath>
+                <targetPath>${project.build.directory}</targetPath>
             </resource>
         </resources>
 
@@ -62,27 +62,55 @@
             </plugin>
 
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.0.21</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <!-- Build and upload Docker image. All the Docker plugins for Maven are not very mature yet, so do it via exec. -->
                 <executions>
                     <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
+                        <id>docker-build</id>
+                        <phase>deploy</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>docker</executable>
+                            <arguments>
+                                <argument>build</argument>
+                                <argument>-t</argument>
+                                <argument>${docker.imageName}</argument>
+                                <argument>${project.build.directory}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>docker-login</id>
+                        <phase>deploy</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>docker</executable>
+                            <arguments>
+                                <argument>login</argument>
+                                <argument>-u</argument>
+                                <argument>${docker.username}</argument>
+                                <argument>-p</argument>
+                                <argument>${docker.password}</argument>
+                                <argument>-e</argument>
+                                <argument>${docker.email}</argument>
+                                <argument>${docker.host}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>docker-push</id>
+                        <phase>deploy</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>docker</executable>
+                            <arguments>
+                                <argument>push</argument>
+                                <argument>${docker.imageName}</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <imageName>example</imageName>
-                    <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -4,7 +4,6 @@ define(function (require) {
     var _ = require("underscore");
     var TboneModel = require("common/TboneModel");
     var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
-    var ExampleApi = require("common/api/ExampleApi");
 
     /**
      * @class User
@@ -15,9 +14,7 @@ define(function (require) {
             email: null
         },
 
-        url: function () {
-            return ExampleApi.getBaseUrl() + "/users/" + this.id;
-        },
+        urlRoot: "/users",
 
         computed: {
             isLoggedIn: {

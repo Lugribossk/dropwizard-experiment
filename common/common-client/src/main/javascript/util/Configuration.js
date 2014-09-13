@@ -1,7 +1,6 @@
 define(function (require) {
     "use strict";
 	var TboneModel = require("common/TboneModel");
-	var ExampleApi = require("common/api/ExampleApi");
 
 	var configurationPromise;
 
@@ -9,12 +8,11 @@ define(function (require) {
      * @class Configuration
      */
 	return TboneModel.extend({
+        urlRoot: "/configurations/client"
 	}, {
 		fetchCurrent: function () {
 			if (!configurationPromise) {
-				configurationPromise = this.fetch({
-                    url: ExampleApi.getBaseUrl() + "/configurations/client"
-                });
+				configurationPromise = this.fetch();
 			}
 			return configurationPromise;
 		}

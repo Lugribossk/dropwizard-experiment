@@ -1,4 +1,4 @@
-/*global require*/
+/*global require, beforeEach, jasmine*/
 // RequireJS main file to start Karma test runs.
 (function () {
     "use strict";
@@ -15,8 +15,13 @@
         return (/\/src\/test\/javascript\/.*?Spec\.js$/).test(file);
     });
 
-    require(["common/util/Logger", "jasmine-jquery"].concat(allTests), function (Logger) {
+    require(["test/JasmineMatchers", "common/util/Logger", "jasmine-jquery"].concat(allTests), function (JasmineMatchers, Logger) {
+        beforeEach(function () {
+            jasmine.addMatchers(JasmineMatchers);
+        });
+
         Logger.setAllLogLevels(Logger.LogLevel.OFF);
+
         // Start the test run.
         window.__karma__.start();
     });

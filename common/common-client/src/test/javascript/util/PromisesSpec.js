@@ -14,13 +14,13 @@ define(function (require) {
 
                 var request = Backbone.ajax({});
 
-                expect(request instanceof Promise).toBe(true);
+                expect(request).toBeInstanceOf(Promise);
             });
 
             it("should use Bluebird promises for Marionette deferreds.", function () {
                 var def = Marionette.Deferred();
 
-                expect(def.promise instanceof Promise).toBe(true);
+                expect(def.promise).toBeInstanceOf(Promise);
             });
         });
     });

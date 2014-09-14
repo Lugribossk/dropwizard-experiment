@@ -51,7 +51,6 @@ When creating run configurations for tests, add the same VM options as above.
 You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
 
 ## Continuous Integration
-The following setup works with [Codeship](https://www.codeship.io).
 ### Environment preparation
 ```
 wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz
@@ -69,10 +68,11 @@ mvn install -DskipTests=true -B
 mvn test -B
 ```
 ### Deploy
-(Doesn't work yet.)
 ```
 mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -DskipTests=true -B
 ```
+### Release
+TODO
 
 ## FAQ
 

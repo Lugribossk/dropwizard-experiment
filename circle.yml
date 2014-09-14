@@ -1,0 +1,24 @@
+machine:
+  java:
+    version: oraclejdk8
+  node:
+    version: 0.10.28
+  services:
+    - rabbitmq-server
+    - docker
+
+dependencies:
+  override:
+    - npm install -g grunt-cli bower
+    - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
+    - mvn install -DskipTests=true -B
+
+test:
+  override:
+    - mvn test -B
+
+deployment:
+  dockerImage:
+    branch: /.*/
+    commands:
+      - mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -DskipTests=true -B

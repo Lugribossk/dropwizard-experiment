@@ -26,8 +26,10 @@ module.exports = function (config) {
             outputFile: "common/common-client/target/test-results.xml"
         },
         coverageReporter: {
-            type: "html",
-            dir: "common/common-client/target/coverage"
+            type: "cobertura",
+            dir: "common/common-client/target/site",
+            subdir: "cobertura",
+            file: "coverage.xml"
         }
     });
 };

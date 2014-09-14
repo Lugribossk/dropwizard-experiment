@@ -38,6 +38,7 @@ module.exports = function (grunt) {
         unit: {
             browsers: ["Chrome"],
             singleRun: false,
+            port: 8765,
             preprocessors: {},
             reporters: ["progress"]
         },

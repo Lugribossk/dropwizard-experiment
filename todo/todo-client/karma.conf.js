@@ -27,8 +27,10 @@ module.exports = function (config) {
             outputFile: "todo/todo-client/target/test-results.xml"
         },
         coverageReporter: {
-            type: "html",
-            dir: "todo/todo-client/target/coverage"
+            type: "cobertura",
+            dir: "todo/todo-client/target/site",
+            subdir: "cobertura",
+            file: "coverage.xml"
         }
     });
 };

@@ -13,6 +13,10 @@
     <packaging>jar</packaging>
     <name>Integration tests</name>
 
+    <properties>
+        <coveralls.skip>true</coveralls.skip>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

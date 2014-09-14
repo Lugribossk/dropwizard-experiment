@@ -14,6 +14,11 @@
     <name>Common - Client</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <!-- Karma generates coverage data with the root of the project as the base dir, so tell coveralls-maven-plugin to look for sources from there. -->
+        <sourceDirectories>../../</sourceDirectories>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

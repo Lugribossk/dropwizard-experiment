@@ -48,14 +48,15 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     private RabbitMQBundle rabbitMqBundle;
     private WorkersCommand<TodoListConfiguration> workersCommand;
 
-
     public static void main(String... args) throws Exception {
         Stopwatch startupTimer = Stopwatch.createStarted();
         new TodoListApplication().run(args);
 
-        long elapsed = startupTimer.stop().elapsed(TimeUnit.MILLISECONDS);
-        startupTimeMetric.update(elapsed, TimeUnit.MILLISECONDS);
-        log.info("Startup took {} ms.", elapsed);
+        if (startupTimeMetric != null) {
+            long elapsed = startupTimer.stop().elapsed(TimeUnit.MILLISECONDS);
+            startupTimeMetric.update(elapsed, TimeUnit.MILLISECONDS);
+            log.info("Startup took {} ms.", elapsed);
+        }
     }
 
     @Override

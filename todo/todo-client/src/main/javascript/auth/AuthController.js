@@ -102,7 +102,7 @@ define(function (require) {
          * Attempt to log in the user.
          * This may happen automatically, or via a login form.
          *
-         * @param {DeferredRegion} region The region to show the login form in.
+         * @param {PromiseRegion} region The region to show the login form in.
          * @returns {Promise} A promise for the login being successful.
          */
         attemptLogin: function (region) {

@@ -8,7 +8,7 @@ define(function (require) {
     var ExampleNavbarController = require("todo/navbar/ExampleNavbarController");
     var ExampleRouter = require("todo/app/ExampleRouter");
     var AuthenticatingHistory = require("todo/auth/AuthenticatingHistory");
-    var DeferredRegion = require("common/view/DeferredRegion");
+    var PromiseRegion = require("common/view/PromiseRegion");
     require("less!./ExampleApp");
 
     var app = new Marionette.Application();
@@ -16,11 +16,11 @@ define(function (require) {
     app.addRegions({
         content: {
             selector: "#main",
-            regionClass: DeferredRegion
+            regionClass: PromiseRegion
         },
         navbar: {
             selector: "#navbar",
-            regionClass: DeferredRegion
+            regionClass: PromiseRegion
         }
     });
 

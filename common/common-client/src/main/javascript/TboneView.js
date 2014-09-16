@@ -2,6 +2,7 @@ define(function (require) {
     "use strict";
     var Marionette = require("marionette");
     var ViewFeatures = require("common/view/ViewFeatures");
+    var PromiseRegion = require("common/view/PromiseRegion");
 
     /**
      * @class TboneView
@@ -16,6 +17,8 @@ define(function (require) {
             }
 
             ViewFeatures.all(this);
-        }
+        },
+
+        regionClass: PromiseRegion
     });
 });

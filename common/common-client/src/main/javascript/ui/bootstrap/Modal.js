@@ -4,7 +4,7 @@ define(function (require) {
     var _ = require("underscore");
     var Marionette = require("marionette");
     var TboneView = require("common/TboneView");
-    var DeferredRegion = require("common/view/DeferredRegion");
+    var PromiseRegion = require("common/view/PromiseRegion");
     var Logger = require("common/util/Logger");
     var Promise = require("bluebird");
     var Promises = require("common/util/Promises");
@@ -13,13 +13,14 @@ define(function (require) {
     require("bootstrap");
 
     var log = new Logger("Modal");
+    var modalEl;
     var modalRegion;
     var modalOpen = false;
 
     function initialize() {
-        $("body").append("<div id='modal'></div>");
-        modalRegion = new DeferredRegion({
-            el: "#modal"
+        modalEl = $("<div id='modal'></div>").appendTo("body");
+        modalRegion = new PromiseRegion({
+            el: modalEl
         });
     }
 
@@ -124,7 +125,7 @@ define(function (require) {
          *
          * @static
          * @param {String} text
-         * @param {String} okLabel
+         * @param {String} [okLabel]
          * @returns {Promise} A promise for the modal having been closed.
          */
         alert: function (text, okLabel) {
@@ -140,7 +141,7 @@ define(function (require) {
          *
          * @static
          * @param {String} text
-         * @param {String} okLabel
+         * @param {String} [okLabel]
          * @returns {Promise} A promise for the modal having been closed by agreeing, rejects if closed in any other way.
          */
         confirm: function (text, okLabel) {
@@ -161,6 +162,12 @@ define(function (require) {
          */
         showView: function (view) {
             return showModal({view: view});
+        },
+
+        _destroy: function () {
+            modalRegion.empty();
+            modalRegion = null;
+            modalEl.remove();
         }
     });
 });

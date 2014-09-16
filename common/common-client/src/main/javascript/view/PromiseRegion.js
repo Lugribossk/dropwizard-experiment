@@ -4,7 +4,7 @@ define(function (require) {
     var Promise = require("bluebird");
 
     /**
-     * @class DeferredRegion
+     * @class PromiseRegion
      */
     return Marionette.Region.extend({
         /**

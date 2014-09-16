@@ -1,9 +1,6 @@
 define(function (require) {
     "use strict";
-    var $ = require("jquery");
     var _ = require("underscore");
-    var Backbone = require("backbone");
-    var Marionette = require("marionette");
     var PreRouteHistory = require("common/auth/PreRouteHistory");
     var Promise = require("bluebird");
     var AuthController = require("todo/auth/AuthController");

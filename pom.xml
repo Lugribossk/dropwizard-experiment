@@ -46,7 +46,7 @@
         <docker.password>none</docker.password>
         <docker.email>none</docker.email>
         <docker.host>r.tutum.co</docker.host>
-        <docker.imageName>${docker.host}/${docker.username}/${project.artifactId}:${git.branch}</docker.imageName>
+        <docker.imageName>${docker.host}/${docker.username}/${project.artifactId}</docker.imageName>
     </properties>
 
     <build>

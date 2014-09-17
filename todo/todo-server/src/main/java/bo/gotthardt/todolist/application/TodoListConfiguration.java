@@ -29,7 +29,7 @@ import java.util.List;
 public class TodoListConfiguration extends Configuration implements HasDatabaseConfiguration, HasEmailServiceConfiguration,
         HasSendGridConfiguration, HasRabbitMQConfiguration, HasWorkerConfigurations, HasQuartzConfiguration,
         HasScheduleConfigurations, HasJsClientConfiguration {
-    private DataSourceFactory database;
+    private DataSourceFactory database = new DataSourceFactory();
     private EmailServiceConfiguration email = new EmailServiceConfiguration();
     private SendGridConfiguration sendGrid;
     private RabbitMQConfiguration rabbitMq = new RabbitMQConfiguration();

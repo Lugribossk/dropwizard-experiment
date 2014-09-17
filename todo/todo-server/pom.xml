@@ -75,8 +75,8 @@
                             <arguments>
                                 <argument>build</argument>
                                 <argument>-t</argument>
-                                <argument>${docker.imageName}</argument>
-                                <argument>${project.build.directory}:${git.branch}</argument>
+                                <argument>${docker.imageName}:${git.branch}</argument>
+                                <argument>${project.build.directory}</argument>
                             </arguments>
                         </configuration>
                     </execution>

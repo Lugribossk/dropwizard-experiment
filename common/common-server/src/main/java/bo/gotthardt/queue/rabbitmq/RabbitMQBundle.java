@@ -39,6 +39,7 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
     public void run(HasRabbitMQConfiguration configuration, Environment environment) throws Exception {
         RabbitMQConfiguration rabbitMQ = configuration.getRabbitMq();
         factory.setHost(rabbitMQ.getHost());
+        factory.setVirtualHost(rabbitMQ.getVirtualHost());
         factory.setUsername(rabbitMQ.getUsername());
         factory.setPassword(rabbitMQ.getPassword());
         factory.setPort(rabbitMQ.getPort());

@@ -63,11 +63,11 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
 
     @Override
     public void stop() throws Exception {
-        if (connection != null && connection.isOpen()) {
-            connection.close();
-        }
         if (channel != null && channel.isOpen()) {
             channel.close();
+        }
+        if (connection != null && connection.isOpen()) {
+            connection.close();
         }
     }
 

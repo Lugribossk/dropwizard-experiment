@@ -332,6 +332,11 @@
                 <version>${dropwizard.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-migrations</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm</artifactId>
                 <version>4.1.6</version>
@@ -345,6 +350,11 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>1.4.181</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>9.3-1102-jdbc41</version>
             </dependency>
             <dependency>
                 <groupId>org.mindrot</groupId>

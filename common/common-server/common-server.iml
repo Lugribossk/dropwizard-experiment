@@ -77,6 +77,10 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-jdbc:7.0.50" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:7.0.50" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-assets:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-migrations:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.13" level="project" />
+    <orderEntry type="library" name="Maven: com.mattbertolini:liquibase-slf4j:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
     <orderEntry type="library" name="Maven: org.avaje.ebeanorm:avaje-ebeanorm:4.1.6" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:persistence-api:1.0" level="project" />

@@ -14,7 +14,7 @@ EXPOSE 80
 #VOLUME /opt/config
 #ENV JAVA_TOOL_OPTIONS -Xmx=256m
 
-CMD --help
+CMD ["--help"]
 ENTRYPOINT ["java", "-jar", "${project.build.finalName}.jar"]
 
 ADD ${project.build.finalName}.jar /

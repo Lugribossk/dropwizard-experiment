@@ -1,5 +1,6 @@
 package bo.gotthardt.queue;
 
+import java.io.Closeable;
 import java.util.function.Function;
 
 /**
@@ -21,7 +22,7 @@ public interface MessageQueue<T> {
      * @param processor The processing function.
      * @return A function that cancels the consumer when run.
      */
-    Function<Void, Void> consume(Function<T, Void> processor);
+    Closeable consume(Function<T, Void> processor);
 
     /**
      * Get the next message in the queue, blocking until there is one.

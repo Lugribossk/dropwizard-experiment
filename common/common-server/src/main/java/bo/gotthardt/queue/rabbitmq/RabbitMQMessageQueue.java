@@ -13,6 +13,7 @@ import io.dropwizard.jackson.Jackson;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.function.Function;
 
@@ -62,21 +63,15 @@ class RabbitMQMessageQueue<T> implements MessageQueue<T> {
     }
 
     @Override
-    public Function<Void, Void> consume(Function<T, Void> processor) {
+    public Closeable consume(Function<T, Void> processor) {
         Consumer consumer = new FunctionConsumer<>(channel, processor, type, name, metrics);
 
         try {
             String tag = channel.basicConsume(name, false, consumer);
             log.info("Set up consumer '{}' for queue '{}'.", tag, name);
 
-            return (x) -> {
-                try {
-                    channel.basicCancel(tag);
-                } catch (IOException e) {
-                    throw new MessageQueueException("Unable to cancel.", e);
-                }
-                return null;
-            };
+
+            return () -> channel.basicCancel(tag);
         } catch (IOException e) {
             throw new MessageQueueException("Unable to set up consumer.", e);
         }

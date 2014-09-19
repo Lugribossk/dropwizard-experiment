@@ -2,7 +2,8 @@ package bo.gotthardt.queue;
 
 import com.google.common.base.Preconditions;
 
-import java.util.function.Function;
+import java.io.Closeable;
+import java.io.IOException;
 
 /**
  * A worker that runs a processing function on messages from a specific message queue.
@@ -16,7 +17,7 @@ import java.util.function.Function;
  */
 abstract public class QueueWorker<T> implements Runnable {
     protected final MessageQueue<T> queue;
-    protected Function<Void, Void> cancel;
+    protected Closeable cancel;
 
     public QueueWorker(MessageQueue<T> queue) {
         this.queue = queue;
@@ -31,6 +32,10 @@ abstract public class QueueWorker<T> implements Runnable {
 
     public void cancel() {
         Preconditions.checkNotNull(cancel, "Cannot cancel before run.");
-        cancel.apply(null);
+        try {
+            cancel.close();
+        } catch (IOException e) {
+            throw new MessageQueueException("Unable to close.", e);
+        }
     }
 }

@@ -31,6 +31,7 @@ require.config({
 
         common: "common/common-client/src/main/javascript",
         todo: "todo/todo-client/src/main/javascript",
+        jenkins: "jenkins/it/src/main/javascript",
 
         test: "common/common-client/src/test/javascript",
         "jasmine-jquery": "common/common-client/bower_components/jasmine-jquery/lib/jasmine-jquery",

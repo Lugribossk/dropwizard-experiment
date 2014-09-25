@@ -1,3 +1,6 @@
+<h1>Integration test runner</h1>
+<p>Will automatically re-run randomly failing integration tests, and then merge to master if they are successful.</p>
+<p>Specify the Git refs as either <code>origin/branchname</code> or <code>branchname</code>.</p>
 <div class="form-group">
 	<label for="integration-tests">Integration tests</label>
 	<input type="text" class="form-control" id="integration-tests" placeholder="master" autofocus>
@@ -6,10 +9,11 @@
 	<label for="apps">Apps</label>
 	<input type="text" class="form-control" id="apps" placeholder="master">
 </div>
+<hr/>
 <div class="form-group">
 	<label for="changelog">Changelog</label>
 	<textarea class="form-control" id="changelog"></textarea>
 </div>
-<button type="submit" class="btn btn-primary ladda-button" data-style="zoom-out">
-	<span class="ladda-label">Start ITs</span>
-</button>
+<div class="btn btn-primary ladda-button submit" data-style="zoom-out">
+	<span class="ladda-label">Start build</span>
+</div>

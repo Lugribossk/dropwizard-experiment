@@ -8,6 +8,9 @@ define(function (require) {
 	var TboneModel = require("common/TboneModel");
 	var LogItem = require("jenkins/runner/LogItem");
 	var Job = require("jenkins/jenkins/Job");
+    var Logger = require("common/util/Logger");
+
+    var log = new Logger("MergeAttempt");
 
 	return TboneModel.extend({
 		defaults: {
@@ -21,27 +24,54 @@ define(function (require) {
 			relatedModel: LogItem
 		}],
 
+        initialize: function () {
+            this.set("logItems", new Backbone.Collection());
+        },
+
 		startITs: function () {
 			var scope = this;
 			var job = new Job({name: "integration-test-generic-build"});
-			var build = job.triggerBuild(this.get("repoBranches").toJSON());
-			return build.success()
+			var build = job.triggerBuild(this.get("repoBranches"));
+
+            this._log("itwait", "Waiting for ITs to start.");
+
+			return build
+                .then(function (build) {
+                    scope._log("itstart", "ITs started.");
+
+                    return build.success();
+                })
 				.then(function () {
-					scope._log("mergestart", "ITs passed succesfully, merging to master!");
+					scope._log("itsuccess", "ITs passed succesfully!");
+
 					return scope.merge();
 				}, function (error) {
+                    log.info("IT build failed with error", error);
 					return scope._handleError(error);
 				});
 		},
 
 		merge: function () {
+            var scope = this;
 			var job = new Job({name: "pull-request"});
 			var params = _.extend({
 				CHANGELOG: this.get("changelog"),
 				CHANGELEVEL: "Level 1: (least impact) Functional defect resolution; some performance improvements"
-			}, this.get("repoBranches").toJSON());
+			}, this.get("repoBranches"));
 
-			return job.triggerBuild(params).success();
+            scope._log("mergewait", "Waiting for merge to start.");
+
+			return job.triggerBuild(params)
+                .then(function (build) {
+                    scope._log("mergestart", "Merge started");
+
+                    return build.success();
+                })
+                .then(function () {
+                    scope._log("mergesuccess", "Merge successful!");
+                }, function () {
+                    scope._log("mergefail", "Merge failed.");
+                });
 		},
 
 		_log: function (type, message, data) {
@@ -49,7 +79,8 @@ define(function (require) {
 				type: type,
 				message: message
 			}, data);
-			this.get("logItems").put(new LogItem(params));
+			this.get("logItems").add(new LogItem(params));
+            log.info(message);
 		},
 
 		_handleError: function (error) {

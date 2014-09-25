@@ -12,24 +12,20 @@ define(function (require) {
 
 	Behaviors.registerBehavior("FormSubmit", Marionette.Behavior.extend({
 		ui: {
-			submit: "button[type=submit]"
+			submit: ".submit"
 		},
 
 		events: {
-			"submit": function () {
-				// Try catch so we always return false and block the form submit.
-                try {
-                    var button = Ladda.create(this.ui.submit.get(0));
-                    button.start();
-                    this.view.onFormSubmit()
-                        .finally(function () {
+			"click .submit": function () {
+                var scope = this;
+                var button = Ladda.create(this.ui.submit.get(0));
+                button.start();
+                this.view.onFormSubmit()
+                    .done(function () {
+                        if (!scope.isDestroyed) {
                             button.stop();
-                        });
-                } catch (e) {
-                    log.error(e);
-                }
-
-				return false;
+                        }
+                    });
 			}
 		}
 	}));
@@ -60,7 +56,7 @@ define(function (require) {
 
 			this.listenTo(this, "render", function () {
 				var required = this.requiredProperties || _.keys(this.model.attributes);
-				this.addBinding(null, "button[type=submit]", {
+				this.addBinding(null, ".submit", {
 					observe: required,
 					update: function (el, values) {
 						var allPropsHaveValue = _.every(values, function (value) {

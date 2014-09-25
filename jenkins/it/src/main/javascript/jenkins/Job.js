@@ -7,6 +7,10 @@ define(function (require) {
 	var TboneModel = require("common/TboneModel");
 	var Associations = require("associations");
 	var Build = require("jenkins/jenkins/Build");
+    var Queue = require("jenkins/jenkins/Queue");
+    var Logger = require("common/util/Logger");
+
+    var log = new Logger("Job");
 
 	return TboneModel.extend({
 		defaults: {
@@ -40,20 +44,30 @@ define(function (require) {
 				});
 			});
 
-			return $.ajax({
-				url: this.url(),
+            log.info("Triggering build with", data);
+
+			return this.save(null, {
+				url: "/job/" + this.get("name") + "/buildWithParameters",
 				type: "POST",
 				data: {
 					parameter: parameters
 				}
 			}).then(function () {
-				// TODO get build number
-				var number;
+                log.error("Unexpected queue behavior.");
+			}, function (xhr) {
+                log.info("Build queued.");
+                // As usual, a 2xx response with no body is an error in jQuery-land...
+                var queueUrl = xhr.getResponseHeader("Location");
+                return Queue.fromUrl(queueUrl).success();
+            }).then(function (queue) {
+                log.info("Queueing complete, build started.");
 				return new Build({
 					job: scope,
-					number: number,
+					number: queue.getBuildNumber(),
 					triggerParameters: data
 				});
+			}, function () {
+                log.error("TODO");
 			});
 		}
 	});

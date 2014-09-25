@@ -7,6 +7,9 @@ define(function (require) {
 	var TboneModel = require("common/TboneModel");
 	var Promise = require("bluebird");
 	var TestReport = require("jenkins/jenkins/TestReport");
+    var Logger = require("common/util/Logger");
+
+    var log = new Logger("Build");
 
 	return TboneModel.extend({
 		defaults: {
@@ -24,7 +27,7 @@ define(function (require) {
 		},
 
 		isSuccessful: function () {
-			return this.get("result") === "SUCCESSFUL";
+			return this.get("result") === "SUCCESS";
 		},
 
 		getTriggerParameters: function () {
@@ -54,14 +57,17 @@ define(function (require) {
 			return this.fetch()
 				.then(function () {
 					if (scope.get("building")) {
+                        log.info("Build in progress, refreshing in 30 seconds...");
 						return Promise.delay(30000)
 							.then(function () {
 								return scope.success();
 							});
 					} else {
 						if (scope.isSuccessful()) {
+                            log.info("Build successful.");
 							return scope;
 						} else {
+                            log.info("Build failed.");
 							return Promise.reject();
 						}
 					}

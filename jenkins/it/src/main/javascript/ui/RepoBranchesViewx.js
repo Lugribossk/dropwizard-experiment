@@ -9,6 +9,7 @@ define(function (require) {
 	var MergeAttempt = require("jenkins/runner/MergeAttempt");
 	var MergeAttemptView = require("jenkins/ui/MergeAttemptView");
 	var template = require("hbars!./RepoBranchesView");
+    var Promise = require("bluebird");
 
 	return Form.extend({
 		template: template,
@@ -40,7 +41,8 @@ define(function (require) {
 				changelog: this.changelog.get("message")
 			});
 			attempt.startITs();
-			return this.options.region.show(new MergeAttemptView({model: attempt}));
+            this.options.region.show(new MergeAttemptView({model: attempt}));
+			return Promise.resolve();
 		}
 	});
 });

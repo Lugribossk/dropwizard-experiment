@@ -12,6 +12,11 @@ define(function (require) {
 
     var log = new Logger("MergeAttempt");
 
+	/**
+	 * An attempt at merging a specific set of repository branches to master by running integration tests for them.
+	 *
+	 * @class MergeAttempt
+	 */
 	return TboneModel.extend({
 		defaults: {
 			repoBranches: null,
@@ -28,6 +33,10 @@ define(function (require) {
             this.set("logItems", new Backbone.Collection());
         },
 
+		/**
+		 * Start integration tests.
+		 * @returns {Promise}
+		 */
 		startITs: function () {
 			var scope = this;
 			var job = new Job({name: "integration-test-generic-build"});
@@ -51,6 +60,10 @@ define(function (require) {
 				});
 		},
 
+		/**
+		 * Merge branches to master.
+		 * @returns {Promise} A promise for the merge having succeeded.
+		 */
 		merge: function () {
             var scope = this;
 			var job = new Job({name: "pull-request"});

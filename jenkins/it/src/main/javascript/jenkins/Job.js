@@ -1,17 +1,20 @@
 define(function (require) {
 	"use strict";
-	var $ = require("jquery");
 	var _ = require("underscore");
-	var Backbone = require("backbone");
-	var Marionette = require("marionette");
 	var TboneModel = require("common/TboneModel");
 	var Associations = require("associations");
 	var Build = require("jenkins/jenkins/Build");
     var Queue = require("jenkins/jenkins/Queue");
     var Logger = require("common/util/Logger");
+	var Promise = require("bluebird");
 
     var log = new Logger("Job");
 
+	/**
+	 * A Jenkins job.
+	 *
+	 * @class Job
+	 */
 	return TboneModel.extend({
 		defaults: {
 			name: null,
@@ -34,17 +37,25 @@ define(function (require) {
 			return "/job/" + this.get("name") + "/api/json";
 		},
 
+		/**
+		 * Triggers a build of this job with the specified parameters.
+		 * @param {Object} data A map of parameter names to their values.
+		 * @returns {Promise} A promise for the started build.
+		 */
 		triggerBuild: function (data) {
 			var scope = this;
 			var parameters = [];
 			_.each(data, function (value, name) {
+				if (value.indexOf("origin/") !== 0) {
+					value = "origin/" + value;
+				}
 				parameters.push({
 					name: name,
 					value: value
 				});
 			});
 
-            log.info("Triggering build with", data);
+            log.info("Triggering", this.get("name"), "build with", data);
 
 			return this.save(null, {
 				url: "/job/" + this.get("name") + "/buildWithParameters",
@@ -54,11 +65,16 @@ define(function (require) {
 				}
 			}).then(function () {
                 log.error("Unexpected queue behavior.");
-			}, function (xhr) {
-                log.info("Build queued.");
+			}).catch(function (xhr) {
                 // As usual, a 2xx response with no body is an error in jQuery-land...
-                var queueUrl = xhr.getResponseHeader("Location");
-                return Queue.fromUrl(queueUrl).success();
+				if (xhr.status === 200) {
+	                log.info("Build queued.");
+
+	                var queueUrl = xhr.getResponseHeader("Location");
+	                return Queue.fromUrl(queueUrl).success();
+				} else {
+					return Promise.reject(xhr);
+				}
             }).then(function (queue) {
                 log.info("Queueing complete, build started.");
 				return new Build({
@@ -66,7 +82,7 @@ define(function (require) {
 					number: queue.getBuildNumber(),
 					triggerParameters: data
 				});
-			}, function () {
+			}).catch(function () {
                 log.error("TODO");
 			});
 		}

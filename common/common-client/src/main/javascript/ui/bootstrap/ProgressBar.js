@@ -4,9 +4,8 @@ define(function (require) {
     var template = require("hbars!./ProgressBar");
 
     /**
-     * A progress bar that visually advances based on notifications from a promise.
+     * A progress bar that visually advances.
      *
-     * @cfg {Promise} [progress] The promise, should notify with percent complete.
      * @cfg {Boolean} [striped=true]
      * @cfg {Boolean} [active=true]
      * @cfg {String} [type=success]
@@ -22,15 +21,7 @@ define(function (require) {
             bar: ".progress-bar"
         },
 
-        templateHelpers: function () {
-            return {
-                type: this.options.type || "success"
-            };
-        },
-
         onRender: function () {
-            var scope = this;
-
             if (this.options.striped !== false) {
                 this.$el.addClass("progress-striped");
             }
@@ -39,14 +30,7 @@ define(function (require) {
                 this.$el.addClass("active");
             }
 
-            if (this.options.progress) {
-                this.options.progress
-                    .progressed(function (percent) {
-                        if (!scope.isDestroyed) {
-                            scope.setProgress(percent);
-                        }
-                    });
-            }
+            this.ui.bar.addClass("progress-bar-" + this.options.type || "success");
         },
 
         setProgress: function (percent) {

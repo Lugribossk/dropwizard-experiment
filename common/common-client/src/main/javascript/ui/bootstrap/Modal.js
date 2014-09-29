@@ -26,7 +26,7 @@ define(function (require) {
 
     function showModal(viewOptions) {
         if (modalOpen) {
-            log.warn("Modal already open, ignoring request to open another");
+            log.warn("Modal already open, ignoring request to open another.");
             return Promise.reject();
         }
         if (!modalRegion) {

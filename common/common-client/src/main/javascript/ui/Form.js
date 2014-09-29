@@ -17,17 +17,21 @@ define(function (require) {
 
 		events: {
 			"submit": function () {
-				// Try catch so we always return false and block the form submit.
-                try {
-                    var button = Ladda.create(this.ui.submit.get(0));
+                var scope = this;
+				// setTimeout so we always return false and block the form submit.
+                setTimeout(function () {
+                    var button = Ladda.create(scope.ui.submit.get(0));
                     button.start();
-                    this.view.onFormSubmit()
-                        .finally(function () {
-                            button.stop();
+                    var submitPromise = scope.view.onFormSubmit();
+
+                    if (submitPromise) {
+                        submitPromise.finally(function () {
+                            if (!scope.isDestroyed) {
+                                button.stop();
+                            }
                         });
-                } catch (e) {
-                    log.error(e);
-                }
+                    }
+                }, 0);
 
 				return false;
 			}

@@ -174,7 +174,7 @@
                 <plugin>
                     <groupId>org.avaje.ebeanorm</groupId>
                     <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
-                    <version>4.1.6</version>
+                    <version>4.1.8</version>
                     <configuration>
                         <packages>bo.gotthardt.model.*</packages>
                         <transformArgs>debug=1</transformArgs>
@@ -390,12 +390,12 @@
             <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm</artifactId>
-                <version>4.1.6</version>
+                <version>4.1.8</version>
             </dependency>
             <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm-agent</artifactId>
-                <version>4.1.6</version>
+                <version>4.1.8</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>

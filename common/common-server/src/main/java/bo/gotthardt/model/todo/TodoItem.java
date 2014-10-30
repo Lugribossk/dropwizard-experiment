@@ -1,8 +1,8 @@
 package bo.gotthardt.model.todo;
 
-import bo.gotthardt.AccessibleBy;
-import bo.gotthardt.Persistable;
-import bo.gotthardt.model.User;
+import bo.gotthardt.rest.Persistable;
+import bo.gotthardt.access.Owned;
+import bo.gotthardt.model.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +20,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TodoItem implements Persistable, AccessibleBy<User> {
+public class TodoItem implements Persistable, Owned {
     @Id
     private long id;
     private String name;
@@ -34,7 +34,7 @@ public class TodoItem implements Persistable, AccessibleBy<User> {
     }
 
     @Override
-    public boolean isAccessibleBy(User principal) {
-        return todoList.getOwner().getId() == principal.getId();
+    public boolean isOwnedBy(Customer customer) {
+        return todoList.isOwnedBy(customer);
     }
 }

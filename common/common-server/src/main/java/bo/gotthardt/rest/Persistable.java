@@ -1,4 +1,4 @@
-package bo.gotthardt;
+package bo.gotthardt.rest;
 
 /**
  * @author Bo Gotthardt

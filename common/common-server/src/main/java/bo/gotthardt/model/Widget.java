@@ -1,6 +1,6 @@
 package bo.gotthardt.model;
 
-import bo.gotthardt.Persistable;
+import bo.gotthardt.rest.Persistable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

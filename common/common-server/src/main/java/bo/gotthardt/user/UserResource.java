@@ -35,9 +35,7 @@ public class UserResource {
             throw new NotFoundException(id);
         }
 
-        if (!item.isAccessibleBy(user)) {
-            throw new UnauthorizedException();
-        }
+        item.assertOwnedBy(user);
 
         return item;
     }

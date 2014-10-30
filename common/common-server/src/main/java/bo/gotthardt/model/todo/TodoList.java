@@ -1,7 +1,8 @@
 package bo.gotthardt.model.todo;
 
-import bo.gotthardt.AccessibleBy;
-import bo.gotthardt.Persistable;
+import bo.gotthardt.rest.Persistable;
+import bo.gotthardt.access.Owned;
+import bo.gotthardt.model.Customer;
 import bo.gotthardt.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
@@ -25,7 +26,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TodoList implements Persistable, AccessibleBy<User> {
+public class TodoList implements Persistable, Owned {
     @Id
     private long id;
     private String name;
@@ -46,7 +47,7 @@ public class TodoList implements Persistable, AccessibleBy<User> {
     }
 
     @Override
-    public boolean isAccessibleBy(User principal) {
-        return owner.getId() == principal.getId();
+    public boolean isOwnedBy(Customer customer) {
+        return owner.getCustomer().getId() == customer.getId();
     }
 }

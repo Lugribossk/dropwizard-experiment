@@ -1,6 +1,5 @@
 package bo.gotthardt.rest;
 
-import bo.gotthardt.Persistable;
 import bo.gotthardt.exception.NotFoundException;
 import bo.gotthardt.jersey.provider.ListFiltering;
 import com.avaje.ebean.EbeanServer;

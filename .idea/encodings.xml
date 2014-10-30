@@ -25,6 +25,7 @@
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/access/UserFeature.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/ebean/EbeanBundle.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/exception/WebAppPreconditions.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/jsclient/JsClientConfigurationResource.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/Customer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/ID.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/User.java" charset="UTF-8" />
@@ -33,6 +34,8 @@
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/rest/CrudService.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/rest/RestrictedRestResource.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/user/UserResource.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/test/java/bo/gotthardt/access/OwnedTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/test/java/bo/gotthardt/access/PrincipalTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/integration-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pom.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/todo/todo-client" charset="UTF-8" />

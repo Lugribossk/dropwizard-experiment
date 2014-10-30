@@ -10,4 +10,9 @@ public enum GlobalFeature implements Feature {
     public static boolean isEnabled(GlobalFeature feature) {
         return enabled.contains(feature);
     }
+
+    public static EnumSet<GlobalFeature> getEnabled() {
+        // TODO immutable copy
+        return enabled;
+    }
 }

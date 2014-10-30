@@ -3,6 +3,7 @@ package bo.gotthardt.user;
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthProvider;
+import bo.gotthardt.test.TestData;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -32,8 +33,7 @@ public class UserResourceTest extends ApiIntegrationTest {
 
     @Before
     public void setupUser() {
-        user = new User("testname", "testpassword", "Testuser");
-        db.save(user);
+        user = TestData.createUser(db);
         authProvider.setUser(user);
     }
 

@@ -1,11 +1,13 @@
 package bo.gotthardt.oauth2;
 
+import bo.gotthardt.model.Customer;
 import bo.gotthardt.model.OAuth2AccessToken;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
 import bo.gotthardt.test.ApiIntegrationTest;
+import bo.gotthardt.test.TestData;
 import bo.gotthardt.user.UserResource;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
@@ -41,12 +43,12 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Before
     public void setup() {
-        user = createUser();
+        user = TestData.createUser(db);
     }
 
     @Test
     public void shouldCreateAndSendTokenThatIdentifiesUser() {
-        ClientResponse response = POST("/token", loginParameters("testuser", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE);
+        ClientResponse response = POST("/token", loginParameters(user.getUsername(), "testpassword"), MediaType.APPLICATION_FORM_URLENCODED_TYPE);
         assertThat(response).hasStatus(Response.Status.OK);
 
         OAuth2AccessToken token = response.getEntity(OAuth2AccessToken.class);
@@ -57,7 +59,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void shouldNotCreateTokenForInvalidCredentials() {
-        assertThat(POST("/token", loginParameters("testuser", "WRONGPASSWORD"), MediaType.APPLICATION_FORM_URLENCODED_TYPE))
+        assertThat(POST("/token", loginParameters(user.getUsername(), "WRONGPASSWORD"), MediaType.APPLICATION_FORM_URLENCODED_TYPE))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
         assertThat(db.find(OAuth2AccessToken.class).findRowCount())
@@ -66,7 +68,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void shouldNotCreateTokenForNonexistentCredentials() {
-        assertThat(POST("/token", loginParameters("DOESNOTEXIST", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE))
+        assertThat(POST("/token", loginParameters("DOESNOTEXIST", "testpassword"), MediaType.APPLICATION_FORM_URLENCODED_TYPE))
                 .hasStatus(Response.Status.UNAUTHORIZED);
 
         assertThat(db.find(OAuth2AccessToken.class).findRowCount())
@@ -88,7 +90,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void should400WhenGrantTypePasswordIsMissingPassword() {
-        assertThat(POST("/token", loginParameters("testuser", null)))
+        assertThat(POST("/token", loginParameters(user.getUsername(), null)))
                 .hasStatus(Response.Status.BAD_REQUEST);
 
     }
@@ -111,7 +113,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void shouldAllowAuthorizedAccessToProtectedResource() {
-        OAuth2AccessToken token = POST("/token", loginParameters("testuser", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+        OAuth2AccessToken token = POST("/token", loginParameters(user.getUsername(), "testpassword"), MediaType.APPLICATION_FORM_URLENCODED_TYPE)
                 .getEntity(OAuth2AccessToken.class);
 
         ClientResponse response = resources.client().resource("/users/" + user.getId())
@@ -134,12 +136,6 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         db.refresh(token);
 
         assertThat(token.isValid()).isFalse();
-    }
-
-    private User createUser() {
-        User user = new User("testuser", "testpass", "Testuser");
-        db.save(user);
-        return user;
     }
 
     private static MultivaluedMap<String, String> loginParameters(String username, String password) {

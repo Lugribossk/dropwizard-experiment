@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$USER_HOME$/Checkouts/Apps-Server/src/http/ExpressServer.js" charset="UTF-8" />
-    <file url="file://$USER_HOME$/Checkouts/Apps-Server/test/server/specs/http/ExpressServerSpec.js" charset="UTF-8" />
-    <file url="file://$USER_HOME$/Checkouts/Apps-Server/test/server/specs/http/RequestContextFilterSpec.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/build" charset="UTF-8" />
@@ -27,7 +24,6 @@
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/exception/WebAppPreconditions.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/jsclient/JsClientConfigurationResource.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/Customer.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/ID.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/User.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/todo/TodoItem.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/todo/TodoList.java" charset="UTF-8" />
@@ -37,6 +33,10 @@
     <file url="file://$PROJECT_DIR$/common/common-server/src/test/java/bo/gotthardt/access/OwnedTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/test/java/bo/gotthardt/access/PrincipalTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/integration-tests" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integration-tests/src/test/java/bo/gotthardt/oauth2/OAuth2IntegrationTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integration-tests/src/test/java/bo/gotthardt/test/TestData.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integration-tests/src/test/java/bo/gotthardt/todo/TodoListResourceTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integration-tests/src/test/java/bo/gotthardt/user/UserResourceTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pom.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/todo/todo-client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/todo/todo-server" charset="UTF-8" />

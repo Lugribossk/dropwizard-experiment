@@ -45,9 +45,7 @@ public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
 
         log.info("Connecting to database on '{}' with username '{}'.", config.getDataSourceConfig().getUrl(), config.getDataSourceConfig().getUsername());
 
-        for (Class<?> entity : EbeanEntities.getEntities()) {
-            config.addClass(entity);
-        }
+        EbeanEntities.getEntities().forEach(config::addClass);
 
         // Automatically create db tables on startup. TODO remove this when using a proper database.
         config.setDdlGenerate(true);

@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/build" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-client/bower.json" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-client/package.json" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/Form.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/bootstrap/Modal.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/bootstrap/Navbar.js" charset="UTF-8" />

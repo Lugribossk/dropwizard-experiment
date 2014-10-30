@@ -4,28 +4,30 @@ define(function (require) {
     var _ = require("underscore");
     var Marionette = require("marionette");
     var TboneView = require("common/TboneView");
-    var DeferredRegion = require("common/view/DeferredRegion");
+    var PromiseRegion = require("common/view/PromiseRegion");
     var Logger = require("common/util/Logger");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
+    var Promises = require("common/util/Promises");
     var template = require("hbars!./Modal");
     var confirmTemplate = require("hbars!./ModalConfirm");
     require("bootstrap");
 
     var log = new Logger("Modal");
+    var modalEl;
     var modalRegion;
     var modalOpen = false;
 
     function initialize() {
-        $("body").append("<div id='modal'></div>");
-        modalRegion = new DeferredRegion({
-            el: "#modal"
+        modalEl = $("<div id='modal'></div>").appendTo("body");
+        modalRegion = new PromiseRegion({
+            el: modalEl
         });
     }
 
     function showModal(viewOptions) {
         if (modalOpen) {
-            log.warn("Modal already open, ignoring request to open another");
-            return Promise.rejected();
+            log.warn("Modal already open, ignoring request to open another.");
+            return Promise.reject();
         }
         if (!modalRegion) {
             initialize();
@@ -34,7 +36,7 @@ define(function (require) {
         var modalView = new ModalView(viewOptions);
         modalRegion.show(modalView);
 
-        return modalView.okPromise;
+        return modalView.okDeferred.promise;
     }
 
     var ModalView = TboneView.extend({
@@ -60,20 +62,20 @@ define(function (require) {
         events: {
             "click .ok": function () {
                 // I guess this works because this event handler is called before the modal plugin notices that a data-dismiss element has been clicked.
-                this.okPromise.resolve();
+                this.okDeferred.resolve();
             }
         },
 
-        okPromise: null,
+        okDeferred: null,
 
         onRender: function () {
             var scope = this;
-            this.okPromise = new $.Deferred();
+            this.okDeferred = Promises.deferred();
 
             if (this.options.view) {
-                $.when(this.options.view)
-                    .done(function (view) {
-                        scope.listenToOnce(view, "close", function () {
+                Promise.resolve(this.options.view)
+                    .then(function (view) {
+                        scope.listenToOnce(view, "destroy", function () {
                             scope.$el.modal("hide");
                         });
                     });
@@ -86,7 +88,7 @@ define(function (require) {
 
             this.$el.modal();
             this.$el.one("hidden.bs.modal", function () {
-                scope.close();
+                scope.destroy();
             });
             modalOpen = true;
         },
@@ -95,12 +97,12 @@ define(function (require) {
             this.ui.okButton.focus();
         },
 
-        onClose: function () {
+        onDestroy: function () {
             modalOpen = false;
-            if (this.options.rejectOnClose) {
-                this.okPromise.reject();
+            if (this.options.rejectOnDestroy) {
+                this.okDeferred.reject();
             } else {
-                this.okPromise.resolve();
+                this.okDeferred.resolve();
             }
         },
 
@@ -123,7 +125,7 @@ define(function (require) {
          *
          * @static
          * @param {String} text
-         * @param {String} okLabel
+         * @param {String} [okLabel]
          * @returns {Promise} A promise for the modal having been closed.
          */
         alert: function (text, okLabel) {
@@ -139,7 +141,7 @@ define(function (require) {
          *
          * @static
          * @param {String} text
-         * @param {String} okLabel
+         * @param {String} [okLabel]
          * @returns {Promise} A promise for the modal having been closed by agreeing, rejects if closed in any other way.
          */
         confirm: function (text, okLabel) {
@@ -147,7 +149,7 @@ define(function (require) {
                 text: text,
                 cancelLabel: "Cancel",
                 okLabel: okLabel || "Ok",
-                rejectOnClose: true
+                rejectOnDestroy: true
             });
         },
 
@@ -160,6 +162,12 @@ define(function (require) {
          */
         showView: function (view) {
             return showModal({view: view});
+        },
+
+        _destroy: function () {
+            modalRegion.empty();
+            modalRegion = null;
+            modalEl.remove();
         }
     });
 });

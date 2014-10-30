@@ -2,8 +2,11 @@
 require.config({
     baseUrl: "../../../../../",
     paths: {
-        backbone: "common/common-client/bower_components/backbone/backbone",
-        marionette: "common/common-client/bower_components/backbone.marionette/lib/backbone.marionette",
+        "real-backbone": "common/common-client/bower_components/backbone/backbone",
+        "real-marionette": "common/common-client/bower_components/backbone.marionette/lib/backbone.marionette",
+        backbone: "common/common-client/src/main/javascript/shim/backbone",
+        marionette: "common/common-client/src/main/javascript/shim/marionette",
+
         stickit: "common/common-client/bower_components/backbone.stickit/backbone.stickit",
         associations: "common/common-client/bower_components/backbone-associations/backbone-associations",
 
@@ -17,6 +20,7 @@ require.config({
         md5: "common/common-client/bower_components/JavaScript-MD5/js/md5",
         ladda: "common/common-client/bower_components/Ladda/js/ladda",
         spin: "common/common-client/bower_components/Ladda/js/spin",
+        bluebird: "common/common-client/bower_components/bluebird/js/browser/bluebird",
 
         text: "common/common-client/bower_components/requirejs-text/text",
         hbars: "common/common-client/bower_components/requirejs-handlebars/hbars",
@@ -33,25 +37,6 @@ require.config({
         "es5-shim": "common/common-client/bower_components/es5-shim/es5-shim"
     },
     shim: {
-        backbone: {
-            deps: ["jquery", "underscore"],
-            exports: "Backbone"
-        },
-        marionette: {
-            deps: ["backbone", "underscore"],
-            exports: "Marionette"
-        },
-        stickit: {
-            deps: ["backbone", "jquery"],
-            exports: "Backbone.Stickit"
-        },
-        associations: {
-            deps: ["backbone", "underscore"],
-            exports: "Backbone.Associations"
-        },
-        Handlebars: {
-            exports: "Handlebars"
-        },
         bootstrap: {
             deps: ["jquery"]
         },

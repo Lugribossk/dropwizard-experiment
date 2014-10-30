@@ -8,25 +8,29 @@ define(function (require) {
     var User = require("common/auth/User");
     var Logger = require("common/util/Logger");
     var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
+    var TboneModel = require("common/TboneModel");
 
     var log = new Logger("AuthController");
     var STORAGE_KEY = "accessToken";
     var currentUser = new User();
 
     function useToken(token) {
-        token.addToRequestsFor("/api/");
-        window.localStorage.setItem(STORAGE_KEY, token.get("accessToken"));
-        return User.fetchById("current")
+        token.addToRequestsFor(TboneModel.getBaseUrl());
+
+        return User.fetchCurrent()
             .then(function (user) {
+                window.localStorage.setItem(STORAGE_KEY, token.get("accessToken"));
                 currentUser.clear();
                 currentUser.set(user.attributes);
                 return user;
-            }, function (err) {
+            })
+            .catch(function (err) {
                 if (err.status === 401) {
                     log.info("Saved token was rejected, deleting it.");
                     window.localStorage.removeItem(STORAGE_KEY);
                 }
+                return Promise.reject(new Error("Unable to get current user from token."));
             });
     }
 
@@ -34,11 +38,11 @@ define(function (require) {
         var token = window.localStorage.getItem(STORAGE_KEY);
         if (token) {
             return useToken(new OAuth2AccessToken({accessToken: token}))
-                .done(function (user) {
+                .then(function (user) {
                     log.info("Logged in from saved token as", user.get("username"));
                 });
         } else {
-            return Promise.rejected();
+            return Promise.reject(new Error("No credentials in localStorage."));
         }
     }
 
@@ -47,20 +51,28 @@ define(function (require) {
      */
     return Marionette.Controller.extend({
         initialize: function () {
-            this._loginSuccess = new $.Deferred();
+            var scope = this;
+            this._loginSuccess = new Promise(function (resolve) {
+                scope._loginSuccessResolve = resolve;
+            });
         },
+
+        // A new login attempt will use a new instance, so it is ok that we don't reset this.
+        _loginSuccess: null,
+        _loginSuccessResolve: null,
 
         tryCredentials: function (username, password) {
             var scope = this;
             return OAuth2AccessToken.fetchByLogin(username, password)
                 .then(useToken)
-                .done(function (user) {
+                .then(function (user) {
                     log.info("Logged in as", user.get("username"));
-                    scope._loginSuccess.resolve();
+                    scope._loginSuccessResolve();
                 })
-                .fail(function () {
+                .catch(function () {
                     log.info("Login failed with username", username);
                     // Don't reject the loginSuccess promise here, as the user can try to login multiple times.
+                    return Promise.reject(new Error("Login failed."));
                 });
         }
     }, {
@@ -90,7 +102,7 @@ define(function (require) {
          * Attempt to log in the user.
          * This may happen automatically, or via a login form.
          *
-         * @param {DeferredRegion} region The region to show the login form in.
+         * @param {PromiseRegion} region The region to show the login form in.
          * @returns {Promise} A promise for the login being successful.
          */
         attemptLogin: function (region) {
@@ -103,7 +115,7 @@ define(function (require) {
                         controller: controller
                     }));
 
-                    return controller._loginSuccess.promise();
+                    return controller._loginSuccess;
                 });
         }
     });

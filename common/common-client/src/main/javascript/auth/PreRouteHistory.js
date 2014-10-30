@@ -2,7 +2,7 @@ define(function (require) {
     "use strict";
     var Backbone = require("backbone");
     var Logger = require("common/util/Logger");
-    var Promise = require("common/util/Promise");
+    var Promise = require("bluebird");
 
     var log = new Logger("PreRouteHistory");
 
@@ -28,7 +28,7 @@ define(function (require) {
          * @returns {Promise}
          */
         preRoute: function (fragment) {
-            return Promise.resolved();
+            return Promise.resolve();
         },
 
         loadUrl: function (fragment) {
@@ -40,15 +40,15 @@ define(function (require) {
             var actualFragment = fragment || this.getFragment(fragment);
             var doRouting = this.preRoute(actualFragment);
 
-            if (doRouting.state() === "pending") {
+            if (doRouting.isPending()) {
                 log.info("Suspended routing of '" + actualFragment + "'.");
             }
 
-            doRouting
-                .done(function () {
+            return doRouting
+                .then(function () {
                     Backbone.History.prototype.loadUrl.call(scope, actualFragment);
                 })
-                .fail(function () {
+                .catch(function () {
                     log.warn("Blocked routing of '" + actualFragment + "'.");
                 });
         }

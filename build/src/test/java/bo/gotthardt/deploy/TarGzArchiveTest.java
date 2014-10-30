@@ -68,7 +68,6 @@ public class TarGzArchiveTest {
 
     private List<File> unpack(File tgzFile) {
         TarGZipUnArchiver unarchiver = new TarGZipUnArchiver(tgzFile);
-        // Needed to avoid a null pointer...
         unarchiver.enableLogging(new ConsoleLogger(Logger.LEVEL_DISABLED, "console"));
         unarchiver.setDestDirectory(unpackDir);
         unarchiver.extract();

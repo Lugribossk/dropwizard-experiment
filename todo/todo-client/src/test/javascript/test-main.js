@@ -15,9 +15,9 @@
         return (/\/src\/test\/javascript\/.*?Spec\.js$/).test(file);
     });
 
-    // PhantomJS *still* doesn't have Function#bind(), so load an ES5 shim for that.
     // Also load the app so all its dependencies will be executed, and therefore be included in the code coverage calculation.
-    require(["jasmine-jquery", "es5-shim", "todo/app/ExampleApp"].concat(allTests), function () {
+    require(["common/util/Logger", "jasmine-jquery", "todo/app/ExampleApp"].concat(allTests), function (Logger) {
+        Logger.setAllLogLevels(Logger.LogLevel.OFF);
         // Start the test run.
         window.__karma__.start();
     });

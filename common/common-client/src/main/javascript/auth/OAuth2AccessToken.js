@@ -23,14 +23,15 @@ define(function (require) {
         defaults: {
             accessToken: null
         },
+        
+        urlRoot: "/token",
 
         addToRequestsFor: function (urlPrefix) {
             prefixes[urlPrefix] = this.get("accessToken");
         }
     }, {
         fetchByLogin: function (username, password) {
-            return this.fetchById(null, {
-                url: "/api/token",
+            return this.fetch({
                 data: {
                     username: username,
                     password: password,

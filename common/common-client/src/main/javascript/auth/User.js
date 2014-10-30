@@ -3,7 +3,6 @@ define(function (require) {
     var $ = require("jquery");
     var _ = require("underscore");
     var TboneModel = require("common/TboneModel");
-    var Promise = require("common/util/Promise");
     var OAuth2AccessToken = require("common/auth/OAuth2AccessToken");
 
     /**
@@ -15,7 +14,7 @@ define(function (require) {
             email: null
         },
 
-        urlRoot: "/api/users/",
+        urlRoot: "/users",
 
         computed: {
             isLoggedIn: {
@@ -24,6 +23,10 @@ define(function (require) {
                     return !!username;
                 }
             }
+        }
+    }, {
+        fetchCurrent: function () {
+            return this.fetchById("current");
         }
     });
 });

@@ -6,7 +6,7 @@ import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
 import bo.gotthardt.test.ApiIntegrationTest;
-import bo.gotthardt.todolist.rest.UserResource;
+import bo.gotthardt.user.UserResource;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
@@ -40,7 +40,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     private User user;
 
     @Before
-    public void blah() {
+    public void setup() {
         user = createUser();
     }
 
@@ -137,7 +137,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     }
 
     private User createUser() {
-        User user = new User("testuser", "testpass");
+        User user = new User("testuser", "testpass", "Testuser");
         db.save(user);
         return user;
     }

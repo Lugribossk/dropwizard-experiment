@@ -7,7 +7,7 @@ define(function (require) {
 
     return Marionette.ItemView.extend({
         constructor: function () {
-            Marionette.ItemView.prototype.constructor.apply(this, arguments);
+            Marionette.ItemView.prototype.constructor.apply(this, _.toArray(arguments));
             var scope = this;
 
             var autoBind = this.autoBind;

@@ -4,9 +4,12 @@ define(function (require) {
     var _ = require("underscore");
     var Backbone = require("backbone");
     var Marionette = require("marionette");
+    var TboneController = require("common/TboneController");
+
+    var BlahView, Blah;
 
     return TboneController.extend({
-        viewType: BlahView
+        viewClass: BlahView
 
         /*showBlah: function (id) {
             this._showModel(Blah.fetchById(id));

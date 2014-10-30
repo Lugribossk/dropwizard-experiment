@@ -13,6 +13,33 @@
     <packaging>jar</packaging>
     <name>Integration tests</name>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <!-- Hacky way to install PhantomJS in a known location. -->
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm${executable}</executable>
+                            <arguments>
+                                <argument>install</argument>
+                                <argument>--loglevel</argument>
+                                <argument>error</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>bo.gotthardt.stack</groupId>
@@ -41,6 +68,10 @@
             <artifactId>assertj-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-joda-time</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
         </dependency>
@@ -49,4 +80,13 @@
             <artifactId>phantomjsdriver</artifactId>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>skipIntegrationTests</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -1,32 +1,24 @@
 define(function (require) {
     "use strict";
-    var $ = require("jquery");
-    var _ = require("underscore");
-    var Backbone = require("backbone");
     var Marionette = require("marionette");
+    var ViewFeatures = require("common/view/ViewFeatures");
+    var PromiseRegion = require("common/view/PromiseRegion");
 
-    require("stickit");
-
-    return Marionette.Layout.extend({
+    /**
+     * @class TboneView
+     * @extends Marionette.LayoutView
+     */
+    return Marionette.LayoutView.extend({
         constructor: function (options) {
-            Marionette.Layout.prototype.constructor.apply(this, arguments);
-            var scope = this;
+            Marionette.LayoutView.prototype.constructor.call(this, options);
 
             if (options && options.controller) {
                 this.controller = options.controller;
             }
 
-            if (this.bindings) {
-                this.listenTo(this, "item:rendered", function () {
-                    this.stickit();
-                });
-            }
+            ViewFeatures.all(this);
+        },
 
-            this.listenTo(this, "item:rendered", function () {
-                setTimeout(function () {
-                    scope.triggerMethod("after:render");
-                }, 0);
-            });
-        }
+        regionClass: PromiseRegion
     });
 });

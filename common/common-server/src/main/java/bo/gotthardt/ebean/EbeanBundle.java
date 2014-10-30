@@ -5,16 +5,17 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Bo Gotthardt
  */
-public class EbeanBundle implements ConfiguredBundle<HasEbeanConfiguration> {
+@Slf4j
+public class EbeanBundle implements ConfiguredBundle<HasDatabaseConfiguration> {
     private EbeanServer ebeanServer;
 
     @Override
@@ -23,7 +24,7 @@ public class EbeanBundle implements ConfiguredBundle<HasEbeanConfiguration> {
     }
 
     @Override
-    public void run(HasEbeanConfiguration configuration, Environment environment) throws Exception {
+    public void run(HasDatabaseConfiguration configuration, Environment environment) throws Exception {
         ServerConfig serverConfig = getServerConfig(configuration.getDatabase());
         ebeanServer = EbeanServerFactory.create(serverConfig);
         Preconditions.checkNotNull(ebeanServer);
@@ -41,7 +42,10 @@ public class EbeanBundle implements ConfiguredBundle<HasEbeanConfiguration> {
         config.setName("main");
         config.setDataSourceConfig(getDataSourceConfig(dbConfig));
         config.setDefaultServer(true);
-        config.setPackages(ImmutableList.of("bo.gotthardt.model"));
+
+        log.info("Connecting to database on '{}' with username '{}'.", config.getDataSourceConfig().getUrl(), config.getDataSourceConfig().getUsername());
+
+        EbeanEntities.getEntities().forEach(config::addClass);
 
         // Automatically create db tables on startup. TODO remove this when using a proper database.
         config.setDdlGenerate(true);

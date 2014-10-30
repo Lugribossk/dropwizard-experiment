@@ -1,0 +1,9 @@
+{
+  "name": "Dropwizard-experiment",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "phantomjs": "1.9.7-15",
+    "chromedriver": "2.10.0-1"
+  }
+}

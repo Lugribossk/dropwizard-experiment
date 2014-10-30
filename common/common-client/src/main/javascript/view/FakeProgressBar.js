@@ -1,8 +1,9 @@
 define(function (require) {
     "use strict";
     var ProgressBar = require("common/views/ProgressBar");
-    var Promise = require("common/util/Promise");
+    var Logger = require("common/util/Logger");
 
+    var log = new Logger("FakeProgressBar");
     var timings = {};
 
     /**
@@ -17,20 +18,25 @@ define(function (require) {
         onRender: function () {
             var scope = this;
             this.startTime = Date.now();
-
-            // TODO use css animation instead
             var duration = timings[this.options.key] || this.options.defaultDuration || 2000;
-            Promise.delay(duration, 20)
-                .progress(function (percent) {
-                    if (!scope.isClosed) {
-                        // Only progress towards 90% complete so the bar looks slightly better if it takes longer.
-                        scope.setProgress(percent * 0.9);
-                    }
-                });
+            var maxSteps = 20;
+            var currentSteps = 0;
+
+            var handle = setInterval(function () {
+                if (currentSteps === maxSteps || scope.isDestroyed) {
+                    clearInterval(handle);
+                }
+
+                // Only progress towards 90% complete so the bar looks slightly better if it takes longer.
+                scope.setProgress(currentSteps / maxSteps * 0.9);
+                currentSteps++;
+            }, duration / maxSteps);
         },
 
-        onClose: function () {
-            timings[this.options.key] = Date.now() - this.startTime;
+        onDestroy: function () {
+            var realDuration = Date.now() - this.startTime;
+            timings[this.options.key] = realDuration;
+            log.info("Duration for", this.options.key, "was", realDuration);
         }
     });
 });

@@ -6,6 +6,7 @@ define(function (require) {
     var Marionette = require("marionette");
     var Logger = require("common/util/Logger");
     var Dashboard = require("todo/dashboard/Dashboard");
+	var PasswordResetController = require("todo/auth/reset/PasswordResetController");
 
     var log = new Logger("ExampleRouter");
 
@@ -19,6 +20,12 @@ define(function (require) {
             },
             "test2/:id": function (id) {
 
+            },
+            "resetpassword": function () {
+				PasswordResetController.showRequestResetPasswordForm(this.region);
+            },
+            "verify/:id": function (id) {
+				PasswordResetController.showDoPasswordResetForm(this.region, id);
             },
             "*unmatched": function (route) {
                 log.warn("Unmatched route", route);

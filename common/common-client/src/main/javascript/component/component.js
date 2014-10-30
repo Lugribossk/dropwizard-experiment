@@ -19,7 +19,7 @@ define(function (require) {
                 return;
             }
 
-            var componentName = name.substring(0, name.indexOf("/"));
+            var componentName = name.substr(0, name.indexOf("/"));
             function loadModule() {
                 if (!loadedComponents[componentName]) {
                     loadedComponents[componentName] = true;

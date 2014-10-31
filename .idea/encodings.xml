@@ -3,6 +3,7 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/README.md" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/build" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client/bower.json" charset="UTF-8" />

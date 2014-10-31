@@ -1,30 +1,61 @@
-package bo.gotthardt;
+package bo.gotthardt.model;
 
+import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.io.BaseEncoding;
+import com.google.common.net.UrlEscapers;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.Embeddable;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
 /**
+ * A secret key for Time-based One-Time Passwords.
+ * Can be encoded for sending to a client or verify a token from a client.
+ *
+ * @see <a href="http://jacob.jkrall.net/totp/">Beginner's Guide to TOTP</a>
  * @author Bo Gotthardt
  */
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TOTPSecret {
     private byte[] key;
 
-    public TOTPSecret() {
-        key = new byte[10];
-        new SecureRandom().nextBytes(key);
+    TOTPSecret(byte[] key) {
+        this.key = key;
     }
 
+    /**
+     * Get the encoded version of the key, suitable for sending to a client application.
+     * @param issuer The issuer name
+     * @param accountName The key's user's account name
+     */
     public String getEncoded(String issuer, String accountName) {
-        return "otpauth://totp/" + issuer + ":" + accountName + "?secret=" + BaseEncoding.base32().encode(key).toUpperCase() + "&issuer=" + issuer;
+        // See https://code.google.com/p/google-authenticator/wiki/KeyUriFormat
+        Preconditions.checkArgument(!issuer.contains(":"));
+        Preconditions.checkArgument(!accountName.contains(":"));
+
+        Function<String, String> escape = UrlEscapers.urlFormParameterEscaper().asFunction();
+
+        return String.format("otpauth://totp/%1$s:%2$s?secret=%3$s&issuer=%1$s",
+                      escape.apply(issuer),
+                      escape.apply(accountName),
+                      BaseEncoding.base32().encode(key).toUpperCase());
     }
 
-    public boolean isSameTokenAt(int token, DateTime time) {
+    /**
+     * Returns whether the specified token is correct (i.e. identical to the one generated from the key) at the specified time.
+     * Also allows the token for the previous and next time steps.
+     * @param token The token
+     * @param time The time
+     */
+    public boolean isCorrectTokenAt(int token, DateTime time) {
         int previousToken = generateToken(time.minusSeconds(30));
         int currentToken = generateToken(time);
         int nextToken = generateToken(time.plusSeconds(30));
@@ -32,10 +63,19 @@ public class TOTPSecret {
         return token == previousToken || token == currentToken || token == nextToken;
     }
 
+    /**
+     * Generate a token for the specified time.
+     * (Technically the specified time's time step.)
+     * @param time The time
+     */
     public int generateToken(DateTime time) {
         return tokenAt(time.getMillis() / 30000);
     }
 
+    /**
+     * Generate a token for the exact specified time.
+     * @param time The time, as milliseconds since the Unix epoch
+     */
     private int tokenAt(long time) {
         byte[] data = ByteBuffer.allocate(8).putLong(time).array();
 
@@ -77,5 +117,15 @@ public class TOTPSecret {
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Create a new TOTPSecret with a random key.
+     */
+    public static TOTPSecret create() {
+        byte[] key = new byte[10];
+        new SecureRandom().nextBytes(key);
+
+        return new TOTPSecret(key);
     }
 }

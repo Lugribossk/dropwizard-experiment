@@ -13,7 +13,13 @@
     <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/bootstrap/ProgressBar.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/view/FakeProgressBar.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/auth/TOTPToken.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/ebean/EbeanBundle.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/TOTPSecret.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/model/User.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/user/PasswordResetService.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/user/UserResource.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/common-server/src/test/java/bo/gotthardt/model/TOTPSecretTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/integration-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pom.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/todo/todo-client" charset="UTF-8" />

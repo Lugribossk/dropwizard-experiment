@@ -29,7 +29,7 @@ public class PasswordResetService {
     }
 
     /**
-     * Request a password reset link be mail to the user with the specified username or email address.
+     * Request a password reset link be emailed to the user with the specified username or email address.
      *
      * @param usernameOrEmail The username or email.
      */
@@ -46,6 +46,7 @@ public class PasswordResetService {
                     .findUnique();
 
             if (verify != null) {
+                log.info("Found existing password reset token, resetting expiration and reusing.");
                 verify.setExpirationDate(DateTime.now().plus(TOKEN_LIFETIME));
                 db.save(verify);
             } else {
@@ -53,8 +54,10 @@ public class PasswordResetService {
                 db.save(verify);
             }
 
-            log.info("Emailing link to '{}' to {}", verify.getUrl(), user.getEmail());
+            log.info("Sending password reset link ({}) to {}.", verify.getUrl(), user.getEmail());
             email.send(user.getEmail(), "Password reset", "Password reset: " + verify.getUrl());
+        } else {
+            log.info("No user found for '{}'.", usernameOrEmail);
         }
     }
 

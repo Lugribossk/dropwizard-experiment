@@ -33,6 +33,9 @@ public class User implements Persistable, AccessibleBy<User>, Principal {
     @Embedded
     @JsonIgnore
     private HashedValue password;
+    @Embedded
+    @JsonIgnore
+    private TOTPSecret totpSecret;
 
     public User(String username, String password, String fullName) {
         this.username = username;

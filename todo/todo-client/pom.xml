@@ -30,7 +30,7 @@
                     <!-- Ensure that dependencies are installed. -->
                     <execution>
                         <id>npm-install</id>
-                        <phase>validate</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -38,9 +38,7 @@
                             <executable>npm${executable}</executable>
                             <arguments>
                                 <argument>install</argument>
-                                <!-- Don't spam the Maven log output with useless missing repository field warnings. -->
-                                <argument>--loglevel</argument>
-                                <argument>error</argument>
+                                <argument>--no-optional</argument>
                             </arguments>
                         </configuration>
                     </execution>

@@ -24,7 +24,7 @@ module.exports = function (config) {
         //logLevel: "DEBUG",
         reporters: ["progress", "junit", "coverage"],
         junitReporter: {
-            outputFile: "todo/todo-client/target/test-results.xml"
+            outputFile: "todo/todo-client/target/test-results-todo.xml"
         },
         coverageReporter: {
             type: "html",

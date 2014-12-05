@@ -1,9 +1,9 @@
 define(function (require) {
     "use strict";
     var Backbone = require("real-backbone");
-    var Promises = require("common/util/Promises");
+    var Ajax = require("common/util/Ajax");
 
-    Promises.useWithBackbone(Backbone);
+    Ajax.useWithBackbone(Backbone);
 
     return Backbone;
 });

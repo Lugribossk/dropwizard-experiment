@@ -35,17 +35,12 @@
         <!-- Assign the build timestamp to a new property to work around a Maven bug (http://jira.codehaus.org/browse/MRESOURCES-99).-->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
-        <!-- Actually set by git-commit-id-plugin, but referenced here so IntelliJ won't complain. -->
-        <git.branch/>
-        <git.commit.id.abbrev/>
-
         <dropwizard.version>0.7.1</dropwizard.version>
         <ebean.version>4.1.9</ebean.version>
 
-        <!-- Override these on the command line. -->
-        <docker.username>none</docker.username>
-        <docker.password>none</docker.password>
-        <docker.email>none</docker.email>
+        <docker.username>${env.DOCKER_USERNAME}</docker.username>
+        <docker.password>${env.DOCKER_PASSWORD}</docker.password>
+        <docker.email>${env.DOCKER_EMAIL}</docker.email>
         <docker.host>tutum.co</docker.host>
         <docker.imageName>${docker.host}/${docker.username}/${project.artifactId}</docker.imageName>
     </properties>
@@ -266,6 +261,7 @@
                         <goals>
                             <goal>revision</goal>
                         </goals>
+                        <phase>validate</phase>
                     </execution>
                 </executions>
                 <configuration>

@@ -68,44 +68,27 @@
                 <executions>
                     <execution>
                         <id>docker-build</id>
-                        <phase>deploy</phase>
+                        <phase>install</phase>
                         <goals><goal>exec</goal></goals>
                         <configuration>
                             <executable>docker</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>-t</argument>
-                                <argument>${docker.imageName}:${git.branch}</argument>
+                                <argument>${docker.imageName}</argument>
                                 <argument>${project.build.directory}</argument>
                             </arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>docker-login</id>
-                        <phase>deploy</phase>
+                        <id>docker-tag</id>
+                        <phase>install</phase>
                         <goals><goal>exec</goal></goals>
                         <configuration>
                             <executable>docker</executable>
                             <arguments>
-                                <argument>login</argument>
-                                <argument>-u</argument>
-                                <argument>${docker.username}</argument>
-                                <argument>-p</argument>
-                                <argument>${docker.password}</argument>
-                                <argument>-e</argument>
-                                <argument>${docker.email}</argument>
-                                <argument>${docker.host}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>docker-push</id>
-                        <phase>deploy</phase>
-                        <goals><goal>exec</goal></goals>
-                        <configuration>
-                            <executable>docker</executable>
-                            <arguments>
-                                <argument>push</argument>
+                                <argument>tag</argument>
+                                <argument>${docker.imageName}</argument>
                                 <argument>${docker.imageName}:${git.branch}</argument>
                             </arguments>
                         </configuration>
@@ -114,6 +97,52 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>pushDockerImages</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>docker-login</id>
+                                <phase>validate</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>login</argument>
+                                        <argument>-u</argument>
+                                        <argument>${docker.username}</argument>
+                                        <argument>-p</argument>
+                                        <argument>${docker.password}</argument>
+                                        <argument>-e</argument>
+                                        <argument>${docker.email}</argument>
+                                        <argument>${docker.host}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>docker-push</id>
+                                <phase>validate</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>push</argument>
+                                        <argument>${docker.imageName}:${git.branch}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>

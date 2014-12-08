@@ -8,10 +8,10 @@ import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.user.UserResource;
 import com.google.common.net.HttpHeaders;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-import io.dropwizard.auth.oauth.OAuthProvider;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.oauth.OAuthFactory;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.joda.time.Duration;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -34,7 +34,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
             .addResource(new OAuth2AccessTokenResource(db))
             .addResource(new UserResource(db))
             .addResource(new OAuth2AuthorizationRequestProvider())
-            .addResource(new OAuthProvider<>(new OAuth2Authenticator(db), "realm"))
+            .addResource(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)))
             .build();
 
     private User user;
@@ -46,10 +46,10 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void shouldCreateAndSendTokenThatIdentifiesUser() {
-        ClientResponse response = POST("/token", loginParameters("testuser", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE);
+        Response response = POST("/token", loginParameters("testuser", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE);
         assertThat(response).hasStatus(Response.Status.OK);
 
-        OAuth2AccessToken token = response.getEntity(OAuth2AccessToken.class);
+        OAuth2AccessToken token = response.readEntity(OAuth2AccessToken.class);
         // The token sent in the response won't have any user information, but if we get it from the database it will have.
         assertThat(db.find(OAuth2AccessToken.class, token.getAccessToken()).getUser().getId())
                 .isEqualTo(user.getId());
@@ -101,9 +101,9 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void shouldRefuseUnauthorizedAccessToAuthProtectedResource() {
-        ClientResponse response = resources.client().resource("/users/" + user.getId())
+        Response response = resources.client().target("/users/" + user.getId()).request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer WRONGTOKEN")
-                .get(ClientResponse.class);
+                .get();
 
         assertThat(response)
                 .hasStatus(Response.Status.UNAUTHORIZED);
@@ -112,11 +112,11 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     @Test
     public void shouldAllowAuthorizedAccessToProtectedResource() {
         OAuth2AccessToken token = POST("/token", loginParameters("testuser", "testpass"), MediaType.APPLICATION_FORM_URLENCODED_TYPE)
-                .getEntity(OAuth2AccessToken.class);
+                .readEntity(OAuth2AccessToken.class);
 
-        ClientResponse response = resources.client().resource("/users/" + user.getId())
+        Response response = resources.client().target("/users/" + user.getId()).request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
-                .get(ClientResponse.class);
+                .get();
 
         assertThat(response)
                 .hasStatus(Response.Status.OK)
@@ -128,9 +128,9 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
         db.save(token);
 
-        ClientResponse response = resources.client().resource("/token")
+        Response response = resources.client().target("/token").request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
-                .delete(ClientResponse.class);
+                .delete();
         db.refresh(token);
 
         assertThat(token.isValid()).isFalse();
@@ -143,7 +143,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
     }
 
     private static MultivaluedMap<String, String> loginParameters(String username, String password) {
-        MultivaluedMap<String, String> parameters = new MultivaluedMapImpl();
+        MultivaluedMap<String, String> parameters = new MultivaluedStringMap();
         parameters.add("grant_type", "password");
         if (username != null) {
             parameters.add("username", username);

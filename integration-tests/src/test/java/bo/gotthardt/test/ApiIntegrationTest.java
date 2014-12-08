@@ -1,15 +1,14 @@
 package bo.gotthardt.test;
 
 import com.google.common.base.Preconditions;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.junit.Before;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.ws.rs.core.Response;
 
 /**
  * Base class for API integration tests.
@@ -26,38 +25,38 @@ public abstract class ApiIntegrationTest {
 
     @Before
     public void squelchSpammyLoggers() {
-        Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
+        //Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
     }
 
     public abstract ResourceTestRule getResources();
 
-    protected ClientResponse GET(String path) {
-        return getResources().client().resource(path).get(ClientResponse.class);
+    protected Response GET(String path) {
+        return getResources().client().target(path).request().get();
     }
 
-    protected ClientResponse POST(String path, Object input, MediaType type) {
-        return getResources().client().resource(path).entity(input, type).post(ClientResponse.class);
+    protected Response POST(String path, Object input, MediaType type) {
+        return getResources().client().target(path).request().post(Entity.entity(input, type));
     }
 
-    protected ClientResponse POST(String path, Object input) {
+    protected Response POST(String path, Object input) {
         return POST(path, input, MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected ClientResponse PUT(String path, Object input, MediaType type) {
-        return getResources().client().resource(path).entity(input, type).put(ClientResponse.class);
+    protected Response PUT(String path, Object input, MediaType type) {
+        return getResources().client().target(path).request().put(Entity.entity(input, type));
     }
 
-    protected ClientResponse PUT(String path, Object input) {
+    protected Response PUT(String path, Object input) {
         return PUT(path, input,  MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected ClientResponse DELETE(String path) {
-        return getResources().client().resource(path).delete(ClientResponse.class);
+    protected Response DELETE(String path) {
+        return getResources().client().target(path).request().delete();
     }
 
     protected static MultivaluedMap<String, String> formParameters(String... keyValues) {
         Preconditions.checkArgument(keyValues.length % 2 == 0, "Must have an even number of arguments.");
-        MultivaluedMap<String, String> parameters = new MultivaluedMapImpl();
+        MultivaluedMap<String, String> parameters = new MultivaluedStringMap();
 
         for (int i = 0; i < keyValues.length; i = i + 2) {
             parameters.add(keyValues[i], keyValues[i + 1]);

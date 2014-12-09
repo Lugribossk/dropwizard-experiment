@@ -1,14 +1,5 @@
 package bo.gotthardt.oauth2.authorization;
 
-import bo.gotthardt.exception.JsonMessageException;
-import bo.gotthardt.exception.WebAppPreconditions;
-import bo.gotthardt.jersey.provider.AbstractInjectableProvider;
-import com.google.common.base.Preconditions;
-import com.sun.jersey.api.core.HttpContext;
-import com.sun.jersey.api.representation.Form;
-import org.eclipse.jetty.http.HttpStatus;
-
-import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -17,9 +8,13 @@ import javax.ws.rs.ext.Provider;
  * @author Bo Gotthardt
  */
 @Provider
-public class OAuth2AuthorizationRequestProvider extends AbstractInjectableProvider<Context, OAuth2AuthorizationRequest> {
+public class OAuth2AuthorizationRequestProvider {
 
-    public OAuth2AuthorizationRequestProvider() {
+    public OAuth2AuthorizationRequest provide() {
+        return null;
+    }
+
+    /*public OAuth2AuthorizationRequestProvider() {
         super(OAuth2AuthorizationRequest.class);
     }
 
@@ -52,5 +47,7 @@ public class OAuth2AuthorizationRequestProvider extends AbstractInjectableProvid
         WebAppPreconditions.checkArgumentNotNull(password, "'Password' grant type requires a 'password' form parameter.");
 
         return new OAuth2AuthorizationPasswordRequest(username, password);
-    }
+    }*/
+
+
 }

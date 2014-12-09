@@ -1,10 +1,6 @@
 package bo.gotthardt.jersey.provider;
 
-import com.google.common.base.Optional;
-import com.sun.jersey.api.core.HttpContext;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -13,14 +9,14 @@ import javax.ws.rs.ext.Provider;
  * @author Bo Gotthardt
  */
 @Provider
-public class ListFilteringProvider extends AbstractInjectableProvider<Context, ListFiltering> {
+public class ListFilteringProvider {
     private static final String SEARCH_QUERY = "q";
     private static final String LIMIT = "limit";
     private static final String OFFSET = "offset";
     private static final String ORDER_BY = "orderBy";
     private static final String ORDER_SORT = "orderSort";
 
-    public ListFilteringProvider() {
+    /*public ListFilteringProvider() {
         super(ListFiltering.class);
     }
 
@@ -63,5 +59,9 @@ public class ListFilteringProvider extends AbstractInjectableProvider<Context, L
         }
 
         return filtering;
+    }*/
+
+    public ListFiltering provide() {
+        return null;
     }
 }

@@ -5,8 +5,9 @@ import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.email.EmailService;
 import bo.gotthardt.email.EmailServiceProvider;
 import bo.gotthardt.email.sendgrid.HasSendGridConfiguration;
+import bo.gotthardt.jersey.BlahFactoryProvider2;
+import bo.gotthardt.jersey.ListFilteringFactory;
 import bo.gotthardt.jersey.filter.BasicAuthFilter;
-import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
@@ -15,9 +16,7 @@ import bo.gotthardt.queue.WorkersCommand;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
-import bo.gotthardt.todolist.rest.WidgetResource;
-import bo.gotthardt.user.EmailVerificationResource;
-import bo.gotthardt.user.UserResource;
+import bo.gotthardt.todolist.rest.TodoListResource;
 import com.avaje.ebean.EbeanServer;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -79,13 +78,13 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         Injector injector = createInjector(configuration, environment);
         workersCommand.setInjector(injector);
 
-        environment.jersey().register(injector.getInstance(WidgetResource.class));
-        environment.jersey().register(injector.getInstance(UserResource.class));
-        environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
+        environment.jersey().register(injector.getInstance(TodoListResource.class));
+        //environment.jersey().register(injector.getInstance(UserResource.class));
+        //environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
 
-        environment.jersey().register(new ListFilteringProvider());
+        environment.jersey().register(BlahFactoryProvider2.binder(new ListFilteringFactory()));
 
-        environment.jersey().setUrlPattern("/api/*");
+        //environment.jersey().setUrlPattern("/api/*");
 
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

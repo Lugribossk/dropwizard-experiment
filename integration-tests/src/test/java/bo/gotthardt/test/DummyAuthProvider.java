@@ -1,24 +1,18 @@
 package bo.gotthardt.test;
 
-import bo.gotthardt.jersey.provider.AbstractInjectableProvider;
 import bo.gotthardt.model.User;
-import com.sun.jersey.api.core.HttpContext;
-import io.dropwizard.auth.Auth;
 import lombok.Setter;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Bo Gotthardt
  */
 @Setter
-public class DummyAuthProvider extends AbstractInjectableProvider<Auth, User> {
+public class DummyAuthProvider {
     private User user;
 
-    public DummyAuthProvider() {
-        super(User.class);
-    }
-
-    @Override
-    public User getValue(HttpContext httpContext) {
+    public User getValue(HttpServletRequest request) {
         return user;
     }
 }

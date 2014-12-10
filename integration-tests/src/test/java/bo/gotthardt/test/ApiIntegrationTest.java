@@ -9,6 +9,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Base class for API integration tests.
@@ -25,7 +27,7 @@ public abstract class ApiIntegrationTest {
 
     @Before
     public void squelchSpammyLoggers() {
-        //Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
+        Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
     }
 
     public abstract ResourceTestRule getResources();
@@ -36,6 +38,10 @@ public abstract class ApiIntegrationTest {
 
     protected Response POST(String path, Object input, MediaType type) {
         return getResources().client().target(path).request().post(Entity.entity(input, type));
+    }
+
+    protected Response POST(String path, MultivaluedMap input) {
+        return POST(path, input, MediaType.APPLICATION_FORM_URLENCODED_TYPE);
     }
 
     protected Response POST(String path, Object input) {

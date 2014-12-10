@@ -24,7 +24,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Jersey resource that provides {@link OAuth2AccessToken}s in response to {@link OAuth2AuthorizationRequest}s.
  * <br/><br/>
- * Requires the {@link OAuth2AuthorizationRequestProvider} to be present.
+ * Requires the {@link OAuth2AuthorizationRequestFactory} to be present.
  *
  * @author Bo Gotthardt
  */

@@ -1,6 +1,6 @@
 package bo.gotthardt.todo;
 
-import bo.gotthardt.jersey.provider.ListFilteringProvider;
+import bo.gotthardt.jersey.ListFilteringFactory;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;
@@ -28,7 +28,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new WidgetResource(service))
-            .addResource(new ListFilteringProvider())
+            .addResource(ListFilteringFactory.getBinder())
             .build();
 
     @Test

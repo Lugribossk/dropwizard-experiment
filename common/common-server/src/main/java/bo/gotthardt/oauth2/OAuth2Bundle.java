@@ -4,7 +4,7 @@ import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
-import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestProvider;
+import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestFactory;
 import com.avaje.ebean.EbeanServer;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.auth.AuthFactory;
@@ -31,7 +31,7 @@ public class OAuth2Bundle implements ConfiguredBundle<Object> { // Should really
     public void run(Object configuration, Environment environment) throws Exception {
         EbeanServer db = ebeanBundle.getEbeanServer();
         environment.jersey().register(new OAuth2AccessTokenResource(db));
-        environment.jersey().register(new OAuth2AuthorizationRequestProvider());
+        environment.jersey().register(OAuth2AuthorizationRequestFactory.getBinder());
 
         environment.jersey().register(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)));
     }

@@ -16,6 +16,8 @@ import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
 import bo.gotthardt.todolist.rest.TodoListResource;
+import bo.gotthardt.user.EmailVerificationResource;
+import bo.gotthardt.user.UserResource;
 import com.avaje.ebean.EbeanServer;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -78,12 +80,10 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         workersCommand.setInjector(injector);
 
         environment.jersey().register(injector.getInstance(TodoListResource.class));
-        //environment.jersey().register(injector.getInstance(UserResource.class));
-        //environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
+        environment.jersey().register(injector.getInstance(UserResource.class));
+        environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
 
         environment.jersey().register(ListFilteringFactory.getBinder());
-
-        //environment.jersey().setUrlPattern("/api/*");
 
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");

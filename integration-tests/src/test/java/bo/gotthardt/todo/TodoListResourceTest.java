@@ -1,6 +1,6 @@
 package bo.gotthardt.todo;
 
-import bo.gotthardt.jersey.ListFilteringFactory;
+import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.model.User;
 import bo.gotthardt.model.todo.TodoItem;
 import bo.gotthardt.model.todo.TodoList;

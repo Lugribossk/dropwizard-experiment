@@ -3,7 +3,7 @@ package bo.gotthardt.rest;
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.exception.WebAppPreconditions;
-import bo.gotthardt.jersey.provider.ListFiltering;
+import bo.gotthardt.jersey.parameters.ListFiltering;
 import bo.gotthardt.model.User;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;

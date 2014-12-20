@@ -1,6 +1,5 @@
-package bo.gotthardt.jersey;
+package bo.gotthardt.jersey.parameters;
 
-import bo.gotthardt.jersey.provider.ListFiltering;
 import com.google.common.base.Optional;
 import io.dropwizard.jersey.params.IntParam;
 import org.glassfish.hk2.api.Factory;

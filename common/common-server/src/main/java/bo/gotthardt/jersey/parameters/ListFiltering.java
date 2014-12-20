@@ -1,4 +1,4 @@
-package bo.gotthardt.jersey.provider;
+package bo.gotthardt.jersey.parameters;
 
 import com.avaje.ebean.Query;
 import com.google.common.base.Optional;

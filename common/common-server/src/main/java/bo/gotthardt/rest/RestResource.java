@@ -1,7 +1,7 @@
 package bo.gotthardt.rest;
 
 import bo.gotthardt.Persistable;
-import bo.gotthardt.jersey.provider.ListFiltering;
+import bo.gotthardt.jersey.parameters.ListFiltering;
 import com.codahale.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 

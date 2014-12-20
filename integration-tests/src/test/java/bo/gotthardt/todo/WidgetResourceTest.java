@@ -1,6 +1,6 @@
 package bo.gotthardt.todo;
 
-import bo.gotthardt.jersey.ListFilteringFactory;
+import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;

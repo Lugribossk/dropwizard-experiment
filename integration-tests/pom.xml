@@ -22,7 +22,7 @@
                     <!-- Hacky way to install PhantomJS in a known location. -->
                     <execution>
                         <id>npm-install</id>
-                        <phase>validate</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -30,8 +30,7 @@
                             <executable>npm${executable}</executable>
                             <arguments>
                                 <argument>install</argument>
-                                <argument>--loglevel</argument>
-                                <argument>error</argument>
+                                <argument>--no-optional</argument>
                             </arguments>
                         </configuration>
                     </execution>

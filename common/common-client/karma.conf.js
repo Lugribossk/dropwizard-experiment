@@ -23,7 +23,7 @@ module.exports = function (config) {
         //logLevel: "DEBUG",
         reporters: ["progress", "junit", "coverage"],
         junitReporter: {
-            outputFile: "common/common-client/target/test-results.xml"
+            outputFile: "common/common-client/target/test-results-common.xml"
         },
         coverageReporter: {
             type: "html",

@@ -1,6 +1,6 @@
 Full stack experiment
 =====================
-[![Build Status](https://travis-ci.org/Lugribossk/dropwizard-experiment.svg?branch=master)](https://travis-ci.org/Lugribossk/dropwizard-experiment)
+[![Circle CI](https://circleci.com/gh/Lugribossk/dropwizard-experiment.svg?style=svg)](https://circleci.com/gh/Lugribossk/dropwizard-experiment)
 
 An experiment with creating a full stack application with Backbone/Marionette, Dropwizard, Ebean, RabbitMQ and Docker.
 
@@ -49,30 +49,6 @@ The browser used for integration tests can be selected via the `WEBDRIVER` envir
 When creating run configurations for tests, add the same VM options as above.
 
 You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
-
-## Continuous Integration
-### Environment preparation
-```
-wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz
-tar xvf jdk-8u20-linux-x64.tar.gz
-export JAVA_HOME=/home/rof/clone/jdk1.8.0_20
-npm install -g grunt-cli bower
-```
-### Build
-```
-mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
-mvn install -DskipTests=true -B
-```
-### Test
-```
-mvn test -B
-```
-### Deploy
-```
-mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -DskipTests=true -B
-```
-### Release
-TODO
 
 ## FAQ
 

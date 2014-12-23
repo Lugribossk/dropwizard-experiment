@@ -1,8 +1,8 @@
 /*global describe, it, expect, spyOn, beforeEach, afterEach, jasmine*/
 define(function (require) {
     "use strict";
-    var $ = require("jquery");
     var TboneModel = require("common/TboneModel");
+    var Ajax = require("common/util/Ajax");
 
     describe("TboneModel", function () {
         describe("computed attributes", function () {
@@ -46,11 +46,11 @@ define(function (require) {
             });
 
             it("should not be sent to the server when saving", function () {
-                spyOn($, "ajax");
+                spyOn(Ajax, "request");
 
                 model.save();
 
-                var ajaxData = $.ajax.calls.mostRecent().args[0].data;
+                var ajaxData = Ajax.request.calls.first().args[0].data;
                 expect(ajaxData).toEqual(JSON.stringify({
                     firstName: "John",
                     lastName: "Smith"

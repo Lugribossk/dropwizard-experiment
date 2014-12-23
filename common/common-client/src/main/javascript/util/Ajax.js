@@ -4,7 +4,6 @@ define(function (require) {
     var _ = require("underscore");
     var Promise = require("bluebird");
     var Logger = require("common/util/Logger");
-    var Toast = require("common/ui/bootstrap/Toast");
 
     var log = new Logger("Ajax");
 
@@ -13,9 +12,8 @@ define(function (require) {
 
     function doRequest(options, retries) {
         retries = retries || 0;
-        var request = Promise.resolve($.ajax.apply($, options));
-
-        if (retries <= maxRetries) {
+        var request = Promise.resolve($.ajax(options));
+        if (retries < maxRetries) {
             return request.catch(function (err) {
                 // Status 0 seems to happens when the request is blocked due to the response not having the right CORS headers (due to the server being down).
                 if (err.status === 0 || err.status === 503) {
@@ -29,10 +27,7 @@ define(function (require) {
                 }
             });
         } else {
-            return request.catch(function (err) {
-                Toast.error("There was a problem communicating with the server, please try again later.");
-                throw err;
-            });
+            return request;
         }
     }
 
@@ -46,8 +41,19 @@ define(function (require) {
         post: function (options) {
             return doRequest(_.extend({type: "POST"}, options));
         },
+        put: function (options) {
+            return doRequest(_.extend({type: "PUT"}, options));
+        },
+        "delete": function (options) {
+            return doRequest(_.extend({type: "DELETE"}, options));
+        },
+
         useWithBackbone: function (Backbone) {
-            Backbone.ajax = doRequest;
+            var scope = this;
+            // Explicitly use this.request so it can be spied on.
+            Backbone.ajax = function () {
+                return scope.request.apply(null, arguments);
+            };
         }
     };
 });

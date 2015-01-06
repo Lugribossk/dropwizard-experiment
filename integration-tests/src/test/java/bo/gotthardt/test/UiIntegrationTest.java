@@ -15,7 +15,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
@@ -24,8 +23,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -40,7 +37,7 @@ import java.util.logging.Level;
  * Base class for UI integration tests that run via Selenium.
  * Access to the running app's database is available via the db property.
  *
- * Select which browser to use by setting the WEBDRIVER environment variable to "firefox", "chrome" or "phantomjs" (default).
+ * Select which browser to use by setting the WEBDRIVER environment variable to "firefox" or "chrome" (default).
  *
  * @author Bo Gotthardt
  */
@@ -140,6 +137,8 @@ public abstract class UiIntegrationTest {
             case "firefox":
                 return new FirefoxDriver(caps);
 
+            default:
+                log.warn("Unknown WebDriver type '{}', defaulting to Chrome.", browser);
             case "chrome":
                 String chromedriverBinary = WebDriverBinaryFinder.findChromeDriver();
                 System.setProperty("webdriver.chrome.driver", chromedriverBinary);
@@ -152,17 +151,6 @@ public abstract class UiIntegrationTest {
 
                 return new ChromeDriver(caps);
 
-            default:
-                log.warn("Unknown WebDriver type '{}', defaulting to PhantomJS.", browser);
-            case "phantomjs":
-                String phantomBinary = WebDriverBinaryFinder.findPhantomJs();
-                caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomBinary);
-                log.info("Using PhantomJS binary from {}", phantomBinary);
-
-                PhantomJSDriver driver = new PhantomJSDriver(caps);
-                // The default window size is very small.
-                driver.manage().window().setSize(new Dimension(1024, 768));
-                return driver;
         }
     }
 

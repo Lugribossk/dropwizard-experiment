@@ -3,9 +3,11 @@ package bo.gotthardt.test;
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
+import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Before;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -30,14 +32,28 @@ public abstract class ApiIntegrationTest {
         Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
     }
 
-    public abstract ResourceTestRule getResources();
+    public ResourceTestRule getResources() {
+        return null;
+    }
 
+    public ResourceTestRule2 getResources2() {
+        return null;
+    }
+
+    private WebTarget target(String path) {
+        if (getResources() != null) {
+            return getResources().client().target(path);
+        } else {
+            return getResources2().client().target(path);
+        }
+    }
+    
     protected Response GET(String path) {
-        return getResources().client().target(path).request().get();
+        return target(path).request().get();
     }
 
     protected Response POST(String path, Object input, MediaType type) {
-        return getResources().client().target(path).request().post(Entity.entity(input, type));
+        return target(path).request().post(Entity.entity(input, type));
     }
 
     protected Response POST(String path, MultivaluedMap input) {
@@ -49,7 +65,7 @@ public abstract class ApiIntegrationTest {
     }
 
     protected Response PUT(String path, Object input, MediaType type) {
-        return getResources().client().target(path).request().put(Entity.entity(input, type));
+        return target(path).request().put(Entity.entity(input, type));
     }
 
     protected Response PUT(String path, Object input) {
@@ -57,7 +73,7 @@ public abstract class ApiIntegrationTest {
     }
 
     protected Response DELETE(String path) {
-        return getResources().client().target(path).request().delete();
+        return target(path).request().delete();
     }
 
     protected static MultivaluedMap<String, String> formParameters(String... keyValues) {

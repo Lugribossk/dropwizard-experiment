@@ -2,9 +2,6 @@ package bo.gotthardt.oauth2.authorization;
 
 import bo.gotthardt.exception.JsonMessageException;
 import bo.gotthardt.exception.WebAppPreconditions;
-import bo.gotthardt.model.User;
-import com.avaje.ebean.EbeanServer;
-import com.google.common.base.Optional;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.utilities.Binder;
@@ -44,8 +41,8 @@ public class OAuth2AuthorizationRequestFactory implements Factory<OAuth2Authoriz
                     throw new JsonMessageException(HttpStatus.NOT_IMPLEMENTED_501, "Grant type '%s' not implemented.", grantType);
             }
         } catch (RuntimeException e) {
-            // Jersey 2 does not support throwing exceptions in providers (unlike Jersey 1).
-            // So instead return an anonymous subclass with a functional interface method that will throw the exception...
+            // Jersey 2 does not support throwing exceptions in parameter injection providers (unlike Jersey 1).
+            // So instead return an anonymous subclass where the functional interface method throws the exception...
             return db -> {
                 throw e;
             };

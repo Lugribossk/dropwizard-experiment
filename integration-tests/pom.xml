@@ -19,7 +19,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-                    <!-- Hacky way to install PhantomJS in a known location. -->
+                    <!-- Hacky way to install Chromedriver in a known location. -->
                     <execution>
                         <id>npm-install</id>
                         <phase>generate-sources</phase>

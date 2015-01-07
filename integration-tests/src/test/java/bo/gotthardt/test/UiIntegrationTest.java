@@ -1,9 +1,12 @@
 package bo.gotthardt.test;
 
+import bo.gotthardt.model.User;
 import bo.gotthardt.test.util.ReportingWebDriverEventListener;
 import bo.gotthardt.test.util.WebDriverBinaryFinder;
 import bo.gotthardt.todolist.application.TodoListApplication;
 import bo.gotthardt.todolist.application.TodoListConfiguration;
+import bo.gotthardt.ui.page.DashboardPage;
+import bo.gotthardt.ui.page.LoginPage;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
@@ -47,6 +50,8 @@ public abstract class UiIntegrationTest {
     protected static WebDriver driver;
     protected static EbeanServer db;
 
+    protected User user;
+
     @ClassRule
     public static DropwizardAppRule<TodoListConfiguration> appRule = new DropwizardAppRule<>(TodoListApplication.class, getConfigFilePath());
 
@@ -83,6 +88,12 @@ public abstract class UiIntegrationTest {
         } else {
             log.error("Integration test does not appear to be using driver for in-memory testing, but rather {}. Not clearing database after test run.", driverClass);
         }
+    }
+
+    protected DashboardPage login() {
+        user = new User("testuser", "testpassword", "Test Testsen");
+        db.save(user);
+        return LoginPage.go(driver).loginSuccess("testuser", "testpassword");
     }
 
     private static String getConfigFilePath() {
@@ -129,8 +140,8 @@ public abstract class UiIntegrationTest {
      */
     private static WebDriver getDriver(DesiredCapabilities caps, @Nullable String browser) {
         if (browser == null) {
-            log.info("WebDriver type not specified, defaulting to PhantomJS.");
-            browser = "phantomjs";
+            log.info("WebDriver type not specified, defaulting to Chrome.");
+            browser = "chrome";
         }
 
         switch (browser.toLowerCase()) {

@@ -8,7 +8,6 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.jackson.JacksonMessageBodyProvider;
 import io.dropwizard.logging.LoggingFactory;
-import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerException;
@@ -25,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by Bo on 06/01/2015.
+ * Temporary version of ResourceTestRule that still uses InMemoryTestContainer when GrizzlyTestContainer is on the classpath.
  */
 public class ResourceTestRule2 implements TestRule {
     static {

@@ -19,7 +19,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-                    <!-- Hacky way to install PhantomJS in a known location. -->
+                    <!-- Hacky way to install Chromedriver in a known location. -->
                     <execution>
                         <id>npm-install</id>
                         <phase>generate-sources</phase>
@@ -75,8 +75,8 @@
             <artifactId>selenium-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.detro.ghostdriver</groupId>
-            <artifactId>phantomjsdriver</artifactId>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
         </dependency>
     </dependencies>
 

@@ -35,7 +35,7 @@
         <!-- Assign the build timestamp to a new property to work around a Maven bug (http://jira.codehaus.org/browse/MRESOURCES-99).-->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
-        <dropwizard.version>0.7.1</dropwizard.version>
+        <dropwizard.version>0.8.0-rc1</dropwizard.version>
         <ebean.version>4.1.9</ebean.version>
 
         <docker.username>${env.DOCKER_USERNAME}</docker.username>
@@ -385,6 +385,11 @@
                 <version>${dropwizard.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-jersey</artifactId>
+                <version>${dropwizard.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.avaje.ebeanorm</groupId>
                 <artifactId>avaje-ebeanorm</artifactId>
                 <version>${ebean.version}</version>
@@ -546,6 +551,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+                <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+                <version>2.13</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
                 <version>2.42.2</version>
@@ -556,12 +567,6 @@
                         <artifactId>selenium-htmlunit-driver</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.github.detro.ghostdriver</groupId>
-                <artifactId>phantomjsdriver</artifactId>
-                <version>1.1.0</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>

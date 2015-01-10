@@ -1,6 +1,5 @@
 package bo.gotthardt.test.assertj;
 
-import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.internal.Booleans;
 import org.openqa.selenium.WebElement;
 

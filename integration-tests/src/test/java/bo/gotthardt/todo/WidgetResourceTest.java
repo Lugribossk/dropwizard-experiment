@@ -1,13 +1,13 @@
 package bo.gotthardt.todo;
 
-import bo.gotthardt.jersey.provider.ListFilteringProvider;
+import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.model.Widget;
-import bo.gotthardt.todolist.rest.WidgetResource;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;
+import bo.gotthardt.test.ResourceTestRule2;
+import bo.gotthardt.todolist.rest.WidgetResource;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
-import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -27,9 +27,9 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 public class WidgetResourceTest extends ApiIntegrationTest {
     private static final CrudService<Widget> service = new CrudService<>(Widget.class, db);
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule2 resources = ResourceTestRule2.builder()
             .addResource(new WidgetResource(service))
-            .addResource(new ListFilteringProvider())
+            .addResource(ListFilteringFactory.getBinder())
             .build();
 
     @Test
@@ -122,7 +122,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
         ObjectNode input = resources.getObjectMapper().createObjectNode();
         input.put("name", "Test2");
 
-        ClientResponse response = PUT("/widgets/" + p.getId(), input);
+        Response response = PUT("/widgets/" + p.getId(), input);
         db.refresh(p);
 
         assertThat(response)
@@ -141,7 +141,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
         input.put("name", "Test2");
         input.put("id", oldId + 100);
 
-        ClientResponse response = PUT("/widgets/" + oldId, input);
+        Response response = PUT("/widgets/" + oldId, input);
         db.refresh(p);
 
         assertThat(response)
@@ -151,7 +151,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     }
 
     @Override
-    public ResourceTestRule getResources() {
+    public ResourceTestRule2 getResources2() {
         return resources;
     }
 }

@@ -13,18 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 /**
  * Jersey resource that provides {@link OAuth2AccessToken}s in response to {@link OAuth2AuthorizationRequest}s.
  * <br/><br/>
- * Requires the {@link OAuth2AuthorizationRequestProvider} to be present.
+ * Requires the {@link OAuth2AuthorizationRequestFactory} to be present.
  *
  * @author Bo Gotthardt
  */

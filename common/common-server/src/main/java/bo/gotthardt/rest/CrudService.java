@@ -2,7 +2,7 @@ package bo.gotthardt.rest;
 
 import bo.gotthardt.Persistable;
 import bo.gotthardt.exception.NotFoundException;
-import bo.gotthardt.jersey.provider.ListFiltering;
+import bo.gotthardt.jersey.parameters.ListFiltering;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
 

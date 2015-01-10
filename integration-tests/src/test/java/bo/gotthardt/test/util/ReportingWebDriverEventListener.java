@@ -9,11 +9,10 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
@@ -100,19 +99,9 @@ public class ReportingWebDriverEventListener extends AbstractWebDriverEventListe
     }
 
     private static void saveScreenshot(String filename, WebDriver driver) {
-        byte[] imageBytes = null;
-        // This should just work for Chrome, Firefox and PhantomJS as they are all instanceof TakesScreenshot.
-        // Unfortunately PhantomJSDriver depends on an old version of RemoteWebDriver causing two incompatible
-        // versions to end up on the classpath, which results in the mess below, where ChromeDriver cannot be cast to anything useful.
-        if (driver instanceof FirefoxDriver) {
-            imageBytes = ((FirefoxDriver) driver).getScreenshotAs(OutputType.BYTES);
-        //} else if (driver instanceof ChromeDriver) {
-        //    imageBytes = ((ChromeDriver) driver).getScreenshotAs(OutputType.BYTES);
-        } else if (driver instanceof PhantomJSDriver) {
-            imageBytes = ((PhantomJSDriver) driver).getScreenshotAs(OutputType.BYTES);
-        }
+        if (driver instanceof TakesScreenshot) {
+            byte[] imageBytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
-        if (imageBytes != null) {
             try {
                 File screenshot = new File(filename + ".png");
                 Files.write(imageBytes, screenshot);

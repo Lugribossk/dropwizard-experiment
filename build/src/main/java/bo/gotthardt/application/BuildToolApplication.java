@@ -1,7 +1,6 @@
 package bo.gotthardt.application;
 
 import bo.gotthardt.check.HealthCheckCommand;
-import bo.gotthardt.deploy.DeployCommand;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -16,7 +15,6 @@ public class BuildToolApplication extends Application<BuildToolConfiguration> {
 
     @Override
     public void initialize(Bootstrap<BuildToolConfiguration> bootstrap) {
-        bootstrap.addCommand(new DeployCommand());
         bootstrap.addCommand(new HealthCheckCommand());
     }
 

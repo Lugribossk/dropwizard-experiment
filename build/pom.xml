@@ -13,13 +13,6 @@
     <packaging>jar</packaging>
     <name>Build/deployment tools</name>
 
-    <repositories>
-        <repository>
-            <id>lib</id>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
             <plugin>
@@ -62,19 +55,6 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>jp.co.flect</groupId>
-            <artifactId>heroku-platform-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
         </dependency>
 
         <dependency>

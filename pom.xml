@@ -18,7 +18,7 @@
     </developers>
 
     <modules>
-        <module>build</module>
+        <module>build/tools</module>
         <module>common/common-client</module>
 		<module>common/common-server</module>
         <module>integration-tests</module>

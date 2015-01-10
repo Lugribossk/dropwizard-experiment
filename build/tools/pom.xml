@@ -7,6 +7,7 @@
         <groupId>bo.gotthardt.stack</groupId>
         <artifactId>dropwizard-experiment</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>build</artifactId>

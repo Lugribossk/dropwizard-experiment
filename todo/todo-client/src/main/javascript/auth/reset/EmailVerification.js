@@ -1,9 +1,12 @@
 define(function (require) {
 	"use strict";
-	var $ = require("jquery");
 	var _ = require("underscore");
+    var Ajax = require("common/util/Ajax");
 	var TboneModel = require("common/TboneModel");
 
+    /**
+     * @class EmailVerification
+     */
 	return TboneModel.extend({
 		urlRoot: "api/verifications",
 
@@ -20,9 +23,8 @@ define(function (require) {
 		},
 
 		changePassword: function (newPassword) {
-			return $.ajax({
+			return Ajax.post({
 				url: this.url(),
-				type: "POST",
 				data: {
 					newPassword: newPassword
 				}

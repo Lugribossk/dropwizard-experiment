@@ -31,6 +31,20 @@ define(function (require) {
         }
     }
 
+    var callbacks = [];
+
+    $.ajaxPrefilter(function (options) {
+        if (!options.headers) {
+            options.headers = {};
+        }
+        _.each(callbacks, function (callback) {
+            callback(options);
+        });
+    });
+
+    /**
+     * @class Ajax
+     */
     return {
         request: function (options) {
             return doRequest(options);
@@ -46,6 +60,13 @@ define(function (require) {
         },
         "delete": function (options) {
             return doRequest(_.extend({type: "DELETE"}, options));
+        },
+
+        on: function (name, callback) {
+            // It would be better to ue Backbone.Events, but that would introduce a circular dependency.
+            if (name === "request") {
+                callbacks.push(callback);
+            }
         },
 
         useWithBackbone: function (Backbone) {

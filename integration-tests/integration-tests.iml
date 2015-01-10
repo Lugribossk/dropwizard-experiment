@@ -13,6 +13,77 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="integration-tests node_modules" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.3" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-jackson:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-guava:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-afterburner:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-joda:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-validation:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate:hibernate-validator:5.1.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-configuration:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-logging:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-logback:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:1.7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:log4j-over-slf4j:1.7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-util:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-metrics:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-jersey:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-core:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-server:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-jersey:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-servlets:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-annotation:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-jetty:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-jetty9:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-io:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-servlet:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-security:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-servlets:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-continuation:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-http:9.0.7.v20131107" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-lifecycle:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-core:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-jvm:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-servlets:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-json:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.codahale.metrics:metrics-healthchecks:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.argparse4j:argparse4j:0.4.3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty.orbit:javax.servlet:3.0.0.v201112011016" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-auth:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-db:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-jdbc:7.0.50" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:7.0.50" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-assets:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-migrations:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: io.dropwizard:dropwizard-testing:0.7.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.sun.jersey.jersey-test-framework:jersey-test-framework-core:1.18.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-servlet:1.18.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.sun.jersey:jersey-client:1.18.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.sun.jersey.jersey-test-framework:jersey-test-framework-inmemory:1.18.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.github.detro.ghostdriver:phantomjsdriver:1.1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:2.39.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-server:2.39.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.bouncycastle:bcprov-jdk15on:1.48" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.48" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: mx4j:mx4j-tools:3.0.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.mortbay.jetty:servlet-api-2.5:6.1.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:jetty-repacked:7.6.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.8" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.8" level="project" />
     <orderEntry type="module" module-name="common-server" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:0.8.0-rc1" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:0.8.0-rc1" level="project" />

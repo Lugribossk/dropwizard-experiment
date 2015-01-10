@@ -10,7 +10,7 @@ define(function (require) {
      * Alternate version of Backbone.History that allows a function to be called before every route, that determines
      * whether it should be run or not.
      *
-     * This makes it convenient place to add global app authentication logic that e.g. checks whether the user is currently logged in.
+     * This makes it a convenient place to add global app authentication logic that e.g. checks whether the user is currently logged in.
      * Using a promise means that it can be used to display a login screen regardless of the route
      * (without re-routing to a special login route), and then resolve the promise after authentication succeeds which
      * will run the route, making it possible to deeplink to any route.

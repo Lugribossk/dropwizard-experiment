@@ -1,7 +1,7 @@
 define(function (require) {
     "use strict";
-    var $ = require("jquery");
     var _ = require("underscore");
+    var Ajax = require("common/util/Ajax");
     var TboneController = require("common/TboneController");
 	var RequestPasswordResetForm = require("todo/auth/reset/RequestPasswordResetForm");
 	var DoPasswordResetForm = require("todo/auth/reset/DoPasswordResetForm");
@@ -13,9 +13,8 @@ define(function (require) {
 
     return TboneController.extend({
 		requestPasswordReset: function (username) {
-			return $.ajax({
-				url: "api/verifications/passwordreset",
-				type: "POST",
+			return Ajax.post({
+				url: this.url() + "/verifications/passwordreset",
 				data: {
 					username: username
 				}

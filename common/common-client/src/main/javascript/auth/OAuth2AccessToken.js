@@ -1,20 +1,7 @@
 define(function (require) {
     "use strict";
-    var $ = require("jquery");
-    var _ = require("underscore");
+    var Ajax = require("common/util/Ajax");
     var TBoneModel = require("common/TboneModel");
-
-    var prefixes = {};
-
-    $.ajaxPrefilter(function (options) {
-        options.headers = options.headers || {};
-
-        _.each(prefixes, function (token, prefix) {
-            if (options.url.indexOf(prefix) === 0) {
-                options.headers.Authorization = "Bearer " + token;
-            }
-        });
-    });
 
     /**
      * @class OAuth2AccessToken
@@ -27,7 +14,12 @@ define(function (require) {
         urlRoot: "/token",
 
         addToRequestsFor: function (urlPrefix) {
-            prefixes[urlPrefix] = this.get("accessToken");
+            var scope = this;
+            Ajax.on("request", function (options) {
+                if (options.url.indexOf(urlPrefix) === 0) {
+                    options.headers.Authorization = "Bearer " + scope.get("accessToken");
+                }
+            });
         }
     }, {
         fetchByLogin: function (username, password) {

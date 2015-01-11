@@ -97,4 +97,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>common-client</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -339,6 +339,11 @@
         <dependencies>
             <dependency>
                 <groupId>bo.gotthardt.stack</groupId>
+                <artifactId>common-client</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>bo.gotthardt.stack</groupId>
                 <artifactId>common-server</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
@@ -431,11 +436,6 @@
                 <version>1.14.8</version>
             </dependency>
             <dependency>
-                <groupId>jp.co.flect</groupId>
-                <artifactId>heroku-platform-api</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-archiver</artifactId>
                 <version>2.4.4</version>
@@ -452,22 +452,6 @@
                     <exclusion>
                         <groupId>com.google.code.findbugs</groupId>
                         <artifactId>annotations</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpmime</artifactId>
-                <version>4.3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.3.4</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

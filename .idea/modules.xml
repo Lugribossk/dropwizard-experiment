@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/common/common-client/common-client.iml" filepath="$PROJECT_DIR$/common/common-client/common-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common-server/common-server.iml" filepath="$PROJECT_DIR$/common/common-server/common-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/build/dashboard/dashboard.iml" filepath="$PROJECT_DIR$/build/dashboard/dashboard.iml" />
       <module fileurl="file://$PROJECT_DIR$/dropwizard-experiment.iml" filepath="$PROJECT_DIR$/dropwizard-experiment.iml" />
       <module fileurl="file://$PROJECT_DIR$/integration-tests/integration-tests.iml" filepath="$PROJECT_DIR$/integration-tests/integration-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/todo/todo-client/todo-client.iml" filepath="$PROJECT_DIR$/todo/todo-client/todo-client.iml" />

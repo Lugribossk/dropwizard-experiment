@@ -19,6 +19,7 @@
 
     <modules>
         <module>build/tools</module>
+        <module>build/dashboard</module>
         <module>common/common-client</module>
 		<module>common/common-server</module>
         <module>integration-tests</module>

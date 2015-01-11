@@ -2,22 +2,11 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/README.md" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/build" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/build/dashboard" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/build/tools" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/bower.json" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/package.json" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/Form.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/bootstrap/Modal.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/bootstrap/Navbar.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/ui/bootstrap/ProgressBar.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/src/main/javascript/view/FakeProgressBar.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/ebean/EbeanBundle.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/integration-tests" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/pom.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/todo/todo-client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/todo/todo-server" charset="UTF-8" />
   </component>

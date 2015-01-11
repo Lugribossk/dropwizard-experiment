@@ -74,6 +74,7 @@
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-assets:0.7.1" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-migrations:0.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.1.1" level="project" />
+    <orderEntry type="module" module-name="common-client" />
     <orderEntry type="module" module-name="common-server" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:0.8.0-rc1" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:0.8.0-rc1" level="project" />

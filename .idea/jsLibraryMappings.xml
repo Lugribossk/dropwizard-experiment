@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/build/dashboard" libraries="{dashboard node_modules}" />
     <file url="file://$PROJECT_DIR$/common/common-client" libraries="{common-client node_modules}" />
     <file url="file://$PROJECT_DIR$/integration-tests" libraries="{integration-tests node_modules}" />
     <file url="file://$PROJECT_DIR$/todo/todo-client" libraries="{todo-client node_modules}" />
   </component>
 </project>
-

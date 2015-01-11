@@ -118,6 +118,7 @@
     <orderEntry type="library" name="Maven: org.quartz-scheduler:quartz:2.2.1" level="project" />
     <orderEntry type="library" name="Maven: c3p0:c3p0:0.9.1.1" level="project" />
     <orderEntry type="module" module-name="todo-client" />
+    <orderEntry type="module" module-name="common-client" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-core:0.8.0-rc1" level="project" />
     <orderEntry type="library" name="Maven: io.dropwizard:dropwizard-util:0.8.0-rc1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.4.0" level="project" />

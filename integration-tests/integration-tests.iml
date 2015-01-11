@@ -183,6 +183,7 @@
     <orderEntry type="module" module-name="common-server" scope="TEST" production-on-test="" />
     <orderEntry type="module" module-name="todo-server" />
     <orderEntry type="module" module-name="todo-client" />
+    <orderEntry type="module" module-name="common-client" />
     <orderEntry type="library" name="Maven: org.avaje.ebeanorm:avaje-ebeanorm-agent:4.1.9" level="project" />
     <orderEntry type="library" name="Maven: com.h2database:h2:1.4.182" level="project" />
     <orderEntry type="library" name="Maven: org.postgresql:postgresql:9.3-1102-jdbc41" level="project" />

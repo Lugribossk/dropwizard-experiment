@@ -11,10 +11,11 @@ dependencies:
   override:
     - npm install -g grunt-cli bower
     - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
-    - mvn install -B
+    - mvn install -DskipTests=true -B
 
 test:
   override:
+    - mvn test -DskipBuild=true -B
     - cp common/common-client/target/test-results-common.xml $CIRCLE_TEST_REPORTS
     - cp common/common-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
     - cp integration-tests/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS

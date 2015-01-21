@@ -60,45 +60,57 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <!-- Build and upload Docker image. All the Docker plugins for Maven are not very mature yet, so do it via exec. -->
-                <executions>
-                    <execution>
-                        <id>docker-build</id>
-                        <phase>install</phase>
-                        <goals><goal>exec</goal></goals>
-                        <configuration>
-                            <executable>docker</executable>
-                            <arguments>
-                                <argument>build</argument>
-                                <argument>-t</argument>
-                                <argument>${docker.imageName}</argument>
-                                <argument>${project.build.directory}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>docker-tag</id>
-                        <phase>install</phase>
-                        <goals><goal>exec</goal></goals>
-                        <configuration>
-                            <executable>docker</executable>
-                            <arguments>
-                                <argument>tag</argument>
-                                <argument>${docker.imageName}</argument>
-                                <argument>${docker.imageName}:${git.branch}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
     <profiles>
+        <profile>
+            <id>buildDockerImages</id>
+            <activation>
+                <property>
+                    <name>!skipDocker</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <!-- Build and upload Docker image. All the Docker plugins for Maven are not very mature yet, so do it via exec. -->
+                        <executions>
+                            <execution>
+                                <id>docker-build</id>
+                                <phase>install</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>build</argument>
+                                        <argument>-t</argument>
+                                        <argument>${docker.imageName}</argument>
+                                        <argument>${project.build.directory}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>docker-tag</id>
+                                <phase>install</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>tag</argument>
+                                        <argument>${docker.imageName}</argument>
+                                        <argument>${docker.imageName}:${git.branch}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>pushDockerImages</id>
             <build>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "backbone": "1.1.2",
-    "backbone.marionette": "2.2.2",
+    "backbone.marionette": "2.3.1",
     "backbone.stickit": "https://github.com/NYTimes/backbone.stickit.git#0.8.0",
     "backbone-associations": "0.6.2",
     "jquery": "2.1.1",
@@ -12,16 +12,16 @@
     "requirejs": "2.1.15",
     "requirejs-text": "2.0.12",
     "requirejs-handlebars": "https://github.com/jfparadis/requirejs-handlebars.git#b6bc5d22f9cee79240e2b99c22983628c311194c",
-    "moment": "2.8.3",
+    "moment": "2.9.0",
     "JavaScript-MD5": "1.1.0",
     "font-awesome": "4.2.0",
-    "bootstrap": "3.3.0",
+    "bootstrap": "3.3.2",
     "Ladda": "0.9.4",
     "require-less": "0.1.4",
-    "bluebird": "2.3.10"
+    "bluebird": "2.8.2"
   },
   "devDependencies": {
-    "jasmine-jquery": "2.0.5",
-    "es5-shim": "4.0.3"
+    "jasmine-jquery": "2.0.6",
+    "es5-shim": "4.0.5"
   }
 }

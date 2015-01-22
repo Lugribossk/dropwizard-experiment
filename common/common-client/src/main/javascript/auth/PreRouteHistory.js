@@ -53,9 +53,10 @@ define(function (require) {
                 });
         }
     }, {
-        initialize: function () {
+        initialize: function (options) {
             var ThisClass = this;
             Backbone.history = new ThisClass();
+            Backbone.history.options = options;
         }
     });
 });

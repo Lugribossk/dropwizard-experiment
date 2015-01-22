@@ -28,7 +28,8 @@ module.exports = function (grunt) {
                 hostname: "*",
                 base: "../../",
                 keepalive: true,
-                livereload: true
+                livereload: true,
+                open: "http://localhost:9090/todo/todo-client/src/main/javascript/"
             }
         }
     });

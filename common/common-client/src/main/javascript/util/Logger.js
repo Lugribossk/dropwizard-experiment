@@ -60,7 +60,7 @@ define(function (require) {
     };
 
     Logger.initialize = function (config) {
-        if (config.Logger) {
+        if (config && config.Logger) {
             _.each(config.Logger, function (value, key) {
                 if (key === "logLevel") {
                     Logger.setAllLogLevels(value);

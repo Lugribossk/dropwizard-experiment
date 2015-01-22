@@ -6,7 +6,7 @@ define(function (require) {
     var ExampleNavbarController = require("todo/navbar/ExampleNavbarController");
     var ExampleRouter = require("todo/app/ExampleRouter");
     var AuthenticatingHistory = require("todo/auth/AuthenticatingHistory");
-    var TboneView = require("common/Tboneview");
+    var TboneView = require("common/TboneView");
     require("less!./ExampleApp");
 
     var RootView = TboneView.extend({

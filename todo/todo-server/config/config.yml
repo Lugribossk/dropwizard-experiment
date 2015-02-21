@@ -1,5 +1,10 @@
 server:
   rootPath: /api/*
+  type: simple
+  applicationContextPath: /
+  connector:
+    type: http
+    port: 9090
 
 database:
   user: sa

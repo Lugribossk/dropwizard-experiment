@@ -6,46 +6,53 @@ module.exports = function (grunt) {
      * Testing and quality related tasks.
      */
 
-    var jsFiles = [
-        "src/main/javascript/**/*.js",
-        "src/test/javascript/**/*.js",
-        "Gruntfile.js",
-        "grunt/**/*.js"
-    ];
+    //var jsFiles = [
+    //    "src/main/javascript/**/*.js",
+    //    "src/test/javascript/**/*.js",
+    //    "Gruntfile.js",
+    //    "grunt/**/*.js"
+    //];
+    //
+    //grunt.loadNpmTasks("grunt-contrib-jshint");
+    //grunt.config.set("jshint", {
+    //    options: {
+    //        jshintrc: "../../.jshintrc"
+    //    },
+    //    dev: {
+    //        src: jsFiles
+    //    },
+    //    ci: {
+    //        options: {
+    //            reporter: "checkstyle",
+    //            reporterOutput: "target/jshint.xml"
+    //        },
+    //        src: jsFiles
+    //    }
+    //});
+    //
+    //grunt.loadNpmTasks('grunt-eslint');
+    //grunt.config.set("eslint", {
+    //    options: {
+    //        configFile: '.eslintrc'
+    //    },
+    //    all: {
+    //        src: ["src/**/*.js", "test/**/*.js"]
+    //    }
+    //});
 
-    grunt.loadNpmTasks("grunt-contrib-jshint");
-    grunt.config.set("jshint", {
+    grunt.loadNpmTasks("grunt-mocha-test");
+    grunt.config.set("mochaTest", {
         options: {
-            jshintrc: "../../.jshintrc"
+            require: [
+                "babel-core/register",
+                "./src/test/javascript/testSetup"
+            ]
         },
         dev: {
-            src: jsFiles
-        },
-        ci: {
-            options: {
-                reporter: "checkstyle",
-                reporterOutput: "target/jshint.xml"
-            },
-            src: jsFiles
+            src: ["src/test/javascript/**/*Test.js"]
         }
     });
 
-    grunt.loadNpmTasks("grunt-karma");
-    grunt.config.set("karma", {
-        options: {
-            configFile: "karma.conf.js"
-        },
-        unit: {
-            browsers: ["Chrome"],
-            singleRun: false,
-            preprocessors: {},
-            reporters: ["progress"]
-        },
-        ci: {
-            // Empty on purpose, as we're just reusing the karma.conf settings.
-        }
-    });
-
-    grunt.registerTask("default", ["jshint:dev"]);
-    grunt.registerTask("maven-test", ["jshint:ci", "karma:ci"]);
+    grunt.registerTask("test", ["grunt-mocha-test:dev"]);
+    grunt.registerTask("maven-test", ["test"]);
 };

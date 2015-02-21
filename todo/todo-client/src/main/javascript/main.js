@@ -1,5 +1,7 @@
-/*global require*/
-require(["todo/app/ExampleApp"], function (exampleApp) {
-    "use strict";
-    exampleApp.start({});
-});
+import React from "react";
+import Application from "./app/Application.js";
+
+React.render(
+    <Application/>,
+    document.querySelector("body")
+);

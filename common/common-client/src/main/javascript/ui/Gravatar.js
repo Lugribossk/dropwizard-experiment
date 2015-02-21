@@ -1,39 +1,20 @@
-define(function (require) {
-    "use strict";
-    var TboneView = require("common/TboneView");
-    var md5 = require("md5");
+import React from "react";
+import md5 from "md5";
 
-    /**
-     * A Gravatar avatar thumbnail.
-     *
-     * @cfg {User} model
-     * @class Gravatar
-     */
-    return TboneView.extend({
-        template: function () {
-            return "";
-        },
+export default class Gravatar extends React.Component {
+    getUrl() {
+        var hash = md5.digest_s(this.props.email.toLocaleLowerCase());
+        var size = Math.ceil(this.props.size * (window.devicePixelRatio || 1));
+        return "https://secure.gravatar.com/avatar/" + hash + "?d=mm&s=" + size;
+    }
 
-        tagName: "img",
+    render() {
+        return (
+            <img src={this.getUrl()}/>
+        );
+    }
+}
 
-        className: "gravatar",
-
-        bindings: {
-            ":el": {
-                attributes: [{
-                    observe: "email",
-                    name: "src",
-                    onGet: function (value) {
-                        if (!value) {
-                            return "";
-                        }
-
-                        var hash = md5(value.toLocaleLowerCase());
-                        var size = Math.ceil(this.$el.innerHeight() * (window.devicePixelRatio || 1));
-                        return "https://secure.gravatar.com/avatar/" + hash + "?d=mm&s=" + size;
-                    }
-                }]
-            }
-        }
-    });
-});
+Gravatar.propTypes = {
+    email: React.PropTypes.string.isRequired
+};

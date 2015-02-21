@@ -2,27 +2,25 @@ Full stack experiment
 =====================
 [![Circle CI](https://circleci.com/gh/Lugribossk/dropwizard-experiment.svg?style=svg)](https://circleci.com/gh/Lugribossk/dropwizard-experiment)
 
-An experiment with creating a full stack application with Backbone/Marionette, Dropwizard, Ebean, RabbitMQ and Docker.
+An experiment with creating a full stack application with React, Dropwizard, Ebean, RabbitMQ and Docker.
 
 ## Javascript frontend
 
 ### Setup
-1. Install NodeJS and npm.
-2. Globally install Grunt CLI and Bower: `npm install -g grunt-cli bower`
-3. Install individual project dependencies in their folders: `npm install` && `bower install` (Maven will also automatically do this when running `mvn install`.)
+1. Install Node.js and npm.
+2. Globally install Grunt CLI: `npm install -g grunt-cli`
+3. Install individual project dependencies in their folders: `npm install` (Maven will also automatically do this when running `mvn install`.)
 
 ### Running
 The frontend is automatically bundled into the backend when that is built, so it is only necessary to run this directly when developing. 
 
-Run `grunt serve` and open `http://localhost:9090/todo/todo-client/src/main/javascript/index.html`
-
-Livereload can be activated by running `grunt watch` in another terminal.
+Run `grunt dev` and open `http://localhost:8080/todo/todo-client/src/main/javascript/index.html`
 
 ### Tests
-Run with `grunt karma:ci` or `grunt karma:unit` + `grunt karma:unit:run`, or with `maven test`, or via an IDE.
+Run with `grunt test`, `maven test`, or via an IDE.
 
 #### IntelliJ
-Create Karma run configurations and point them at the `karma.conf.js` configuration file in each project.
+Create Mocha run configurations and point them at the test folder in each project. See the Grunt setup for the options needed.
 
 ## Java backend
 

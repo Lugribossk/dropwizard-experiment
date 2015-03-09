@@ -4,7 +4,6 @@ import bo.gotthardt.email.LoggerEmailService;
 import bo.gotthardt.model.EmailVerification;
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.ApiIntegrationTest;
-import bo.gotthardt.test.ResourceTestRule2;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -25,14 +24,14 @@ import static org.assertj.jodatime.api.Assertions.assertThat;
 public class EmailVerificationResourceTest extends ApiIntegrationTest {
     private static final PasswordResetService service = new PasswordResetService(db, new LoggerEmailService());
     @ClassRule
-    public static final ResourceTestRule2 resources = ResourceTestRule2.builder()
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new EmailVerificationResource(db, service))
             .build();
 
     private User user;
 
     @Override
-    public ResourceTestRule2 getResources2() {
+    public ResourceTestRule getResources() {
         return resources;
     }
 

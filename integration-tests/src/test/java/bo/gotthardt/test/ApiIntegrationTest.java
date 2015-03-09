@@ -3,7 +3,6 @@ package bo.gotthardt.test;
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
-import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Before;
 
 import javax.ws.rs.client.Entity;
@@ -36,16 +35,9 @@ public abstract class ApiIntegrationTest {
         return null;
     }
 
-    public ResourceTestRule2 getResources2() {
-        return null;
-    }
 
     private WebTarget target(String path) {
-        if (getResources() != null) {
-            return getResources().client().target(path);
-        } else {
-            return getResources2().client().target(path);
-        }
+        return getResources().client().target(path);
     }
     
     protected Response GET(String path) {

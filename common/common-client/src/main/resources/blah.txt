@@ -1,0 +1,1 @@
+The project needs to have jar packaging so others can depend on it, which means it must have something to put into the jar. Hence this file.

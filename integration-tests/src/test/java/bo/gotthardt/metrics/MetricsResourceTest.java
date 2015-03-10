@@ -1,7 +1,6 @@
 package bo.gotthardt.metrics;
 
 import bo.gotthardt.test.ApiIntegrationTest;
-import bo.gotthardt.test.ResourceTestRule2;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.net.MediaType;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -20,7 +19,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 public class MetricsResourceTest extends ApiIntegrationTest {
     private static final MetricRegistry metrics = new MetricRegistry();
     @ClassRule
-    public static final ResourceTestRule2 resources = ResourceTestRule2.builder()
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new MetricsResource(metrics))
             .build();
 
@@ -56,7 +55,7 @@ public class MetricsResourceTest extends ApiIntegrationTest {
     }
 
     @Override
-    public ResourceTestRule2 getResources2() {
+    public ResourceTestRule getResources() {
         return resources;
     }
 }

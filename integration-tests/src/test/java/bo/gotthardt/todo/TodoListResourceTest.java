@@ -6,7 +6,6 @@ import bo.gotthardt.model.todo.TodoItem;
 import bo.gotthardt.model.todo.TodoList;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthFactory;
-import bo.gotthardt.test.ResourceTestRule2;
 import bo.gotthardt.todolist.rest.TodoListResource;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -23,7 +22,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 public class TodoListResourceTest extends ApiIntegrationTest {
     private static final DummyAuthFactory authFactory = new DummyAuthFactory();
     @ClassRule
-    public static final ResourceTestRule2 resources = ResourceTestRule2.builder()
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new TodoListResource(db))
             .addResource(AuthFactory.binder(authFactory))
             .addResource(ListFilteringFactory.getBinder())
@@ -46,7 +45,7 @@ public class TodoListResourceTest extends ApiIntegrationTest {
     }
 
     @Override
-    public ResourceTestRule2 getResources2() {
+    public ResourceTestRule getResources() {
         return resources;
     }
 }

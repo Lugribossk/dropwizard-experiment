@@ -22,6 +22,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="build" />
+        <module name="common-client" />
         <module name="common-server" />
         <module name="integration-tests" />
         <module name="todo-client" />
@@ -30,6 +32,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="build" target="1.8" />
+      <module name="common-client" target="1.8" />
       <module name="common-server" target="1.8" />
       <module name="integration-tests" target="1.8" />
       <module name="todo-client" target="1.8" />

@@ -4,7 +4,6 @@ import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.model.Widget;
 import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;
-import bo.gotthardt.test.ResourceTestRule2;
 import bo.gotthardt.todolist.rest.WidgetResource;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
@@ -27,7 +26,7 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 public class WidgetResourceTest extends ApiIntegrationTest {
     private static final CrudService<Widget> service = new CrudService<>(Widget.class, db);
     @ClassRule
-    public static final ResourceTestRule2 resources = ResourceTestRule2.builder()
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new WidgetResource(service))
             .addResource(ListFilteringFactory.getBinder())
             .build();
@@ -151,7 +150,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     }
 
     @Override
-    public ResourceTestRule2 getResources2() {
+    public ResourceTestRule getResources() {
         return resources;
     }
 }

@@ -1,11 +1,19 @@
 import React from "react";
+import _ from "lodash";
 
+/**
+ * A Flux "store", a repository of data state that listens to actions and triggers events when changed.
+ */
 export default class Store {
     constructor() {
         this.listeners = {};
         this.state = {};
     }
 
+    /**
+     * Change the stored data.
+     * @param {Object} newState
+     */
     setState(newState) {
         _.assign(this.state, newState);
         _.forEach(newState, (value, key) => {
@@ -13,15 +21,14 @@ export default class Store {
         });
     }
 
+    /**
+     * Register a listener that automatically triggers when the named key in state is changed.
+     * @param {String} name
+     * @param {Function} listener
+     * @returns {Function}
+     * @private
+     */
     _registerListener(name, listener) {
-        /*if (listener instanceof React.Component) {
-            listener.state[name] = this.state[name];
-            var newListener = () => {
-                listener.setState({[name]: this.state[name]});
-            };
-            return this._registerListener(name, newListener);
-        }*/
-
         if (!this.listeners[name]) {
             this.listeners[name] = [];
         }
@@ -34,6 +41,12 @@ export default class Store {
         }
     }
 
+    /**
+     * Trigger listeners with the specified name with the provided data.
+     * @param {String} name
+     * @param {*} data
+     * @private
+     */
     _trigger(name, ...data) {
         if (this.listeners[name]) {
             _.forEach(this.listeners[name], (listener) => {

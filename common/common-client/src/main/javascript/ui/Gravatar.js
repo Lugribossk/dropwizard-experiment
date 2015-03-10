@@ -1,6 +1,9 @@
 import React from "react";
 import md5 from "md5";
 
+/**
+ * A user avatar picture from Gravatar.
+ */
 export default class Gravatar extends React.Component {
     getUrl() {
         var hash = md5.digest_s(this.props.email.toLocaleLowerCase());

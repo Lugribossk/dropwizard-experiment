@@ -1,6 +1,13 @@
 import Router from "./Router";
 
+/**
+ * Router that blocks non-public routes if there is no current user.
+ */
 export default class AuthenticatingRouter extends Router {
+    /**
+     * @param {Window} window
+     * @param {CurrentUserStore} userStore
+     */
     constructor(window, userStore) {
         super(window);
         this.userStore = userStore;
@@ -17,6 +24,11 @@ export default class AuthenticatingRouter extends Router {
         }
     }
 
+    /**
+     * Add a hander for the specified public route.
+     * @param {String} url
+     * @param {Function} handler
+     */
     addPublic(url, handler) {
         this.routes.push({
             regex: Router.buildRegex(url),

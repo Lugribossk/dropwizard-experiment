@@ -10,6 +10,12 @@ var lifecycleMethods = [
 ];
 
 export default {
+    /**
+     * Add one or more mixins to a class.
+     * Supports multiple mixins (including the target class) that use the same React lifecycle methods.
+     * @param {*} context The object to place the mixins on, e.g. the prototype of a class.
+     * @param {*[]} mixins The mixins
+     */
     add: function (context, mixins) {
         // Several mixins (and the class being mixed into) can use the React lifecycle notification methods.
         // So collect all of each type together and create a single function that calls all of them.

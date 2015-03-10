@@ -4,7 +4,13 @@ var loggers = {};
 
 function noop() {}
 
+/**
+ * Named logger that can be used instead of console.log().
+ */
 export default class Logger {
+    /**
+     * @param {String} name The name of the logger, if passing __filename it will be extracted automatically.
+     */
     constructor(name) {
         name = Logger._extractFilename(name);
         if (loggers[name]) {

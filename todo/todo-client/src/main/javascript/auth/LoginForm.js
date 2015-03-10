@@ -5,6 +5,9 @@ import Mixins from "../../../../../../common/common-client/src/main/javascript/u
 import SubscribeMixin from "../../../../../../common/common-client/src/main/javascript/flux/SubscribeMixin";
 import AuthActions from "../auth/AuthActions";
 
+/**
+ * Form for logging in with username and password.
+ */
 export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);

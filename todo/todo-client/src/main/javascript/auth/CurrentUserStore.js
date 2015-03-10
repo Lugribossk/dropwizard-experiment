@@ -6,6 +6,9 @@ import OAuth2AccessToken from "./OAuth2AccessToken";
 
 var log = new Logger(__filename);
 
+/**
+ * Store for the User currently logged into the application.
+ */
 export default class CurrentUserStore extends CachingStore {
     constructor(api) {
         super(__filename);
@@ -36,10 +39,18 @@ export default class CurrentUserStore extends CachingStore {
     }
 
     login(username, password) {
-        this._fetchAccesstoken(username, password)
-            .then(() => {
-                this._fetchCurrentUser();
+        // TODO Remove demo login
+        if (username === "demo" && password === "demo") {
+            this.setState({
+                user: new User({id: 1, username: "demo", name: "Demo Demosen", email: "demo@example.com"}),
+                accessToken: "demo"
             });
+        } else {
+            this._fetchAccesstoken(username, password)
+                .then(() => {
+                    this._fetchCurrentUser();
+                });
+        }
     }
 
     logout() {
@@ -49,14 +60,27 @@ export default class CurrentUserStore extends CachingStore {
         });
     }
 
+    /**
+     * Get the current user if one exists.
+     * @returns {null|User}
+     */
     getUser() {
         return this.state.user;
     }
 
+    /**
+     * Listen for the current user changing.
+     * @param {Function} listener
+     * @returns {Function}
+     */
     onUserChange(listener) {
         return this._registerListener("user", listener);
     }
 
+    /**
+     * Listen for the next successful login (but not any subsequent or failed logins).
+     * @param {Function} listener
+     */
     onNextSuccessfulLogin(listener) {
         var unsubscribe = this.onUserChange(user => {
             if (user) {
@@ -66,6 +90,11 @@ export default class CurrentUserStore extends CachingStore {
         });
     }
 
+    /**
+     * Listen for unsuccessful login attempts.
+     * @param {Function} listener
+     * @returns {Function}
+     */
     onInvalidLogin(listener) {
         return this._registerListener("invalidLogin", listener);
     }

@@ -3,6 +3,9 @@ import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap"
 import Gravatar from "../../../../../../common/common-client/src/main/javascript/ui/Gravatar";
 import AuthActions from "../auth/AuthActions";
 
+/**
+ * Example navigation bar.
+ */
 export default class ExampleNavbar extends React.Component {
     isActive(link) {
         var route = this.props.route;

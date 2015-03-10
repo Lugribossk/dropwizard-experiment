@@ -1,6 +1,13 @@
 import _ from "lodash";
 
+/**
+ * Hash fragment navigation router.
+ * There are many router libraries out there, but none of them supported all the features used here.
+ */
 export default class Router {
+    /**
+     * @param {Window} window
+     */
     constructor(window) {
         this.routes = [];
         this.listeners = [];
@@ -9,18 +16,35 @@ export default class Router {
         this.window = window;
     }
 
+    /**
+     * Listen for a new route being matched.
+     * @param listener
+     */
     onRouteChange(listener) {
         this.listeners.push(listener);
     }
 
+    /**
+     * Get the current route url (i.e. the hash fragment).
+     * @returns {String}
+     */
     getRouteUrl() {
         return this.hash;
     }
 
+    /**
+     * Get the current route content (i.e. the React elements to show).
+     * @returns {string|CSSStyleDeclaration.content|*|content|.renderStructuredContent.content|d.Properties.content}
+     */
     getRouteContent() {
         return this.content;
     }
 
+    /**
+     * Add a handler for the specified route.
+     * @param {String|RegExp} url
+     * @param {Function} handler
+     */
     add(url, handler) {
         this.routes.push({
             regex: Router.buildRegex(url),
@@ -28,10 +52,17 @@ export default class Router {
         });
     }
 
+    /**
+     * Go to the specified route.
+     * @param {String} url
+     */
     navigate(url) {
         this.window.location.hash = url;
     }
 
+    /**
+     * Begin routing, including routing the current url.
+     */
     init() {
         this.window.addEventListener("hashchange", this.handleHashChange.bind(this));
 
@@ -40,6 +71,10 @@ export default class Router {
         });
     }
 
+    /**
+     * Called whenever a route is matched.
+     * @param data
+     */
     foundMatchingRoute(data) {
         this.content = data.handler.apply(null, data.args);
         this.hash = data.hash;
@@ -49,6 +84,10 @@ export default class Router {
         });
     }
 
+    /**
+     * Called whenever a route is not matched.
+     * @param hash
+     */
     foundNoMatchingRoute(hash) {
         if (hash !== "") {
             // " " lets us change from no hash fragment at all to /# (since the space is somehow trimmed).

@@ -69,5 +69,5 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("test", ["jscs:dev", "mochaTest:dev"]);
-    grunt.registerTask("maven-test", ["jscs:ci", "mochaTest:ci"]);
+    grunt.registerTask("maven-test", ["jscs:ci", "mochaTest:dev"]);
 };

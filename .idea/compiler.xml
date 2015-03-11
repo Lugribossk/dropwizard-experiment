@@ -22,7 +22,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="build" />
         <module name="common-client" />
         <module name="common-server" />
         <module name="integration-tests" />

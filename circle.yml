@@ -16,10 +16,12 @@ dependencies:
 test:
   override:
     - mvn test -DskipBuild=true -B
-    - cp common/common-client/target/test-results-common.xml $CIRCLE_TEST_REPORTS
+    - cp common/common-client/target/style.xml $CIRCLE_TEST_REPORTS/common-style.xml
+    - cp common/common-client/target/tests.xml $CIRCLE_TEST_REPORTS/common-tests.xml
     - cp common/common-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
     - cp integration-tests/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
-    - cp todo/todo-client/target/test-results-todo.xml $CIRCLE_TEST_REPORTS
+    - cp todo/todo-client/target/style.xml $CIRCLE_TEST_REPORTS/todo-style.xml
+    - cp todo/todo-client/target/tests.xml $CIRCLE_TEST_REPORTS/todo-tests.xml
     #- cp todo/todo-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
 
 deployment:

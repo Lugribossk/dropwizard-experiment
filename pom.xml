@@ -241,9 +241,6 @@
                     <configuration>
                         <filesets>
                             <fileset>
-                                <directory>bower_components</directory>
-                            </fileset>
-                            <fileset>
                                 <directory>node_modules</directory>
                             </fileset>
                         </filesets>
@@ -341,6 +338,41 @@
             <properties>
                 <executable/>
             </properties>
+        </profile>
+
+        <profile>
+            <id>jsBuild</id>
+            <activation>
+                <property>
+                    <name>!skipBuild</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Ensure that dependencies are installed. -->
+                            <execution>
+                                <id>npm-install</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm${executable}</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                        <argument>--no-optional</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <inherited>false</inherited>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

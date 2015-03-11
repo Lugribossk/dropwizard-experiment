@@ -57,7 +57,7 @@ public class WebDriverBinaryFinder {
         boolean isWindows = System.getProperty("os.name").contains("Windows");
         String path = "node_modules/chromedriver/lib/chromedriver/chromedriver" + (isWindows ? ".exe" : "");
         if (!new File(path).exists()) {
-            path = "integration-tests/" + path;
+            path = "../" + path;
         }
 
         File binary = new File(path);

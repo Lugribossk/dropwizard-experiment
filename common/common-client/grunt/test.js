@@ -1,4 +1,4 @@
-/*global module, process*/
+/*global module, process, require*/
 module.exports = function (grunt) {
     "use strict";
 
@@ -6,7 +6,7 @@ module.exports = function (grunt) {
      * Testing and quality related tasks.
      */
 
-    grunt.loadNpmTasks("grunt-jscs");
+    require("grunt-jscs/tasks/jscs")(grunt);
     var styleSrc = ["src/**/*.js", "test/**/*.js", "grunt/**/*.js", "Gruntfile.js"];
     grunt.config.set("jscs", {
         options: {
@@ -24,7 +24,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-mocha-test");
+    require("grunt-mocha-test/tasks/mocha-test")(grunt);
     var testSrc = ["src/test/javascript/**/*Test.js"];
     grunt.config.set("mochaTest", {
         options: {
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
         var done = this.async();
         grunt.util.spawn({
             cmd: "node",
-            args: ["./node_modules/istanbul/lib/cli"].concat(istanbulOptions).concat("--").concat(mochaOptions),
+            args: ["./node_modules/istanbul/lib/cli"].concat(istanbulOptions).concat(["--"]).concat(mochaOptions),
             opts: {
                 env: process.env,
                 cwd: process.cwd(),

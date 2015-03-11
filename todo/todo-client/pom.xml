@@ -60,22 +60,6 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
-                            <!-- Ensure that dependencies are installed. -->
-                            <execution>
-                                <id>npm-install</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>npm${executable}</executable>
-                                    <arguments>
-                                        <argument>install</argument>
-                                        <argument>--no-optional</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-
                             <!-- Run the Grunt compile phase goal. -->
                             <execution>
                                 <id>grunt-compile</id>

@@ -10,7 +10,7 @@ module.exports = function (grunt) {
      * Tasks for producing the final build output.
      */
 
-    grunt.loadNpmTasks("grunt-webpack");
+    require("grunt-webpack/tasks/webpack")(grunt);
     grunt.config.set("webpack", {
         build: {
             context: "src/main/javascript",
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-string-replace");
+    require("grunt-string-replace/tasks/string-replace")(grunt);
     grunt.config.set("string-replace", {
         html: {
             options: {
@@ -74,14 +74,14 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-git-revision");
+    require("grunt-git-revision/tasks/revision")(grunt);
     grunt.config.set("revision", {
         options: {
             property: "revision"
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-clean");
+    require("grunt-contrib-clean/tasks/clean")(grunt);
     grunt.config.set("clean", {
         build: ["target/dist/*"]
     });

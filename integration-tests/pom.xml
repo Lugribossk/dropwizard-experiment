@@ -13,42 +13,6 @@
     <packaging>jar</packaging>
     <name>Integration tests</name>
 
-    <profiles>
-        <profile>
-            <id>jsBuild</id>
-            <activation>
-                <property>
-                    <name>!skipBuild</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <!-- Hacky way to install Chromedriver in a known location. -->
-                            <execution>
-                                <id>npm-install</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>npm${executable}</executable>
-                                    <arguments>
-                                        <argument>install</argument>
-                                        <argument>--no-optional</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <dependencies>
         <dependency>
             <groupId>bo.gotthardt.stack</groupId>

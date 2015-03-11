@@ -9,6 +9,7 @@ module.exports = function (grunt) {
      * Development utility tasks.
      */
 
+    require("grunt-webpack/tasks/webpack-dev-server")(grunt)
     grunt.config.set("webpack-dev-server", {
         options: {
             webpack: {

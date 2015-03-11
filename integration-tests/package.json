@@ -1,8 +1,0 @@
-{
-  "name": "Dropwizard-experiment",
-  "version": "0.0.1",
-  "private": true,
-  "devDependencies": {
-    "chromedriver": "2.13.0"
-  }
-}

@@ -18,7 +18,7 @@ public class LoginUiTest extends UiIntegrationTest {
 
     @Test
     public void shouldLogInWithCorrectCredentials() {
-        db.save(new User(USERNAME, PASSWORD, NAME));
+        createUser();
         LoginPage page = LoginPage.go(driver);
 
         page.loginSuccess(USERNAME, PASSWORD);
@@ -26,7 +26,7 @@ public class LoginUiTest extends UiIntegrationTest {
 
     @Test
     public void shouldGoBackToLoginFormAfterLoggingOut() {
-        db.save(new User(USERNAME, PASSWORD, NAME));
+        createUser();
         LoginPage page = LoginPage.go(driver);
 
         page.loginSuccess(USERNAME, PASSWORD)
@@ -42,7 +42,7 @@ public class LoginUiTest extends UiIntegrationTest {
 
     @Test
     public void shouldStayLoggedOutWithWrongPassword() {
-        db.save(new User(USERNAME, PASSWORD, NAME));
+        createUser();
         LoginPage page = LoginPage.go(driver);
 
         page.loginFail(USERNAME, "WRONGpassword");
@@ -50,8 +50,10 @@ public class LoginUiTest extends UiIntegrationTest {
 
     @Test
     public void shouldLogInWithSecondUserAfterLoggingOut() {
-        db.save(new User(USERNAME, PASSWORD, NAME));
-        db.save(new User("testuser2", "testpassword2", "Test2 Testsen2"));
+        createUser();
+        User user2 = new User("testuser2", "testpassword2", "Test2 Testsen2");
+        user2.setEmail("example2@example.com");
+        db.save(user2);
         LoginPage page = LoginPage.go(driver);
 
         DashboardPage dash = page.loginSuccess(USERNAME, PASSWORD)
@@ -63,12 +65,20 @@ public class LoginUiTest extends UiIntegrationTest {
 
     @Test
     public void shouldStayLoggedInAfterReloadingPage() {
-        db.save(new User(USERNAME, PASSWORD, NAME));
+        createUser();
         LoginPage page = LoginPage.go(driver);
 
         page.loginSuccess(USERNAME, PASSWORD);
         driver.get(driver.getCurrentUrl());
 
         DashboardPage.go(driver);
+    }
+
+    private User createUser() {
+        User user = new User(USERNAME, PASSWORD, NAME);
+        user.setEmail("example@example.com");
+        db.save(user);
+
+        return user;
     }
 }

@@ -8,11 +8,13 @@
     <option es3="false" />
     <option forin="true" />
     <option freeze="false" />
+    <option gcl="false" />
     <option immed="false" />
     <option newcap="false" />
     <option noarg="true" />
     <option noempty="true" />
     <option nonew="true" />
+    <option noyield="false" />
     <option plusplus="false" />
     <option undef="true" />
     <option strict="true" />
@@ -36,20 +38,21 @@
     <option loopfunc="false" />
     <option moz="false" />
     <option multistr="false" />
+    <option sub="false" />
+    <option browser="true" />
+    <option devel="false" />
+    <option jquery="false" />
+    <option mootools="false" />
+    <option nonbsp="false" />
     <option notypeof="false" />
     <option proto="false" />
     <option scripturl="false" />
     <option smarttabs="false" />
     <option shadow="false" />
-    <option sub="false" />
     <option supernew="false" />
     <option validthis="false" />
-    <option browser="true" />
     <option couch="false" />
-    <option devel="false" />
     <option dojo="false" />
-    <option jquery="false" />
-    <option mootools="false" />
     <option node="false" />
     <option nonstandard="false" />
     <option phantom="false" />
@@ -65,4 +68,3 @@
     <option maxerr="50" />
   </component>
 </project>
-

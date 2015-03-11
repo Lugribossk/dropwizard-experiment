@@ -36,7 +36,7 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
         <dropwizard.version>0.8.0</dropwizard.version>
-        <ebean.version>4.5.2</ebean.version>
+        <ebean.version>4.5.2</ebean.version> <!-- Remember to update the readme when changing this. -->
 
         <docker.username>${env.DOCKER_USERNAME}</docker.username>
         <docker.password>${env.DOCKER_PASSWORD}</docker.password>

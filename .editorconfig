@@ -7,5 +7,5 @@ end_of_line = crlf
 [*.yml]
 indent_size = 2
 
-[bower.json]
+[package.json]
 indent_size = 2

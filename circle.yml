@@ -9,7 +9,7 @@ machine:
 
 dependencies:
   override:
-    - npm install -g grunt-cli bower
+    - npm install -g grunt-cli
     - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
     - mvn install -DskipTests=true -B
 

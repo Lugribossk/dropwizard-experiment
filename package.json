@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "bluebird": "2.9.6",
+    "bluebird": "2.9.13",
     "bootstrap": "3.3.2",
     "lodash": "3.2.0",
     "md5": "1.0.0",
     "react": "0.13.0",
-    "react-bootstrap": "0.13.3",
-    "superagent": "0.21.0"
+    "react-bootstrap": "0.16.1",
+    "superagent": "1.0.0"
   },
   "devDependencies": {
     "babel-core": "4.7.8",
@@ -30,13 +30,13 @@
     "html-webpack-plugin": "1.1.0",
     "istanbul": "0.3.7",
     "jscs": "1.11.3",
-    "jsdom": "3.1.1",
-    "mocha": "2.1.0",
-    "react-hot-loader": "1.1.4",
-    "sinon": "1.12.2",
+    "jsdom": "4.0.2",
+    "mocha": "2.2.1",
+    "react-hot-loader": "1.2.3",
+    "sinon": "1.13.0",
     "style-loader": "0.8.3",
     "url-loader": "0.5.5",
-    "webpack": "1.5.3",
+    "webpack": "1.7.3",
     "webpack-dev-server": "1.7.0"
   }
 }

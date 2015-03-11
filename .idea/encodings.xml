@@ -6,7 +6,6 @@
     <file url="file://$PROJECT_DIR$/README.md" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/build" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-client" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common/common-client/package.json" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/common-server/src/main/java/bo/gotthardt/ebean/EbeanBundle.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/integration-tests" charset="UTF-8" />

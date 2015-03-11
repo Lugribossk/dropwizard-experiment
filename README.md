@@ -5,6 +5,7 @@ Full stack experiment
 An experiment with creating a full stack application with React, Dropwizard, Ebean, RabbitMQ and Docker.
 
 ## Javascript frontend
+See [common/common-client](./common/common-client) and [todo/todo-client](./todo/todo-client).
 
 ### Setup
 1. Install Node.js and npm.
@@ -14,7 +15,7 @@ An experiment with creating a full stack application with React, Dropwizard, Ebe
 ### Running
 The frontend is automatically bundled into the backend when that is built, so it is only necessary to run this directly when developing. 
 
-Run `grunt dev` and open `http://localhost:8080/todo/todo-client/src/main/javascript/index.html`
+Run `grunt dev` and open `http://localhost:8080`
 
 ### Tests
 Run with `grunt test`, `maven test`, or via an IDE.
@@ -23,6 +24,7 @@ Run with `grunt test`, `maven test`, or via an IDE.
 Create Mocha run configurations and point them at the test folder in each project. See the Grunt setup for the options needed.
 
 ## Java backend
+See [common/common-server](./common/common-server) and [todo/todo-server](./todo/todo-server).
 
 ### Setup
 1. Install Java 8 JDK.
@@ -34,7 +36,7 @@ Run `mvn install` in the root of the project and then `java -jar todo\todo-serve
 
 #### IntelliJ
 Create an IntelliJ run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\config\config.yml`
-and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\4.5.1\avaje-ebeanorm-agent-4.1.6.jar`
+and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\4.5.2\avaje-ebeanorm-agent-4.5.2.jar`
 
 ### Running message queue workers
 As above, but with the argument `workers` instead of `server`.

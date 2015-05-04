@@ -1,1 +1,0 @@
-web: java -Ddw.server.connector.port=$PORT -jar target/todo-server-0.0.1-SNAPSHOT.jar server src/main/resources/heroku.yml

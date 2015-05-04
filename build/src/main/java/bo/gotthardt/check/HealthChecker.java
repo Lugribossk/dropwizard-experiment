@@ -26,7 +26,7 @@ public class HealthChecker {
                     .basicAuth("test", "test")
                     .asString();
 
-            if (health.getCode() == 200) {
+            if (health.getStatus() == 200) {
                 log.info("Healthy with {}", health.getBody());
                 return true;
             } else {

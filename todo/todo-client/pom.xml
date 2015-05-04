@@ -24,60 +24,6 @@
 
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <!-- Ensure that dependencies are installed. -->
-                    <execution>
-                        <id>npm-install</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>npm${executable}</executable>
-                            <arguments>
-                                <argument>install</argument>
-                                <!-- Don't spam the Maven log output with useless missing repository field warnings. -->
-                                <argument>--loglevel</argument>
-                                <argument>error</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                    <!-- Run the Grunt compile phase goal. -->
-                    <execution>
-                        <id>grunt-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>grunt${executable}</executable>
-                            <arguments>
-                                <argument>maven-compile</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                    <!-- Run the Grunt test phase goal. -->
-                    <execution>
-                        <id>grunt-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>grunt${executable}</executable>
-                            <arguments>
-                                <argument>maven-test</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
@@ -100,7 +46,79 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>jsBuild</id>
+            <activation>
+                <property>
+                    <name>!skipBuild</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Run the Grunt compile phase goal. -->
+                            <execution>
+                                <id>grunt-compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>grunt${executable}</executable>
+                                    <arguments>
+                                        <argument>maven-compile</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>jsTest</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Run the Grunt test phase goal. -->
+                            <execution>
+                                <id>grunt-test</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>grunt${executable}</executable>
+                                    <arguments>
+                                        <argument>maven-test</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
+        <dependency>
+            <groupId>bo.gotthardt.stack</groupId>
+            <artifactId>common-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>bo.gotthardt.stack</groupId>
             <artifactId>common-server</artifactId>

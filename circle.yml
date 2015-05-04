@@ -9,16 +9,31 @@ machine:
 
 dependencies:
   override:
-    - npm install -g grunt-cli bower
+    - npm install -g grunt-cli
     - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
     - mvn install -DskipTests=true -B
 
 test:
   override:
-    - mvn test -B
+    - mvn test -DskipBuild=true -B
+    - cp common/common-client/target/style.xml $CIRCLE_TEST_REPORTS/common-style.xml
+    - cp common/common-client/target/tests.xml $CIRCLE_TEST_REPORTS/common-tests.xml
+    - cp common/common-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
+    - cp integration-tests/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
+    - cp todo/todo-client/target/style.xml $CIRCLE_TEST_REPORTS/todo-style.xml
+    - cp todo/todo-client/target/tests.xml $CIRCLE_TEST_REPORTS/todo-tests.xml
+    #- cp todo/todo-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
 
 deployment:
   dockerImage:
     branch: /.*/
     commands:
-      - mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -DskipTests=true -B
+      - mvn validate -PpushDockerImages -B
+
+general:
+  artifacts:
+    - "common/common-client/target/coverage"
+    - "common/common-server/target/surefire-reports"
+    - "integration-tests/target/surefire-reports"
+    - "todo/todo-client/target/coverage"
+    - "todo/todo-server/target/surefire-reports"

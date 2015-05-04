@@ -12,7 +12,7 @@ public class DashboardPage extends PageObject {
     private WebElement header;
     @FindBy(className = "logout")
     private WebElement logout;
-    @FindBy(className = "name")
+    @FindBy(className = "name-dropdown")
     private WebElement userFullName;
 
     public DashboardPage(WebDriver driver) {

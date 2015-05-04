@@ -2,8 +2,8 @@ package bo.gotthardt.user;
 
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.ApiIntegrationTest;
-import bo.gotthardt.test.DummyAuthProvider;
-import bo.gotthardt.test.TestData;
+import bo.gotthardt.test.DummyAuthFactory;
+import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -17,11 +17,11 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
  * @author Bo Gotthardt
  */
 public class UserResourceTest extends ApiIntegrationTest {
-    private static final DummyAuthProvider authProvider = new DummyAuthProvider();
+    private static final DummyAuthFactory authFactory = new DummyAuthFactory();
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new UserResource(db))
-            .addResource(authProvider)
+            .addResource(AuthFactory.binder(authFactory))
             .build();
 
     private User user;
@@ -33,8 +33,9 @@ public class UserResourceTest extends ApiIntegrationTest {
 
     @Before
     public void setupUser() {
-        user = TestData.createUser(db);
-        authProvider.setUser(user);
+        user = new User("testname", "testpassword", "Testuser");
+        db.save(user);
+        authFactory.setUser(user);
     }
 
     @Test

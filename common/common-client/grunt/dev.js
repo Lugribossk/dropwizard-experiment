@@ -1,4 +1,7 @@
-/*global module*/
+/*global module, require*/
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = function (grunt) {
     "use strict";
 
@@ -6,32 +9,54 @@ module.exports = function (grunt) {
      * Development utility tasks.
      */
 
-    grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.config.set("watch", {
+    require("grunt-webpack/tasks/webpack-dev-server")(grunt)
+    grunt.config.set("webpack-dev-server", {
         options: {
-            livereload: true
+            webpack: {
+                context: "src/main/javascript",
+                entry: [
+                    "webpack-dev-server/client?http://localhost:8080",
+                    "webpack/hot/only-dev-server",
+                    "./main.js"
+                ],
+                output: {
+                    path: "target",
+                    filename: "main.js"
+                },
+                module: {
+                    loaders: [
+                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?sourceMap=true"]},
+                        { test: /\.css$/, loader: "style!css"},
+                        { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
+                        { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
+                        { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
+                        { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" }
+                    ]
+                },
+                plugins: [
+                    new HtmlWebpackPlugin({
+                        template: "src/main/javascript/index.html"
+                    }),
+                    new webpack.HotModuleReplacementPlugin(),
+                    new webpack.NoErrorsPlugin()
+                ],
+                node: {
+                    __filename: true
+                },
+                watch: true,
+                keepalive: true
+            },
+            publicPath: "/",
+            hot: true
         },
-        js: {
-            files: ["src/main/javascript/**/*.js"],
-            tasks: ["jshint:dev"]
-        },
-        templates: {
-            files: ["src/main/javascript/**/*.html"]
-        }
-    });
-
-    grunt.loadNpmTasks("grunt-contrib-connect");
-    grunt.config.set("connect", {
-        client: {
-            options: {
-                port: 9090,
-                hostname: "*",
-                base: "../../",
-                keepalive: true,
-                livereload: true
+        start: {
+            keepAlive: true,
+            webpack: {
+                devtool: "eval",
+                debug: true
             }
         }
     });
 
-    grunt.registerTask("serve", ["connect:client"]);
+    grunt.registerTask("dev", ["webpack-dev-server:start"]);
 };

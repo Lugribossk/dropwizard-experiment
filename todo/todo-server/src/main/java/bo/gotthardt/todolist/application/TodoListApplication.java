@@ -2,28 +2,21 @@ package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
-import bo.gotthardt.email.EmailService;
-import bo.gotthardt.email.EmailServiceProvider;
-import bo.gotthardt.email.sendgrid.HasSendGridConfiguration;
+import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.jersey.filter.BasicAuthFilter;
-import bo.gotthardt.jersey.provider.ListFilteringProvider;
 import bo.gotthardt.model.User;
-import bo.gotthardt.model.Widget;
 import bo.gotthardt.oauth2.OAuth2Bundle;
-import bo.gotthardt.queue.MessageQueue;
 import bo.gotthardt.queue.WorkersCommand;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
-import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.todo.TodoClientBundle;
-import bo.gotthardt.todolist.rest.WidgetResource;
+import bo.gotthardt.todolist.rest.TodoListResource;
 import bo.gotthardt.user.EmailVerificationResource;
 import bo.gotthardt.user.UserResource;
-import com.avaje.ebean.EbeanServer;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Stopwatch;
-import com.google.inject.*;
-import com.google.inject.name.Names;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -76,16 +69,14 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        Injector injector = createInjector(configuration, environment);
+        Injector injector = Guice.createInjector(new TodoListGuiceModule(environment, configuration, ebeanBundle, rabbitMqBundle));
         workersCommand.setInjector(injector);
 
-        environment.jersey().register(injector.getInstance(WidgetResource.class));
+        environment.jersey().register(injector.getInstance(TodoListResource.class));
         environment.jersey().register(injector.getInstance(UserResource.class));
         environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
 
-        environment.jersey().register(new ListFilteringProvider());
-
-        environment.jersey().setUrlPattern("/api/*");
+        environment.jersey().register(ListFilteringFactory.getBinder());
 
         FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -106,26 +97,5 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle.getEbeanServer().save(user);
 
         rabbitMqBundle.getQueue("username", User.class).publish(user);
-    }
-
-    private Injector createInjector(TodoListConfiguration configuration, Environment environment) {
-        return Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(MetricRegistry.class).toInstance(environment.metrics());
-                bind(EbeanServer.class).toInstance(ebeanBundle.getEbeanServer());
-                bind(EmailService.class).toProvider(EmailServiceProvider.class);
-                bind(new TypeLiteral<HasSendGridConfiguration>(){}).toInstance(configuration);
-
-                bind(new TypeLiteral<MessageQueue<User>>(){})
-                        .annotatedWith(Names.named("username"))
-                        .toProvider(() -> rabbitMqBundle.getQueue("username", User.class));
-            }
-
-            @Provides
-            public CrudService<Widget> getWidgetService(EbeanServer db) {
-                return new CrudService<>(Widget.class, db);
-            }
-        });
     }
 }

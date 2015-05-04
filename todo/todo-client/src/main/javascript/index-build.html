@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>React stuff</title>
+        <!-- ${build} -->
+        <link rel="stylesheet" href="{%=o.webpack.assetsByChunkName.main[1]%}">
+    </head>
+    <body>
+        <script src="{%=o.webpack.assetsByChunkName.vendor%}"></script>
+        <script src="{%=o.webpack.assetsByChunkName.main[0]%}"></script>
+    </body>
+</html>

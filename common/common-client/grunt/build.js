@@ -1,4 +1,8 @@
-/*global module*/
+/*global module, require*/
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 module.exports = function (grunt) {
     "use strict";
 
@@ -6,79 +10,78 @@ module.exports = function (grunt) {
      * Tasks for producing the final build output.
      */
 
-    grunt.loadNpmTasks("grunt-requirejs");
-    grunt.config.set("requirejs", {
-        options: {
-            mainConfigFile: "../../common/common-client/src/main/javascript/require.config.js",
-            findNestedDependencies: true,
-            almond: true,
-            optimize: "uglify2",
-            preserveLicenseComments: false,
-            generateSourceMaps: true
-        },
+    require("grunt-webpack/tasks/webpack")(grunt);
+    grunt.config.set("webpack", {
         build: {
-            options: {
-                // The starting slash here seems to be critical.
-                name: "/todo/todo-client/src/main/javascript/main.js",
-                out: "target/dist/main.js"
+            context: "src/main/javascript",
+            entry: {
+                main: "./main.js",
+                vendor: ["bluebird", "lodash", "md5", "react", "react-bootstrap", "superagent"]
+            },
+            output: {
+                path: "target/dist",
+                filename: "main-[chunkhash].min.js"
+            },
+            module: {
+                loaders: [
+                    { test: /\.js$/, exclude: /node_modules/, loader: "babel"},
+                    { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
+                    { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
+                    { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
+                    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
+                    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" }
+                ]
+            },
+            plugins: [
+                new webpack.optimize.OccurenceOrderPlugin(),
+                new webpack.optimize.CommonsChunkPlugin("vendor", "vendor-[chunkhash].min.js"),
+                new HtmlWebpackPlugin({
+                    template: "src/main/javascript/index-build.html"
+                }),
+                new webpack.DefinePlugin({
+                    "process.env": {
+                        NODE_ENV: JSON.stringify("production")
+                    }
+                }),
+                new ExtractTextPlugin("main-[chunkhash].css"),
+                new webpack.optimize.UglifyJsPlugin({
+                    minimize: true,
+                    comments: /a^/g, // Remove all comments
+                    compress: {
+                        warnings: false
+                    }
+                })
+            ],
+            node: {
+                __filename: true
             }
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-concat");
-    grunt.config.set("concat", {
-        vendorcss: {
-            options: {
-                process: function (src, path) {
-                    // Rewrite references to other files in the CSS to their new location.
-                    return src.replace(/url\(\'?(.*?)(?:(?:\?|\#).*?)?\'?\)/g, function (url, filePath) {
-                        var newFilePath = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
-                        var srcPath = path.substring(0, path.lastIndexOf("/")) + "/" + filePath;
-
-                        // And copy those files to that location.
-                        grunt.file.copy(srcPath, "target/dist/vendor/" + newFilePath);
-
-                        return url.replace(filePath, "vendor/" + newFilePath);
-                    });
-                }
-            },
-            src:  ["../../common/common-client/bower_components/bootstrap/dist/css/bootstrap.min.css",
-                   "../../common/common-client/bower_components/font-awesome/css/font-awesome.min.css",
-                   "../../common/common-client/bower_components/Ladda/dist/ladda-themeless.min.css"],
-            dest: "target/dist/vendor.css"
-        }
-    });
-
-    grunt.loadNpmTasks("grunt-string-replace");
+    require("grunt-string-replace/tasks/string-replace")(grunt);
     grunt.config.set("string-replace", {
         html: {
             options: {
                 replacements: [{
                     pattern: "${build}",
                     replacement: "<%= revision %> <%= grunt.template.today(\"yyyy/mm/dd HH:MM:ss Z\") %>"
-                }, {
-                    pattern: /\s*<!-- \${css-start}[\S\s]*?\${css-end} -->/,
-                    replacement: "\n\t\t<link rel=\"stylesheet\" href=\"vendor.css?v=<%= revision %>\">"
-                }, {
-                    pattern: /\s*<!-- \${scripts-start}[\S\s]*?\${scripts-end} -->/,
-                    replacement: "\n\t\t<script src=\"main.js?v=<%= revision %>\"></script>"
                 }]
             },
             files: [{
-                src: "src/main/javascript/index.html",
+                src: "target/dist/index.html",
                 dest: "target/dist/index.html"
             }]
         }
     });
 
-    grunt.loadNpmTasks("grunt-git-revision");
+    require("grunt-git-revision/tasks/revision")(grunt);
     grunt.config.set("revision", {
         options: {
             property: "revision"
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-clean");
+    require("grunt-contrib-clean/tasks/clean")(grunt);
     grunt.config.set("clean", {
         build: ["target/dist/*"]
     });
@@ -86,8 +89,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("build", [
         "clean:build",
-        "requirejs:build",
-        "concat:vendorcss",
+        "webpack:build",
         "revision",
         "string-replace:html"
     ]);

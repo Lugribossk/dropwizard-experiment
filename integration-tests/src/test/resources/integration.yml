@@ -1,4 +1,5 @@
 server:
+  rootPath: /api/*
   type: simple
   applicationContextPath: /
   connector:

@@ -1,30 +1,30 @@
 Full stack experiment
 =====================
-[![Build Status](https://travis-ci.org/Lugribossk/dropwizard-experiment.svg?branch=master)](https://travis-ci.org/Lugribossk/dropwizard-experiment)
+[![Circle CI](https://circleci.com/gh/Lugribossk/dropwizard-experiment.svg?style=svg)](https://circleci.com/gh/Lugribossk/dropwizard-experiment)
 
-An experiment with creating a full stack application with Backbone, Dropwizard, Ebean, RabbitMQ and Docker.
+An experiment with creating a full stack application with React, Dropwizard, Ebean, RabbitMQ and Docker.
 
 ## Javascript frontend
+See [common/common-client](./common/common-client) and [todo/todo-client](./todo/todo-client).
 
 ### Setup
-1. Install NodeJS and npm.
-2. Globally install Grunt CLI and Bower: `npm install -g grunt-cli bower`
-3. Install individual project dependencies in their folders: `npm install` && `bower install` (Maven will also automatically do this when running `mvn install`.)
+1. Install Node.js and npm.
+2. Globally install Grunt CLI: `npm install -g grunt-cli`
+3. Install individual project dependencies in their folders: `npm install` (Maven will also automatically do this when running `mvn install`.)
 
 ### Running
 The frontend is automatically bundled into the backend when that is built, so it is only necessary to run this directly when developing. 
 
-Run `grunt serve` and open `http://localhost:9090/todo/todo-client/src/main/javascript/index.html`
-
-Livereload can be activated by running `grunt watch` in another terminal.
+Run `grunt dev` and open `http://localhost:8080`
 
 ### Tests
-Run with `grunt karma:ci` or `grunt karma:unit` + `grunt karma:unit:run`, or with `maven test`, or via an IDE.
+Run with `grunt test`, `maven test`, or via an IDE.
 
 #### IntelliJ
-Create Karma run configurations and point them at the `karma.conf.js` configuration file in each project.
+Create Mocha run configurations and point them at the test folder in each project. See the Grunt setup for the options needed.
 
 ## Java backend
+See [common/common-server](./common/common-server) and [todo/todo-server](./todo/todo-server).
 
 ### Setup
 1. Install Java 8 JDK.
@@ -36,43 +36,20 @@ Run `mvn install` in the root of the project and then `java -jar todo\todo-serve
 
 #### IntelliJ
 Create an IntelliJ run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\config\config.yml`
-and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\4.1.6\avaje-ebeanorm-agent-4.1.6.jar`
+and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\4.5.2\avaje-ebeanorm-agent-4.5.2.jar`
 
 ### Running message queue workers
 As above, but with the argument `workers` instead of `server`.
 
 ### Tests
 Run `maven test` or via an IDE.
-The browser used for integration tests can be selected via the `WEBDRIVER` environment variable, either Firefox, Chrome or PhantomJS (the default).
+The browser used for integration tests can be selected via the `WEBDRIVER` environment variable, either Firefox or Chrome (the default).
+PhantomJS is unfortunately not supported as it uses an old version of Selenium which causes classpath issues.
 
 #### IntelliJ
 When creating run configurations for tests, add the same VM options as above.
 
 You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
-
-## Continuous Integration
-### Environment preparation
-```
-wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz
-tar xvf jdk-8u20-linux-x64.tar.gz
-export JAVA_HOME=/home/rof/clone/jdk1.8.0_20
-npm install -g grunt-cli bower
-```
-### Build
-```
-mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
-mvn install -DskipTests=true -B
-```
-### Test
-```
-mvn test -B
-```
-### Deploy
-```
-mvn deploy -Ddocker.username=$DOCKER_USERNAME -Ddocker.password=$DOCKER_PASSWORD -Ddocker.email=$DOCKER_EMAIL -DskipTests=true -B
-```
-### Release
-TODO
 
 ## FAQ
 

@@ -1,5 +1,6 @@
 package bo.gotthardt.ui;
 
+import bo.gotthardt.model.Customer;
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.UiIntegrationTest;
 import bo.gotthardt.ui.page.DashboardPage;
@@ -75,8 +76,11 @@ public class LoginUiTest extends UiIntegrationTest {
     }
 
     private User createUser() {
+        Customer customer = new Customer("Test Customer");
+        db.save(customer);
         User user = new User(USERNAME, PASSWORD, NAME);
         user.setEmail("example@example.com");
+        user.setCustomer(customer);
         db.save(user);
 
         return user;

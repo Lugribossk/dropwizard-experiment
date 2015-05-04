@@ -1,24 +1,13 @@
 package bo.gotthardt.model;
 
-import bo.gotthardt.rest.Persistable;
-import bo.gotthardt.access.CustomerFeature;
 import bo.gotthardt.access.Feature;
-import bo.gotthardt.access.GlobalFeature;
 import bo.gotthardt.access.Owned;
 import bo.gotthardt.access.Principal;
-import bo.gotthardt.access.UserFeature;
+import bo.gotthardt.rest.Persistable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.EnumSet;
 
 /**
@@ -46,7 +35,7 @@ public class User implements Persistable, Owned, Principal {
     private Customer customer;
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private EnumSet<UserFeature> features = EnumSet.noneOf(UserFeature.class); // TODO annotation?
+    private EnumSet<Feature> features = EnumSet.noneOf(Feature.class); // TODO annotation?
 
     public User(String username, String password, String fullName) {
         this.username = username;
@@ -61,21 +50,15 @@ public class User implements Persistable, Owned, Principal {
 
     @Override
     public boolean hasAccessTo(Feature feature) {
-        if (feature instanceof UserFeature) {
-            return features.contains(feature);
-        } else if (feature instanceof CustomerFeature || feature instanceof GlobalFeature) {
-            return customer.hasAccessTo(feature);
-        } else {
-            throw new IllegalStateException("Feature inheritance hierarchy mismatch.");
-        }
+        return this.features.contains(feature) || this.customer.hasAccessTo(feature);
     }
 
-    public void addFeature(User adder, UserFeature feature) {
+    public void addFeature(User adder, Feature feature) {
         adder.assertAccessTo(feature);
-        features.add(feature);
+        this.features.add(feature);
     }
 
-    public void removeFeature(UserFeature feature) {
-        features.remove(feature);
+    public void removeFeature(Feature feature) {
+        this.features.remove(feature);
     }
 }

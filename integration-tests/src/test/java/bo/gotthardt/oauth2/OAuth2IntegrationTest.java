@@ -1,5 +1,6 @@
 package bo.gotthardt.oauth2;
 
+import bo.gotthardt.model.Customer;
 import bo.gotthardt.model.OAuth2AccessToken;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
@@ -20,7 +21,6 @@ import org.glassfish.jersey.servlet.ServletProperties;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.ServletDeploymentContext;
-import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
@@ -53,7 +53,10 @@ public class OAuth2IntegrationTest extends JerseyTest {
     @Before
     public void setup() {
         db.clear();
+        Customer customer = new Customer("Test Customer");
+        db.save(customer);
         user = new User("testuser", "testpass", "Testuser");
+        user.setCustomer(customer);
         db.save(user);
     }
 

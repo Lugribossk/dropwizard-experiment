@@ -6,6 +6,7 @@ import bo.gotthardt.model.todo.TodoItem;
 import bo.gotthardt.model.todo.TodoList;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthFactory;
+import bo.gotthardt.test.TestData;
 import bo.gotthardt.todolist.rest.TodoListResource;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -30,8 +31,7 @@ public class TodoListResourceTest extends ApiIntegrationTest {
 
     @Test
     public void blah() {
-        User user = new User("test", "blah", "Blah");
-        db.save(user);
+        User user = TestData.createUser(db);
         authFactory.setUser(user);
 
         TodoList list = new TodoList("testlist", user);

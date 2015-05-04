@@ -1,6 +1,7 @@
 package bo.gotthardt.jsclient;
 
-import bo.gotthardt.access.GlobalFeature;
+import bo.gotthardt.access.Feature;
+import bo.gotthardt.access.GloballyEnabledFeatures;
 import lombok.RequiredArgsConstructor;
 
 import javax.ws.rs.GET;
@@ -26,7 +27,7 @@ public class JsClientConfigurationResource {
 
     @GET
     @Path("/features")
-    public Set<GlobalFeature> getGlobalFeatures() {
-        return GlobalFeature.getEnabled();
+    public Set<Feature> getGlobalFeatures() {
+        return GloballyEnabledFeatures.getEnabled();
     }
 }

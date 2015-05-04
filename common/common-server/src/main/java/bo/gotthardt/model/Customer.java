@@ -1,15 +1,10 @@
 package bo.gotthardt.model;
 
-import bo.gotthardt.rest.Persistable;
-import bo.gotthardt.access.CustomerFeature;
 import bo.gotthardt.access.Feature;
-import bo.gotthardt.access.GlobalFeature;
+import bo.gotthardt.access.GloballyEnabledFeatures;
 import bo.gotthardt.access.Principal;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import bo.gotthardt.rest.Persistable;
+import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -32,7 +27,7 @@ public class Customer implements Persistable, Principal {
     private String name;
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
-    private EnumSet<CustomerFeature> features = EnumSet.noneOf(CustomerFeature.class);
+    private EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
 
     public Customer(String name) {
         this.name = name;
@@ -40,21 +35,15 @@ public class Customer implements Persistable, Principal {
 
     @Override
     public boolean hasAccessTo(Feature feature) {
-        if (feature instanceof CustomerFeature) {
-            return features.contains(feature);
-        } else if (feature instanceof GlobalFeature) {
-            return GlobalFeature.isEnabled((GlobalFeature) feature);
-        } else {
-            throw new IllegalStateException("Feature inheritance hierarchy mismatch.");
-        }
+        return this.features.contains(feature) || GloballyEnabledFeatures.isEnabled(feature);
     }
 
-    public void addFeature(User adder, CustomerFeature feature) {
+    public void addFeature(User adder, Feature feature) {
         adder.assertAccessTo(feature);
-        features.add(feature);
+        this.features.add(feature);
     }
 
-    public void removeFeature(CustomerFeature feature) {
-        features.remove(feature);
+    public void removeFeature(Feature feature) {
+        this.features.remove(feature);
     }
 }

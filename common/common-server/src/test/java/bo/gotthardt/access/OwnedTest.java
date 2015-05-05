@@ -41,7 +41,7 @@ public class OwnedTest {
     private static class Blah implements Owned {
         @Override
         public boolean isOwnedBy(Customer customer) {
-            return customer.getName().equals("test");
+            return "test".equals(customer.getName());
         }
     }
 }

@@ -55,7 +55,12 @@
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
-                        <encoding>UTF-8</encoding>
+                        <showWarnings>true</showWarnings>
+                        <showDeprecation>true</showDeprecation>
+                        <compilerArgs>
+                            <compilerArg>-Werror</compilerArg>
+                            <compilerArg>-Xlint:-processing</compilerArg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -73,12 +78,12 @@
                     <version>2.15</version>
                     <configuration>
                         <configLocation>checkstyle.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                        <!-- Disable weird warning. -->
                         <linkXRef>false</linkXRef>
                     </configuration>
-                    <!-- Disabled until it supports Java 8... -->
-                   <!--<executions>
+                   <executions>
                         <execution>
                             <id>checkstyle</id>
                             <phase>test</phase>
@@ -86,7 +91,7 @@
                                 <goal>checkstyle</goal>
                             </goals>
                         </execution>
-                    </executions>-->
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -480,7 +485,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.16.2</version>
+                <version>1.16.4</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>

@@ -47,9 +47,9 @@
             <property name="checkEmptyJavadoc" value="true"/>
         </module>-->
 
-        <module name="CyclomaticComplexity">
-            <property name="max" value="15"/>
-        </module>
+        <!--<module name="CyclomaticComplexity">-->
+            <!--<property name="max" value="15"/>-->
+        <!--</module>-->
 
         <module name="ArrayTypeStyle"/>
         <module name="Indentation"/>

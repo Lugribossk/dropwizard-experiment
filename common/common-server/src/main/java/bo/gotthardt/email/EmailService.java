@@ -30,7 +30,7 @@ public interface EmailService {
      * @param templateName The name of a resource file to use as pseudo-Handlebars template.
      * @param data The template data, as a map of template expression names to their values.
      */
-    default public void sendTemplate(String toAddress, String subject, String templateName, Map<String, String> data) {
+    public default void sendTemplate(String toAddress, String subject, String templateName, Map<String, String> data) {
         String content;
         try {
             content = Resources.toString(Resources.getResource(templateName), Charsets.UTF_8);

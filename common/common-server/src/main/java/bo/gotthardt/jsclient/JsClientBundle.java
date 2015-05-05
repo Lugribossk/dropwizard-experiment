@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
  * Dropwizard bundle for serving the Javascript client part of an application, and its configuration.
  */
 @RequiredArgsConstructor
-abstract public class JsClientBundle implements ConfiguredBundle<HasJsClientConfiguration> {
+public abstract class JsClientBundle implements ConfiguredBundle<HasJsClientConfiguration> {
     /** Path to the resources folder that contains the Javascript code and index.html. */
     private final String resourcePath;
 

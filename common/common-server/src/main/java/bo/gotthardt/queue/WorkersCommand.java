@@ -77,52 +77,52 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
 
     private void setupWorkers(List<WorkerConfiguration> configurations, Environment environment, Injector injector) {
         configurations.forEach(config -> {
-            Class<? extends QueueWorker> workerClass = config.getWorker();
-            ExecutorService executorService = environment.lifecycle()
-                    .executorService(workerClass.getSimpleName() + "-%d")
-                    .maxThreads(config.getThreads())
-                    .build();
+                Class<? extends QueueWorker> workerClass = config.getWorker();
+                ExecutorService executorService = environment.lifecycle()
+                        .executorService(workerClass.getSimpleName() + "-%d")
+                        .maxThreads(config.getThreads())
+                        .build();
 
-            for (int i = 0; i < config.getThreads(); i++) {
-                QueueWorker<?> worker = injector.getInstance(workerClass);
-                executorService.submit(worker);
-                workers.add(worker);
-            }
-            log.info("Created {} thread{} for worker {}.", config.getThreads(), config.getThreads() > 1 ? "s" : "", workerClass.getSimpleName());
-        });
+                for (int i = 0; i < config.getThreads(); i++) {
+                    QueueWorker<?> worker = injector.getInstance(workerClass);
+                    executorService.submit(worker);
+                    workers.add(worker);
+                }
+                log.info("Created {} thread{} for worker {}.", config.getThreads(), config.getThreads() > 1 ? "s" : "", workerClass.getSimpleName());
+            });
     }
 
     private static void setupSchedules(List<ScheduleConfiguration> schedules, Scheduler scheduler) {
         Set<JobKey> configuredKeys = new HashSet<>();
 
         schedules.forEach(config -> {
-            Class<? extends Job> jobClass = config.getJob();
-            JobKey jobKey = new JobKey(config.getName(), GROUP_NAME);
-            TriggerKey triggerKey = new TriggerKey(config.getName(), GROUP_NAME);
-            configuredKeys.add(jobKey);
+                Class<? extends Job> jobClass = config.getJob();
+                JobKey jobKey = new JobKey(config.getName(), GROUP_NAME);
+                TriggerKey triggerKey = new TriggerKey(config.getName(), GROUP_NAME);
+                configuredKeys.add(jobKey);
 
-            JobDetail job = JobBuilder.newJob(jobClass)
-                    .withIdentity(jobKey)
-                    .storeDurably()
-                    .build();
-            Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(triggerKey)
-                    .withSchedule(CronScheduleBuilder.cronSchedule(config.getCron()))
-                    .forJob(job)
-                    .build();
+                JobDetail job = JobBuilder.newJob(jobClass)
+                        .withIdentity(jobKey)
+                        .storeDurably()
+                        .build();
+                Trigger trigger = TriggerBuilder.newTrigger()
+                        .withIdentity(triggerKey)
+                        .withSchedule(CronScheduleBuilder.cronSchedule(config.getCron()))
+                        .forJob(job)
+                        .build();
 
-            try {
-                if (scheduler.checkExists(triggerKey)) {
-                    scheduler.rescheduleJob(triggerKey, trigger);
-                } else {
-                    scheduler.addJob(job, true);
-                    scheduler.scheduleJob(trigger);
+                try {
+                    if (scheduler.checkExists(triggerKey)) {
+                        scheduler.rescheduleJob(triggerKey, trigger);
+                    } else {
+                        scheduler.addJob(job, true);
+                        scheduler.scheduleJob(trigger);
+                    }
+                    log.info("Scheduled job {} to run at '{}'", jobClass.getSimpleName(), config.getCron().getCronExpression());
+                } catch (SchedulerException e) {
+                    log.warn("Unable to schedule job {}", jobClass.getSimpleName(), e);
                 }
-                log.info("Scheduled job {} to run at '{}'", jobClass.getSimpleName(), config.getCron().getCronExpression());
-            } catch (SchedulerException e) {
-                log.warn("Unable to schedule job {}", jobClass.getSimpleName(), e);
-            }
-        });
+            });
 
         try {
             Set<JobKey> existingKeys = scheduler.getJobKeys(GroupMatcher.<JobKey>jobGroupEquals(GROUP_NAME));

@@ -15,9 +15,9 @@ import java.io.IOException;
  *
  * @author Bo Gotthardt
  */
-abstract public class QueueWorker<T> implements Runnable {
-    protected final MessageQueue<T> queue;
-    protected Closeable cancel;
+public abstract class QueueWorker<T> implements Runnable {
+    private final MessageQueue<T> queue;
+    private Closeable cancel;
 
     public QueueWorker(MessageQueue<T> queue) {
         this.queue = queue;

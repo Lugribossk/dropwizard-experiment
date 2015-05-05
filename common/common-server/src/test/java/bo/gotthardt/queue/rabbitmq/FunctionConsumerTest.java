@@ -32,18 +32,20 @@ public class FunctionConsumerTest {
 
     @Test
     public void shouldMapMessageToType() throws IOException {
-        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<>(channel, msg -> {
-            assertThat(msg.getName()).isEqualTo("test");
-            assertThat(msg.getCount()).isEqualTo(2);
-            return null;
-        }, TestMsg.class, "name", metrics);
+        FunctionConsumer<TestMsg> consumer =
+            new FunctionConsumer<>(channel, msg -> {
+                assertThat(msg.getName()).isEqualTo("test");
+                assertThat(msg.getCount()).isEqualTo(2);
+                return null;
+            }, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
     }
 
     @Test
     public void shouldAcknowledgeMessage() throws IOException {
-        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<>(channel, msg -> null, TestMsg.class, "name", metrics);
+        FunctionConsumer<TestMsg> consumer =
+            new FunctionConsumer<>(channel, msg -> null, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
 
@@ -52,9 +54,10 @@ public class FunctionConsumerTest {
 
     @Test
     public void shouldRejectMessageOnException() throws IOException {
-        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<>(channel, msg -> {
-            throw new RuntimeException("Message processing failed on purpose.");
-        }, TestMsg.class, "name", metrics);
+        FunctionConsumer<TestMsg> consumer =
+            new FunctionConsumer<>(channel, msg -> {
+                throw new RuntimeException("Message processing failed on purpose.");
+            }, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
 
@@ -63,7 +66,8 @@ public class FunctionConsumerTest {
 
     @Test
     public void shouldRecordConsumeSuccessMetrics() throws IOException {
-        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<>(channel, msg -> null, TestMsg.class, "name", metrics);
+        FunctionConsumer<TestMsg> consumer =
+            new FunctionConsumer<>(channel, msg -> null, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
 
@@ -73,9 +77,10 @@ public class FunctionConsumerTest {
 
     @Test
     public void shouldRecordConsumeFailureMetrics() throws IOException {
-        FunctionConsumer<TestMsg> consumer = new FunctionConsumer<>(channel, msg -> {
-            throw new RuntimeException("Message processing failed on purpose.");
-        }, TestMsg.class, "name", metrics);
+        FunctionConsumer<TestMsg> consumer =
+            new FunctionConsumer<>(channel, msg -> {
+                throw new RuntimeException("Message processing failed on purpose.");
+            }, TestMsg.class, "name", metrics);
 
         consumer.handleDelivery(null, envelope, null, message);
 

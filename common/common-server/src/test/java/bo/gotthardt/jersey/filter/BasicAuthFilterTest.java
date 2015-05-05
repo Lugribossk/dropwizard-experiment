@@ -17,9 +17,9 @@ import static org.mockito.Mockito.*;
  * Tests for {@link bo.gotthardt.jersey.filter.BasicAuthFilter}.
  */
 public class BasicAuthFilterTest {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-    FilterChain chain = mock(FilterChain.class);
+    private HttpServletRequest request = mock(HttpServletRequest.class);
+    private HttpServletResponse response = mock(HttpServletResponse.class);
+    private FilterChain chain = mock(FilterChain.class);
 
     @Test
     public void shouldAllowRequestsWithCorrectCredentials() throws IOException, ServletException {

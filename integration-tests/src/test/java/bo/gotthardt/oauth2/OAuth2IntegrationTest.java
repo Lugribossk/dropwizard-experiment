@@ -20,7 +20,6 @@ import org.glassfish.jersey.servlet.ServletProperties;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.ServletDeploymentContext;
-import org.glassfish.jersey.test.grizzly.GrizzlyTestContainerFactory;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
@@ -163,18 +162,6 @@ public class OAuth2IntegrationTest extends JerseyTest {
             .build();
     }
 
-    public static class OAuth2IntegrationTestResourceConfig extends DropwizardResourceConfig {
-        public OAuth2IntegrationTestResourceConfig() {
-            super(true, new MetricRegistry());
-
-            register(new JacksonMessageBodyProvider(Jackson.newObjectMapper(), Validation.buildDefaultValidatorFactory().getValidator()));
-            register(new OAuth2AccessTokenResource(db));
-            register(new UserResource(db));
-            register(OAuth2AuthorizationRequestFactory.getBinder());
-            register(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)));
-        }
-    }
-
     private Response POST(String path, MultivaluedMap input) {
         return target(path).request().post(Entity.entity(input, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
     }
@@ -189,5 +176,17 @@ public class OAuth2IntegrationTest extends JerseyTest {
             parameters.add("password", password);
         }
         return parameters;
+    }
+
+    public static class OAuth2IntegrationTestResourceConfig extends DropwizardResourceConfig {
+        public OAuth2IntegrationTestResourceConfig() {
+            super(true, new MetricRegistry());
+
+            register(new JacksonMessageBodyProvider(Jackson.newObjectMapper(), Validation.buildDefaultValidatorFactory().getValidator()));
+            register(new OAuth2AccessTokenResource(db));
+            register(new UserResource(db));
+            register(OAuth2AuthorizationRequestFactory.getBinder());
+            register(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)));
+        }
     }
 }

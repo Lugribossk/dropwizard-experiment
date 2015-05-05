@@ -81,7 +81,7 @@ public abstract class UiIntegrationTest {
         // TODO Do this with a transaction rollback instead?
         SpiEbeanServer realDb = (SpiEbeanServer) db;
         String driverClass = realDb.getServerConfig().getDataSourceConfig().getDriver();
-        if (driverClass.equals("org.h2.Driver")) {
+        if ("org.h2.Driver".equals(driverClass)) {
             DdlGenerator ddl = realDb.getDdlGenerator();
             ddl.runScript(false, ddl.generateDropDdl());
             ddl.runScript(false, ddl.generateCreateDdl());
@@ -118,7 +118,7 @@ public abstract class UiIntegrationTest {
 
         if (proxy.type() == java.net.Proxy.Type.HTTP) {
             InetSocketAddress address = (InetSocketAddress) proxy.address();
-            if (address.getHostString().equals("127.0.0.1")) {
+            if ("127.0.0.1".equals(address.getHostString())) {
                 log.info("Detected local proxy on port {}, using for UI integration tests.", address.getPort());
                 caps.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy("localhost:" + address.getPort()));
             }

@@ -17,7 +17,6 @@
         <module name="RightCurly"/>
         <module name="AvoidNestedBlocks"/>
 
-        <module name="VisibilityModifier"/>
         <module name="InterfaceIsType"/>
         <module name="InnerTypeLast"/>
 
@@ -33,23 +32,10 @@
         <module name="StringLiteralEquality"/>
         <module name="PackageDeclaration"/>
         <module name="IllegalType"/>
-        <module name="DeclarationOrder"/>
-        <module name="ParameterAssignment"/>
-        <module name="DefaultComesLast"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="OneStatementPerLine"/>
 
         <module name="IllegalImport"/>
-
-        <!--<module name="JavadocType"/>
-        <module name="JavadocMethod"/>
-        <module name="JavadocStyle">
-            <property name="checkEmptyJavadoc" value="true"/>
-        </module>-->
-
-        <!--<module name="CyclomaticComplexity">-->
-            <!--<property name="max" value="15"/>-->
-        <!--</module>-->
 
         <module name="ArrayTypeStyle"/>
         <module name="Indentation"/>

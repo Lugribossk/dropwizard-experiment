@@ -114,7 +114,9 @@
         <profile>
             <id>pushDockerImages</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>pushDockerImages</name>
+                </property>
                 <file>
                     <exists>docker/Dockerfile</exists>
                 </file>

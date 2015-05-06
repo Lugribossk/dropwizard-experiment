@@ -28,7 +28,7 @@ deployment:
   dockerImage:
     branch: /.*/
     commands:
-      - mvn validate -PpushDockerImages -B
+      - mvn validate -DpushDockerImages=true -B
 
 general:
   artifacts:

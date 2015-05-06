@@ -24,7 +24,9 @@
         <module>integration-tests</module>
 		<module>todo/todo-client</module>
 		<module>todo/todo-server</module>
-	</modules>	
+        <module>maven/parent-java</module>
+        <module>maven/parent-javascript</module>
+    </modules>
 		
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -86,7 +88,7 @@
                    <executions>
                         <execution>
                             <id>checkstyle</id>
-                            <phase>test</phase>
+                            <phase>validate</phase>
                             <goals>
                                 <goal>checkstyle</goal>
                             </goals>

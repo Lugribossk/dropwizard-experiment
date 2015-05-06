@@ -5,22 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>bo.gotthardt.stack</groupId>
-        <artifactId>dropwizard-experiment</artifactId>
+        <artifactId>parent-java</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../maven/parent-java/pom.xml</relativePath>
     </parent>
 
     <artifactId>integration-tests</artifactId>
     <packaging>jar</packaging>
     <name>Integration tests</name>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>

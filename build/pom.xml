@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>bo.gotthardt.stack</groupId>
-        <artifactId>dropwizard-experiment</artifactId>
+        <artifactId>parent-java</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../maven/parent-java/pom.xml</relativePath>
     </parent>
 
     <artifactId>build</artifactId>
@@ -34,19 +35,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -21,6 +21,9 @@
                 <property>
                     <name>!skipBuild</name>
                 </property>
+                <file>
+                    <exists>Gruntfile.js</exists>
+                </file>
             </activation>
             <build>
                 <plugins>
@@ -54,6 +57,9 @@
                 <property>
                     <name>!skipTests</name>
                 </property>
+                <file>
+                    <exists>Gruntfile.js</exists>
+                </file>
             </activation>
             <build>
                 <plugins>

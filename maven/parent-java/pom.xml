@@ -67,6 +67,9 @@
                 <property>
                     <name>!skipDocker</name>
                 </property>
+                <file>
+                    <exists>docker/Dockerfile</exists>
+                </file>
             </activation>
             <build>
                 <plugins>

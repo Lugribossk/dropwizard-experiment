@@ -298,7 +298,8 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.0</version>
+                                    <!-- 3.2.2 fixed profiles with multiple activation criteria to use "and" instead of "or" between them, which we rely on. -->
+                                    <version>3.2.5</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
                                     <version>1.8</version>

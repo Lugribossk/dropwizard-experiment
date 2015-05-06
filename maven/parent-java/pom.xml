@@ -113,6 +113,11 @@
 
         <profile>
             <id>pushDockerImages</id>
+            <activation>
+                <file>
+                    <exists>docker/Dockerfile</exists>
+                </file>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

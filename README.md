@@ -10,7 +10,7 @@ See [common/common-client](./common/common-client) and [todo/todo-client](./todo
 ### Setup
 1. Install Node.js and npm.
 2. Globally install Grunt CLI: `npm install -g grunt-cli`
-3. Install individual project dependencies in their folders: `npm install` (Maven will also automatically do this when running `mvn install`.)
+3. Install dependencies in project root: `npm install` (Maven will also automatically do this when running `mvn install`.)
 
 ### Running
 The frontend is automatically bundled into the backend when that is built, so it is only necessary to run this directly when developing. 
@@ -28,8 +28,9 @@ See [common/common-server](./common/common-server) and [todo/todo-server](./todo
 
 ### Setup
 1. Install Java 8 JDK.
-2. Install Erlang VM.
-3. Install RabbitMQ.
+2. Install Maven 3.
+3. Install RabbitMQ (also needs the Erlang VM).
+4. Install Docker (or Boot2docker).
 
 ### Running server
 Run `mvn install` in the root of the project and then `java -jar todo\todo-server\target\todo-server-0.0.1-SNAPSHOT.jar server todo\todo-server\config\config.yml`.

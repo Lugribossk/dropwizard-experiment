@@ -3,6 +3,7 @@ package bo.gotthardt.test;
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
+import org.glassfish.jersey.test.TestProperties;
 import org.junit.Before;
 
 import javax.ws.rs.client.Entity;
@@ -35,9 +36,10 @@ public abstract class ApiIntegrationTest {
         return null;
     }
 
-
-    private WebTarget target(String path) {
-        return getResources().client().target(path);
+    protected WebTarget target(String path) {
+        // The base URL does not get set properly when using GrizzlyWebTestContainer, so set it explicitly.
+        // Unfortunately it does not seem possible to get the actual port, so use the default port and hope that's the one being used.
+        return getResources().client().target("http://localhost:" + TestProperties.DEFAULT_CONTAINER_PORT + path);
     }
     
     protected Response GET(String path) {

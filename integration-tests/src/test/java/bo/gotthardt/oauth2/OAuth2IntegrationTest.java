@@ -5,32 +5,21 @@ import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestFactory;
-import bo.gotthardt.test.InMemoryEbeanServer;
+import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.user.UserResource;
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.net.HttpHeaders;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.oauth.OAuthFactory;
-import io.dropwizard.jackson.Jackson;
-import io.dropwizard.jersey.DropwizardResourceConfig;
-import io.dropwizard.jersey.jackson.JacksonMessageBodyProvider;
+import io.dropwizard.testing.junit.ResourceTestRule;
 import org.assertj.core.api.Assertions;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
-import org.glassfish.jersey.servlet.ServletProperties;
-import org.glassfish.jersey.test.DeploymentContext;
-import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.ServletDeploymentContext;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
-import org.glassfish.jersey.test.spi.TestContainerException;
-import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.joda.time.Duration;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 
-import javax.validation.Validation;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
@@ -39,13 +28,17 @@ import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 /**
  * Tests for the OAuth2 functionality working end-to-end.
  *
- * Since this uses OAuthFactory which uses @Context injection, we can't use ResourceTestRule since that uses
- * InMemoryTestContainer, which doesn't support context injection.
- *
  * @author Bo Gotthardt
  */
-public class OAuth2IntegrationTest extends JerseyTest {
-    protected static final InMemoryEbeanServer db = new InMemoryEbeanServer();
+public class OAuth2IntegrationTest extends ApiIntegrationTest {
+    @ClassRule
+    public static final ResourceTestRule resources = ResourceTestRule.builder()
+        .addResource(new OAuth2AccessTokenResource(db))
+        .addResource(new UserResource(db))
+        .addResource(OAuth2AuthorizationRequestFactory.getBinder())
+        .addResource(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)))
+        .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
+        .build();
 
     private User user;
 
@@ -106,7 +99,7 @@ public class OAuth2IntegrationTest extends JerseyTest {
 
     @Test
     public void shouldRefuseNonAuthorizedAccessToAuthProtectedResource() {
-        assertThat(target("/users/" + user.getId()).request().get())
+        assertThat(GET("/users/" + user.getId()))
             .hasStatus(Response.Status.UNAUTHORIZED);
     }
 
@@ -147,23 +140,9 @@ public class OAuth2IntegrationTest extends JerseyTest {
         assertThat(token.isValid()).isFalse();
     }
 
-
     @Override
-    protected TestContainerFactory getTestContainerFactory()
-        throws TestContainerException {
-        // GrizzlyWebTestContainerFactory works, GrizzlyTestContainerFactory returns error 500 in some of the tests...
-        return new GrizzlyWebTestContainerFactory();
-    }
-
-    @Override
-    protected DeploymentContext configureDeployment() {
-        return ServletDeploymentContext.builder(new OAuth2IntegrationTestResourceConfig())
-            .initParam(ServletProperties.JAXRS_APPLICATION_CLASS, OAuth2IntegrationTestResourceConfig.class.getName())
-            .build();
-    }
-
-    private Response POST(String path, MultivaluedMap input) {
-        return target(path).request().post(Entity.entity(input, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+    public ResourceTestRule getResources() {
+        return resources;
     }
 
     private static MultivaluedMap<String, String> loginParameters(String username, String password) {
@@ -176,17 +155,5 @@ public class OAuth2IntegrationTest extends JerseyTest {
             parameters.add("password", password);
         }
         return parameters;
-    }
-
-    public static class OAuth2IntegrationTestResourceConfig extends DropwizardResourceConfig {
-        public OAuth2IntegrationTestResourceConfig() {
-            super(true, new MetricRegistry());
-
-            register(new JacksonMessageBodyProvider(Jackson.newObjectMapper(), Validation.buildDefaultValidatorFactory().getValidator()));
-            register(new OAuth2AccessTokenResource(db));
-            register(new UserResource(db));
-            register(OAuth2AuthorizationRequestFactory.getBinder());
-            register(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)));
-        }
     }
 }

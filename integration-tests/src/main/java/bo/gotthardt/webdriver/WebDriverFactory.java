@@ -1,25 +1,7 @@
-package bo.gotthardt.test;
+package bo.gotthardt.webdriver;
 
-import bo.gotthardt.model.User;
-import bo.gotthardt.test.util.ReportingWebDriverEventListener;
-import bo.gotthardt.test.util.WebDriverBinaryFinder;
-import bo.gotthardt.todolist.application.TodoListApplication;
-import bo.gotthardt.todolist.application.TodoListConfiguration;
-import bo.gotthardt.ui.page.DashboardPage;
-import bo.gotthardt.ui.page.LoginPage;
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebeaninternal.api.SpiEbeanServer;
-import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -31,79 +13,29 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.util.List;
 import java.util.logging.Level;
 
 /**
- * Base class for UI integration tests that run via Selenium.
- * Access to the running app's database is available via the db property.
- *
- * Select which browser to use by setting the WEBDRIVER environment variable to "firefox" or "chrome" (default).
- *
- * @author Bo Gotthardt
+ * Utility for creating WebDriver instances.
  */
 @Slf4j
-public abstract class UiIntegrationTest {
+public class WebDriverFactory {
     private static final String WEBDRIVER_ENV_NAME = "WEBDRIVER";
-    protected static WebDriver driver;
-    protected static EbeanServer db;
 
-    protected User user;
-
-    @ClassRule
-    public static DropwizardAppRule<TodoListConfiguration> appRule = new DropwizardAppRule<>(TodoListApplication.class, getConfigFilePath());
-
-    @BeforeClass
-    public static void setupWebDriver() {
+    /**
+     * Create a WebDriver instance with useful settings based on the WEBDRIVER environment variable.
+     * @return The WebDriver
+     */
+    public static WebDriver create() {
         DesiredCapabilities caps = new DesiredCapabilities();
         withSystemProxy(caps);
         withBrowserLogs(caps);
 
-        driver = withReports(getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME)));
-        db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
-    }
-
-    @AfterClass
-    public static void teardownWebDriver() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
-    @After
-    public void clearLocalStorageAndDatabase() {
-        if (driver != null) {
-            ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
-        }
-
-        // TODO Do this with a transaction rollback instead?
-        SpiEbeanServer realDb = (SpiEbeanServer) db;
-        String driverClass = realDb.getServerConfig().getDataSourceConfig().getDriver();
-        if ("org.h2.Driver".equals(driverClass)) {
-            DdlGenerator ddl = realDb.getDdlGenerator();
-            ddl.runScript(false, ddl.generateDropDdl());
-            ddl.runScript(false, ddl.generateCreateDdl());
-        } else {
-            log.error("Integration test does not appear to be using driver for in-memory testing, but rather {}. Not clearing database after test run.", driverClass);
-        }
-    }
-
-    protected DashboardPage login() {
-        user = new User("testuser", "testpassword", "Test Testsen");
-        db.save(user);
-        return LoginPage.go(driver).loginSuccess("testuser", "testpassword");
-    }
-
-    private static String getConfigFilePath() {
-        String path = Resources.getResource("integration.yml").toString();
-
-        if (path.startsWith("file://")) {
-            return path.substring(6);
-        } else {
-            return path.substring(5);
-        }
+        return withReports(getDriver(caps, System.getenv(WEBDRIVER_ENV_NAME)));
     }
 
     /**
@@ -113,14 +45,14 @@ public abstract class UiIntegrationTest {
      * @param caps The capabilities to modify
      */
     private static void withSystemProxy(DesiredCapabilities caps) {
-        List<java.net.Proxy> proxies = ProxySelector.getDefault().select(URI.create("http://www.google.com"));
+        List<Proxy> proxies = ProxySelector.getDefault().select(URI.create("http://www.google.com"));
         java.net.Proxy proxy = proxies.get(0);
 
         if (proxy.type() == java.net.Proxy.Type.HTTP) {
             InetSocketAddress address = (InetSocketAddress) proxy.address();
             if ("127.0.0.1".equals(address.getHostString())) {
                 log.info("Detected local proxy on port {}, using for UI integration tests.", address.getPort());
-                caps.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy("localhost:" + address.getPort()));
+                caps.setCapability(CapabilityType.PROXY, new org.openqa.selenium.Proxy().setHttpProxy("localhost:" + address.getPort()));
             }
         }
     }

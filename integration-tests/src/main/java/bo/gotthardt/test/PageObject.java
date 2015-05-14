@@ -8,9 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class PageObject {
-    // Set in integration.yml
-    protected static String BASE_URL = "http://localhost:8056/";
-
     protected WebDriver driver;
 
     protected PageObject(WebDriver driver) {

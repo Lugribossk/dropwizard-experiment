@@ -1,11 +1,11 @@
-package bo.gotthardt.ui.page;
+package bo.gotthardt.page;
 
 import bo.gotthardt.test.PageObject;
+import bo.gotthardt.test.UiIntegrationTest;
+import bo.gotthardt.test.assertj.DropwizardAssertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
 public class DashboardPage extends PageObject {
     @FindBy(tagName = "h1")
@@ -22,7 +22,7 @@ public class DashboardPage extends PageObject {
     @Override
     protected void onLoad() throws Error {
         waitFor(header, "Header");
-        assertThat(header).containsText("Dashboard");
+        DropwizardAssertions.assertThat(header).containsText("Dashboard");
     }
 
     public LoginPage logout() {
@@ -36,7 +36,7 @@ public class DashboardPage extends PageObject {
     }
 
     public static DashboardPage go(WebDriver driver) {
-        driver.get(BASE_URL + "");
+        driver.get(UiIntegrationTest.BASE_URL + "");
         return new DashboardPage(driver);
     }
 }

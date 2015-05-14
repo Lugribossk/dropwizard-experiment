@@ -1,4 +1,4 @@
-package bo.gotthardt.test.util;
+package bo.gotthardt.webdriver;
 
 import bo.gotthardt.test.PageObject;
 import com.google.common.base.Charsets;

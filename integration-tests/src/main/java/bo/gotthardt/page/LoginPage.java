@@ -1,6 +1,7 @@
-package bo.gotthardt.ui.page;
+package bo.gotthardt.page;
 
 import bo.gotthardt.test.PageObject;
+import bo.gotthardt.test.UiIntegrationTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -47,7 +48,7 @@ public class LoginPage extends PageObject {
     }
 
     public static LoginPage go(WebDriver driver) {
-        driver.get(BASE_URL);
+        driver.get(UiIntegrationTest.BASE_URL);
         return new LoginPage(driver);
     }
 }

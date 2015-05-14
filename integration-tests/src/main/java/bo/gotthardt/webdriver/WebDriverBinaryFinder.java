@@ -1,4 +1,4 @@
-package bo.gotthardt.test.util;
+package bo.gotthardt.webdriver;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;

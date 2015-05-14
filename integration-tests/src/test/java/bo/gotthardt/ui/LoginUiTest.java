@@ -2,8 +2,8 @@ package bo.gotthardt.ui;
 
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.UiIntegrationTest;
-import bo.gotthardt.ui.page.DashboardPage;
-import bo.gotthardt.ui.page.LoginPage;
+import bo.gotthardt.page.DashboardPage;
+import bo.gotthardt.page.LoginPage;
 import org.junit.Test;
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
@@ -19,7 +19,7 @@ public class LoginUiTest extends UiIntegrationTest {
     @Test
     public void shouldLogInWithCorrectCredentials() {
         createUser();
-        LoginPage page = LoginPage.go(driver);
+        LoginPage page = frontPage();
 
         page.loginSuccess(USERNAME, PASSWORD);
     }
@@ -27,7 +27,7 @@ public class LoginUiTest extends UiIntegrationTest {
     @Test
     public void shouldGoBackToLoginFormAfterLoggingOut() {
         createUser();
-        LoginPage page = LoginPage.go(driver);
+        LoginPage page = frontPage();
 
         page.loginSuccess(USERNAME, PASSWORD)
                 .logout();
@@ -35,7 +35,7 @@ public class LoginUiTest extends UiIntegrationTest {
 
     @Test
     public void shouldStayLoggedOutWithNonexistentCredentials() {
-        LoginPage page = LoginPage.go(driver);
+        LoginPage page = frontPage();
 
         page.loginFail(USERNAME, PASSWORD);
     }
@@ -43,7 +43,7 @@ public class LoginUiTest extends UiIntegrationTest {
     @Test
     public void shouldStayLoggedOutWithWrongPassword() {
         createUser();
-        LoginPage page = LoginPage.go(driver);
+        LoginPage page = frontPage();
 
         page.loginFail(USERNAME, "WRONGpassword");
     }
@@ -54,7 +54,7 @@ public class LoginUiTest extends UiIntegrationTest {
         User user2 = new User("testuser2", "testpassword2", "Test2 Testsen2");
         user2.setEmail("example2@example.com");
         db.save(user2);
-        LoginPage page = LoginPage.go(driver);
+        LoginPage page = frontPage();
 
         DashboardPage dash = page.loginSuccess(USERNAME, PASSWORD)
                                 .logout()
@@ -66,7 +66,7 @@ public class LoginUiTest extends UiIntegrationTest {
     @Test
     public void shouldStayLoggedInAfterReloadingPage() {
         createUser();
-        LoginPage page = LoginPage.go(driver);
+        LoginPage page = frontPage();
 
         page.loginSuccess(USERNAME, PASSWORD);
         driver.get(driver.getCurrentUrl());

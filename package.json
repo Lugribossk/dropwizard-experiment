@@ -14,7 +14,7 @@
   "devDependencies": {
     "babel-core": "4.7.8",
     "babel-loader": "4.1.0",
-    "chromedriver": "2.13.0",
+    "chromedriver": "2.15.1",
     "css-loader": "0.9.1",
     "esprima-fb": "12001.1.0-dev-harmony-fb",
     "expect.js": "0.3.1",

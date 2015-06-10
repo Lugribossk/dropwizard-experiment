@@ -37,7 +37,7 @@ Run `mvn install` in the root of the project and then `java -jar todo\todo-serve
 
 #### IntelliJ
 Create an IntelliJ run configuration for TodoListApplication, then add program arguments: `server todo\todo-server\config\config.yml`
-and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\4.5.2\avaje-ebeanorm-agent-4.5.2.jar`
+and VM options: `-javaagent:$USER_HOME$\.m2\repository\org\avaje\ebeanorm\avaje-ebeanorm-agent\4.5.3\avaje-ebeanorm-agent-4.5.3.jar`
 
 ### Running message queue workers
 As above, but with the argument `workers` instead of `server`.

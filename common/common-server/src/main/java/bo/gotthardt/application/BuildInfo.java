@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * Information about the build of the running code.
@@ -24,7 +24,7 @@ public class BuildInfo {
     /** Maven version. */
     private String version;
     /** Maven build timestamp. */
-    private LocalDateTime builtAt;
+    private OffsetDateTime builtAt;
     /* Git revision. */
     private String revision;
     /** Git branch name. */
@@ -35,7 +35,15 @@ public class BuildInfo {
      * This can be false if running a build not created by Maven or something integrated with Maven.
      */
     public boolean isValid() {
-        return version != null && !version.contains("$");
+        return version != null && !revision.contains("$");
+    }
+
+    public String getPrintableInfo() {
+        String output = "Built at " + builtAt;
+        if (isValid()) {
+            output = output + ", revision: " + revision + ", branch: " + branch;
+        }
+        return output;
     }
 
     public static BuildInfo create(ObjectMapper mapper) {

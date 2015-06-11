@@ -15,6 +15,7 @@ import bo.gotthardt.user.EmailVerificationResource;
 import bo.gotthardt.user.UserResource;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Stopwatch;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -59,6 +60,9 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle = new EbeanBundle();
         rabbitMqBundle = new RabbitMQBundle();
 
+        // This outputs xDateTimes as ISO strings rather than an array of numbers in JSON.
+        bootstrap.getObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         bootstrap.addBundle(new Java8Bundle());
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(rabbitMqBundle);
@@ -89,7 +93,9 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         filter.setInitParameter("preflightMaxAge", "5184000"); // 2 months
         filter.setInitParameter("allowCredentials", "true");
 
-        environment.healthChecks().register("version", new VersionHealthCheck(BuildInfo.create(environment.getObjectMapper())));
+        BuildInfo buildInfo = BuildInfo.create(environment.getObjectMapper());
+        log.info(buildInfo.getPrintableInfo());
+        environment.healthChecks().register("version", new VersionHealthCheck(buildInfo));
 
         BasicAuthFilter.addToAdmin(environment, "test", "test");
 

@@ -51,6 +51,10 @@ public class OAuth2AccessToken {
         this.user = user;
     }
 
+    public String getLoggableAccessToken() {
+        return accessToken.substring(0, 8) + "-****-****-****-************";
+    }
+
     /**
      * Returns whether this token is currently valid.
      */

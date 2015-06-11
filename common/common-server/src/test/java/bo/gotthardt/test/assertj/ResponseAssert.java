@@ -21,6 +21,7 @@ public class ResponseAssert extends BaseAssert<ResponseAssert, Response> {
     static {
         MAPPER = Jackson.newObjectMapper();
         MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
+        MAPPER.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         MAPPER.registerModule(new JavaOptionalModule());
         MAPPER.registerModule(new JSR310Module());
     }

@@ -4,8 +4,6 @@ import bo.gotthardt.email.LoggerEmailService;
 import bo.gotthardt.model.EmailVerification;
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.ApiIntegrationTest;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
-import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -27,7 +25,7 @@ public class EmailVerificationResourceTest extends ApiIntegrationTest {
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new EmailVerificationResource(db, service))
-            .setMapper(Jackson.newObjectMapper().registerModule(new JSR310Module()))
+            .setMapper(getMapper())
             .build();
 
     private User user;

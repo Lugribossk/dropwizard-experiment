@@ -1,10 +1,15 @@
 package bo.gotthardt.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.base.Preconditions;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.glassfish.jersey.test.TestProperties;
 import org.junit.Before;
+import org.zapodot.jackson.java8.JavaOptionalModule;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -68,6 +73,13 @@ public abstract class ApiIntegrationTest {
 
     protected Response DELETE(String path) {
         return target(path).request().delete();
+    }
+
+    protected static ObjectMapper getMapper() {
+        return Jackson.newObjectMapper()
+            .registerModule(new JavaOptionalModule())
+            .registerModule(new JSR310Module())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     protected static MultivaluedMap<String, String> formParameters(String... keyValues) {

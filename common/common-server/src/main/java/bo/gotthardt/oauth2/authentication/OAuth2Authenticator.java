@@ -35,7 +35,7 @@ public class OAuth2Authenticator implements Authenticator<String, User> {
         }
 
         User user = token.getUser();
-        log.info("Authenticated user {} with access token '{}'.", user, token.getLoggableAccessToken());
+        log.info("Authenticated user {} with access token '{}'.", user, token.loggableAccessToken());
         return Optional.of(user);
     }
 }

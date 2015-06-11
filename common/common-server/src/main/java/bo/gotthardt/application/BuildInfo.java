@@ -38,7 +38,7 @@ public class BuildInfo {
         return version != null && !revision.contains("$");
     }
 
-    public String getPrintableInfo() {
+    public String printableInfo() {
         String output = "Built at " + builtAt;
         if (isValid()) {
             output = output + ", revision: " + revision + ", branch: " + branch;

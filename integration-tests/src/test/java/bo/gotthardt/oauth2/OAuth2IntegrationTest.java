@@ -7,11 +7,9 @@ import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestFactory;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.user.UserResource;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.net.HttpHeaders;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.oauth.OAuthFactory;
-import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
@@ -38,7 +36,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         .addResource(new UserResource(db))
         .addResource(OAuth2AuthorizationRequestFactory.getBinder())
         .addResource(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)))
-        .setMapper(Jackson.newObjectMapper().registerModule(new JSR310Module()))
+        .setMapper(getMapper())
         .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
         .build();
 

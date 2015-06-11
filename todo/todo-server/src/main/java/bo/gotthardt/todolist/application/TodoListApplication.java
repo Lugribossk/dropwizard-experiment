@@ -94,7 +94,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         filter.setInitParameter("allowCredentials", "true");
 
         BuildInfo buildInfo = BuildInfo.create(environment.getObjectMapper());
-        log.info(buildInfo.getPrintableInfo());
+        log.info(buildInfo.printableInfo());
         environment.healthChecks().register("version", new VersionHealthCheck(buildInfo));
 
         BasicAuthFilter.addToAdmin(environment, "test", "test");

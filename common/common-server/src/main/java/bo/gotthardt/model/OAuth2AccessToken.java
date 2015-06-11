@@ -51,7 +51,7 @@ public class OAuth2AccessToken {
         this.user = user;
     }
 
-    public String getLoggableAccessToken() {
+    public String loggableAccessToken() {
         return accessToken.substring(0, 8) + "-****-****-****-************";
     }
 

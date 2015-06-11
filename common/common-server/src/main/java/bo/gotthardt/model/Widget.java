@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -18,7 +19,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Widget implements Persistable {
     @Id
-    private long id;
+    private UUID id;
 
     @NotEmpty
     private String name;

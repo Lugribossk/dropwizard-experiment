@@ -6,17 +6,11 @@ import com.codahale.metrics.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -29,7 +23,7 @@ public class RestResource<P extends Persistable> {
     @GET
     @Path("/{id}")
     @Timed
-    public P one(@PathParam("id") long id) {
+    public P one(@PathParam("id") UUID id) {
         return service.fetchById(id);
     }
 
@@ -47,13 +41,13 @@ public class RestResource<P extends Persistable> {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public P update(@PathParam("id") long id, @Valid P item) {
+    public P update(@PathParam("id") UUID id, @Valid P item) {
         return service.update(id, item);
     }
 
     @DELETE
     @Path("/{id}")
-    public void delete(@PathParam("id") long id) {
+    public void delete(@PathParam("id") UUID id) {
         service.delete(id);
     }
 }

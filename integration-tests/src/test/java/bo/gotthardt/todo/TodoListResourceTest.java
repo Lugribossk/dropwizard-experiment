@@ -7,7 +7,9 @@ import bo.gotthardt.model.todo.TodoList;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthFactory;
 import bo.gotthardt.todolist.rest.TodoListResource;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -26,6 +28,7 @@ public class TodoListResourceTest extends ApiIntegrationTest {
             .addResource(new TodoListResource(db))
             .addResource(AuthFactory.binder(authFactory))
             .addResource(ListFilteringFactory.getBinder())
+            .setMapper(Jackson.newObjectMapper().registerModule(new JSR310Module()))
             .build();
 
     @Test

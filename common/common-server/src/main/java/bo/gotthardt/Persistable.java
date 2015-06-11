@@ -1,9 +1,11 @@
 package bo.gotthardt;
 
+import java.util.UUID;
+
 /**
  * @author Bo Gotthardt
  */
 public interface Persistable {
-    long getId();
-    void setId(long id);
+    UUID getId();
+    void setId(UUID id);
 }

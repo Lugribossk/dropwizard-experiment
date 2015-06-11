@@ -10,12 +10,12 @@ import com.google.common.net.HttpHeaders;
 import io.dropwizard.auth.Auth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  * Jersey resource that provides {@link OAuth2AccessToken}s in response to {@link OAuth2AuthorizationRequest}s.
@@ -29,7 +29,7 @@ import javax.ws.rs.core.MediaType;
 @RequiredArgsConstructor
 @Path("/token")
 public class OAuth2AccessTokenResource {
-    private static final Duration TOKEN_LIFETIME = Duration.standardDays(365);
+    private static final Duration TOKEN_LIFETIME = Duration.ofDays(365);
 
     private final EbeanServer db;
 
@@ -54,9 +54,9 @@ public class OAuth2AccessTokenResource {
         OAuth2AccessToken token = db.find(OAuth2AccessToken.class, accessToken);
 
         Preconditions.checkNotNull(token);
-        Preconditions.checkState(user.getId() == token.getUser().getId());
+        Preconditions.checkState(user.getId().equals(token.getUser().getId()));
 
-        token.setExpirationDate(DateTime.now());
+        token.setExpirationDate(LocalDateTime.now());
         db.save(token);
         log.info("Expired token %s", token);
     }

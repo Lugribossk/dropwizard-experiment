@@ -2,7 +2,9 @@ package bo.gotthardt.test.assertj;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import io.dropwizard.jackson.Jackson;
+import org.zapodot.jackson.java8.JavaOptionalModule;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,6 +21,8 @@ public class ResponseAssert extends BaseAssert<ResponseAssert, Response> {
     static {
         MAPPER = Jackson.newObjectMapper();
         MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
+        MAPPER.registerModule(new JavaOptionalModule());
+        MAPPER.registerModule(new JSR310Module());
     }
 
     public ResponseAssert(Response actual) {

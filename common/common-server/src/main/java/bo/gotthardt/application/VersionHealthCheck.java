@@ -1,6 +1,7 @@
 package bo.gotthardt.application;
 
 import com.codahale.metrics.health.HealthCheck;
+import lombok.RequiredArgsConstructor;
 
 /**
  * A health check that displays the Maven version of the running code.
@@ -8,12 +9,9 @@ import com.codahale.metrics.health.HealthCheck;
  *
  * @author Bo Gotthardt
  */
+@RequiredArgsConstructor
 public class VersionHealthCheck extends HealthCheck {
     private final BuildInfo buildInfo;
-
-    public VersionHealthCheck() {
-        this.buildInfo = BuildInfo.create();
-    }
 
     @Override
     protected Result check() throws Exception {

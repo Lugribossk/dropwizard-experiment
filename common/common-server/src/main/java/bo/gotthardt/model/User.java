@@ -3,17 +3,14 @@ package bo.gotthardt.model;
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.Principal;
+import com.avaje.ebean.annotation.CreatedTimestamp;
+import com.avaje.ebean.annotation.UpdatedTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -26,13 +23,18 @@ import javax.persistence.Table;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User implements Persistable, AccessibleBy<User>, Principal {
     @Id
-    private long id;
+    private UUID id;
     private String username;
     private String email;
     private String name;
     @Embedded
+    @AttributeOverrides({@AttributeOverride(name = "hashedValue", column = @Column(name = "password"))})
     @JsonIgnore
     private HashedValue password;
+    @CreatedTimestamp
+    private LocalDateTime createdDate;
+    @UpdatedTimestamp
+    private LocalDateTime updatedDate;
 
     public User(String username, String password, String fullName) {
         this.username = username;
@@ -42,6 +44,6 @@ public class User implements Persistable, AccessibleBy<User>, Principal {
 
     @Override
     public boolean isAccessibleBy(User principal) {
-        return id == principal.getId();
+        return id.equals(principal.getId());
     }
 }

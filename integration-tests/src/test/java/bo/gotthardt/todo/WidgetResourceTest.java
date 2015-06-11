@@ -6,7 +6,9 @@ import bo.gotthardt.rest.CrudService;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.todolist.rest.WidgetResource;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.collect.ImmutableList;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.UUID;
 
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
@@ -29,6 +32,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new WidgetResource(service))
             .addResource(ListFilteringFactory.getBinder())
+            .setMapper(Jackson.newObjectMapper().registerModule(new JSR310Module()))
             .build();
 
     @Test
@@ -43,7 +47,7 @@ public class WidgetResourceTest extends ApiIntegrationTest {
 
     @Test
     public void should404WhenOneItemNotFound() {
-        assertThat(GET("/widgets/1"))
+        assertThat(GET("/widgets/" + UUID.randomUUID()))
                 .hasStatus(Response.Status.NOT_FOUND)
                 .hasContentType(MediaType.APPLICATION_JSON_TYPE);
     }
@@ -51,8 +55,10 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetAllItems() {
         Widget p1 = new Widget("Test1");
+        p1.setId(new UUID(0, 0));
         db.save(p1);
         Widget p2 = new Widget("Test2");
+        p2.setId(new UUID(0, 1));
         db.save(p2);
 
         assertThat(GET("/widgets"))
@@ -73,12 +79,15 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     }
 
     @Test
-    public void shouldGetItemsAccordingToLimitAndOffest() {
+    public void shouldGetItemsAccordingToLimitAndOffset() {
         Widget p1 = new Widget("Test1");
+        p1.setId(new UUID(0, 0));
         db.save(p1);
         Widget p2 = new Widget("Test2");
+        p2.setId(new UUID(0, 1));
         db.save(p2);
         Widget p3 = new Widget("Test3");
+        p3.setId(new UUID(0, 2));
         db.save(p3);
 
         assertThat(GET("/widgets?limit=1&offset=1"))
@@ -89,10 +98,13 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     @Test
     public void shouldGetAllItemsWhenLimitIs0() {
         Widget p1 = new Widget("Test1");
+        p1.setId(new UUID(0, 0));
         db.save(p1);
         Widget p2 = new Widget("Test2");
+        p2.setId(new UUID(0, 1));
         db.save(p2);
         Widget p3 = new Widget("Test3");
+        p3.setId(new UUID(0, 2));
         db.save(p3);
 
         assertThat(GET("/widgets?limit=0&offset=1"))
@@ -134,11 +146,11 @@ public class WidgetResourceTest extends ApiIntegrationTest {
     public void shouldNotOverwriteIdFromPuttedItem() {
         Widget p = new Widget("Test1");
         db.save(p);
-        long oldId = p.getId();
+        UUID oldId = p.getId();
 
         ObjectNode input = resources.getObjectMapper().createObjectNode();
         input.put("name", "Test2");
-        input.put("id", oldId + 100);
+        input.put("id", UUID.randomUUID().toString());
 
         Response response = PUT("/widgets/" + oldId, input);
         db.refresh(p);

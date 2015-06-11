@@ -8,6 +8,7 @@ import com.avaje.ebean.Query;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -22,7 +23,7 @@ public class CrudService<T extends Persistable> {
         this.db = db;
     }
 
-    public T fetchById(long id) {
+    public T fetchById(UUID id) {
         T item = db.find(type, id);
 
         if (item == null) {
@@ -45,7 +46,7 @@ public class CrudService<T extends Persistable> {
         return item;
     }
 
-    public T update(long id, T item) {
+    public T update(UUID id, T item) {
         assertExists(id);
 
         item.setId(id);
@@ -53,7 +54,7 @@ public class CrudService<T extends Persistable> {
         return item;
     }
 
-    public void delete(long id) {
+    public void delete(UUID id) {
         assertExists(id);
 
         db.delete(type, id);
@@ -64,7 +65,7 @@ public class CrudService<T extends Persistable> {
      *
      * @param id the object ID
      */
-    protected void assertExists(long id) {
+    protected void assertExists(UUID id) {
         // Presumably this is (slightly) faster than retrieving the object.
         if (db.find(type).where().eq("id", id).findRowCount() != 1) {
             throw new NotFoundException(id);

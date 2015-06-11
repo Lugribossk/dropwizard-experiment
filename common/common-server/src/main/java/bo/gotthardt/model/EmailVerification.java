@@ -6,12 +6,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -25,7 +25,7 @@ public class EmailVerification {
     private String token;
 
     @Setter
-    private DateTime expirationDate;
+    private LocalDateTime expirationDate;
 
     private Type type;
 
@@ -35,14 +35,14 @@ public class EmailVerification {
 
     public EmailVerification(User user, Duration duration, Type type) {
         this.token = UUID.randomUUID().toString();
-        this.expirationDate = DateTime.now().plus(duration);
+        this.expirationDate = LocalDateTime.now().plus(duration);
         this.user = user;
         this.type = type;
     }
 
     @JsonIgnore
     public boolean isValid() {
-        return expirationDate.isAfterNow();
+        return expirationDate.isAfter(LocalDateTime.now());
     }
 
     public String getUrl() {

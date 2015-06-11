@@ -5,7 +5,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
@@ -21,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.util.Random;
 
 /**
@@ -114,7 +114,7 @@ public class ReportingWebDriverEventListener extends AbstractWebDriverEventListe
     private static void saveLogs(String filename, WebDriver driver) {
         StringBuffer logs = new StringBuffer();
         for (LogEntry entry : driver.manage().logs().get(LogType.BROWSER)) {
-            logs.append(new DateTime(entry.getTimestamp()))
+            logs.append(Instant.ofEpochMilli(entry.getTimestamp()))
                     .append(": ")
                     .append(entry.getMessage())
                     .append("\n");

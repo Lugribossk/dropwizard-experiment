@@ -12,6 +12,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -22,7 +23,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TodoItem implements Persistable, AccessibleBy<User> {
     @Id
-    private long id;
+    private UUID id;
     private String name;
     private boolean completed = false;
     @ManyToOne
@@ -35,6 +36,6 @@ public class TodoItem implements Persistable, AccessibleBy<User> {
 
     @Override
     public boolean isAccessibleBy(User principal) {
-        return todoList.getOwner().getId() == principal.getId();
+        return todoList.getOwner().getId().equals(principal.getId());
     }
 }

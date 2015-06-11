@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -28,7 +29,7 @@ public class UserResource {
 
     @GET
     @Path("/{id}")
-    public User one(@Auth User user, @PathParam("id") long id) {
+    public User one(@Auth User user, @PathParam("id") UUID id) {
         User item = db.find(User.class, id);
 
         if (item == null) {

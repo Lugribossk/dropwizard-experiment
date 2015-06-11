@@ -1,17 +1,14 @@
 package bo.gotthardt.model;
 
+import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -28,16 +25,19 @@ import java.util.UUID;
 public class OAuth2AccessToken {
     /** The access token itself. */
     @Id
-    private String accessToken; // TODO hash this
+    private String accessToken;
 
     /** The token's expiration date, after which it is no longer valid. */
     @Setter
-    private DateTime expirationDate;
+    private LocalDateTime expirationDate;
 
     /** The user that this token authenticates. */
     @ManyToOne
     @JsonIgnore
     private User user;
+
+    @CreatedTimestamp
+    private LocalDateTime createdDate;
 
     /**
      * Constructor.
@@ -47,7 +47,7 @@ public class OAuth2AccessToken {
     public OAuth2AccessToken(User user, Duration duration) {
         // UUID is a convenient way to generate a random string.
         this.accessToken = UUID.randomUUID().toString();
-        this.expirationDate = DateTime.now().plus(duration);
+        this.expirationDate = LocalDateTime.now().plus(duration);
         this.user = user;
     }
 
@@ -56,6 +56,6 @@ public class OAuth2AccessToken {
      */
     @JsonIgnore
     public boolean isValid() {
-        return expirationDate.isAfterNow();
+        return expirationDate.isAfter(LocalDateTime.now());
     }
 }

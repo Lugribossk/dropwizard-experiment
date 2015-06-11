@@ -3,20 +3,18 @@ package bo.gotthardt.model.todo;
 import bo.gotthardt.AccessibleBy;
 import bo.gotthardt.Persistable;
 import bo.gotthardt.model.User;
+import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -27,11 +25,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TodoList implements Persistable, AccessibleBy<User> {
     @Id
-    private long id;
+    private UUID id;
     private String name;
     @OneToMany(cascade = CascadeType.ALL)
     private List<TodoItem> items = Lists.newArrayList();
-    private DateTime creationDate = DateTime.now();
+    @CreatedTimestamp
+    private LocalDateTime createdDate;
     @ManyToOne
     @JsonIgnore
     private User owner;
@@ -47,6 +46,6 @@ public class TodoList implements Persistable, AccessibleBy<User> {
 
     @Override
     public boolean isAccessibleBy(User principal) {
-        return owner.getId() == principal.getId();
+        return owner.getId().equals(principal.getId());
     }
 }

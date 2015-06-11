@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,20 +24,21 @@ public class CrudServiceTest {
 
     @Test
     public void fetchShouldFindInDatabase() {
+        UUID id = UUID.randomUUID();
         TestItem item = new TestItem();
-        when(db.find(TestItem.class, 1L)).thenReturn(item);
+        when(db.find(TestItem.class, id)).thenReturn(item);
 
-        assertThat(service.fetchById(1)).isEqualTo(item);
+        assertThat(service.fetchById(id)).isEqualTo(item);
     }
 
     @Test(expected = NotFoundException.class)
     public void fetchShouldThrowWhenIdNotFound() {
-        service.fetchById(1);
+        service.fetchById(UUID.randomUUID());
     }
 
     @Getter
     @Setter
     private static class TestItem implements Persistable {
-        private long id;
+        private UUID id;
     }
 }

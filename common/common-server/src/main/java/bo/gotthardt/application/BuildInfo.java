@@ -1,15 +1,15 @@
 package bo.gotthardt.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import io.dropwizard.jackson.Jackson;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * Information about the build of the running code.
@@ -24,7 +24,7 @@ public class BuildInfo {
     /** Maven version. */
     private String version;
     /** Maven build timestamp. */
-    private DateTime builtAt;
+    private LocalDateTime builtAt;
     /* Git revision. */
     private String revision;
     /** Git branch name. */
@@ -38,10 +38,10 @@ public class BuildInfo {
         return version != null && !version.contains("$");
     }
 
-    public static BuildInfo create() {
+    public static BuildInfo create(ObjectMapper mapper) {
         try {
             String info = Resources.toString(Resources.getResource("bo/gotthardt/application/build.json"), Charsets.UTF_8);
-            return Jackson.newObjectMapper().readValue(info, BuildInfo.class);
+            return mapper.readValue(info, BuildInfo.class);
         } catch (IOException e) {
             log.warn("Unable to read and map build information.", e);
             return new BuildInfo();

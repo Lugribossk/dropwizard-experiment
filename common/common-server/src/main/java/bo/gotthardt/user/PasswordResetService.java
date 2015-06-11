@@ -7,9 +7,10 @@ import bo.gotthardt.model.User;
 import com.avaje.ebean.EbeanServer;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
 import javax.inject.Inject;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  * Service for requesting and executing a password reset via email.
@@ -18,7 +19,7 @@ import javax.inject.Inject;
  */
 @Slf4j
 public class PasswordResetService {
-    private static final Duration TOKEN_LIFETIME = Duration.standardDays(2);
+    private static final Duration TOKEN_LIFETIME = Duration.ofDays(2);
     private final EbeanServer db;
     private final EmailService email;
 
@@ -46,7 +47,7 @@ public class PasswordResetService {
                     .findUnique();
 
             if (verify != null) {
-                verify.setExpirationDate(DateTime.now().plus(TOKEN_LIFETIME));
+                verify.setExpirationDate(LocalDateTime.now().plus(TOKEN_LIFETIME));
                 db.save(verify);
             } else {
                 verify = new EmailVerification(user, TOKEN_LIFETIME, EmailVerification.Type.PASSWORD_RESET);
@@ -72,7 +73,7 @@ public class PasswordResetService {
             if (verify.isValid() && verify.getType() == EmailVerification.Type.PASSWORD_RESET) {
                 user.setPassword(new HashedValue(newPassword));
                 db.save(user);
-                verify.setExpirationDate(DateTime.now());
+                verify.setExpirationDate(LocalDateTime.now());
                 db.save(verify);
 
                 log.info("Changed password for user {} from email token.", user);

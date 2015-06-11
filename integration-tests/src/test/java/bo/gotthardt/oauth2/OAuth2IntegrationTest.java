@@ -7,14 +7,14 @@ import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestFactory;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.user.UserResource;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.net.HttpHeaders;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.oauth.OAuthFactory;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import org.assertj.core.api.Assertions;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
-import org.joda.time.Duration;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -22,6 +22,7 @@ import org.junit.Test;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.time.Duration;
 
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
@@ -37,6 +38,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         .addResource(new UserResource(db))
         .addResource(OAuth2AuthorizationRequestFactory.getBinder())
         .addResource(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)))
+        .setMapper(Jackson.newObjectMapper().registerModule(new JSR310Module()))
         .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
         .build();
 
@@ -56,7 +58,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
         OAuth2AccessToken token = response.readEntity(OAuth2AccessToken.class);
         // The token sent in the response won't have any user information, but if we get it from the database it will have.
-        Assertions.assertThat(db.find(OAuth2AccessToken.class, token.getAccessToken()).getUser().getId())
+        assertThat(db.find(OAuth2AccessToken.class, token.getAccessToken()).getUser().getId())
             .isEqualTo(user.getId());
     }
 
@@ -129,7 +131,7 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
 
     @Test
     public void shouldInvalidateTokens() {
-        OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
+        OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.ofHours(1));
         db.save(token);
 
         target("/token").request()

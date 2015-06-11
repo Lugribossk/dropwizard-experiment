@@ -15,6 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Bo Gotthardt
@@ -26,7 +27,7 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
 
     @GET
     @Path("/{id}")
-    public P one(@Auth User user, @PathParam("id") long id) {
+    public P one(@Auth User user, @PathParam("id") UUID id) {
         P item = service.fetchById(id);
 
         WebAppPreconditions.assertAccessTo(user, item);
@@ -64,7 +65,7 @@ public class RestrictedRestResource<P extends Persistable & AccessibleBy<User>> 
 
     @DELETE
     @Path("/{id}")
-    public void delete(@Auth User user, @PathParam("id") long id) {
+    public void delete(@Auth User user, @PathParam("id") UUID id) {
         P item = service.fetchById(id);
 
         WebAppPreconditions.assertAccessTo(user, item);

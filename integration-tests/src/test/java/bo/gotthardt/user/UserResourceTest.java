@@ -3,7 +3,9 @@ package bo.gotthardt.user;
 import bo.gotthardt.model.User;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.test.DummyAuthFactory;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -22,6 +24,7 @@ public class UserResourceTest extends ApiIntegrationTest {
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new UserResource(db))
             .addResource(AuthFactory.binder(authFactory))
+            .setMapper(Jackson.newObjectMapper().registerModule(new JSR310Module()))
             .build();
 
     private User user;
@@ -40,7 +43,7 @@ public class UserResourceTest extends ApiIntegrationTest {
 
     @Test
     public void shouldGetById() {
-        assertThat(GET("/users/" + user.getId()))
+        assertThat(GET("/users/" + user.getId().toString()))
                 .hasJsonContent(user);
     }
 

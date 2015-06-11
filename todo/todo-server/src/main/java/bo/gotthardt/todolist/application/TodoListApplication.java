@@ -1,9 +1,10 @@
 package bo.gotthardt.todolist.application;
 
+import bo.gotthardt.application.BuildInfo;
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
-import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.jersey.filter.BasicAuthFilter;
+import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.queue.WorkersCommand;
@@ -18,6 +19,7 @@ import com.google.common.base.Stopwatch;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
+import io.dropwizard.java8.Java8Bundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.Getter;
@@ -57,6 +59,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         ebeanBundle = new EbeanBundle();
         rabbitMqBundle = new RabbitMQBundle();
 
+        bootstrap.addBundle(new Java8Bundle());
         bootstrap.addBundle(ebeanBundle);
         bootstrap.addBundle(rabbitMqBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
@@ -86,7 +89,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         filter.setInitParameter("preflightMaxAge", "5184000"); // 2 months
         filter.setInitParameter("allowCredentials", "true");
 
-        environment.healthChecks().register("version", new VersionHealthCheck());
+        environment.healthChecks().register("version", new VersionHealthCheck(BuildInfo.create(environment.getObjectMapper())));
 
         BasicAuthFilter.addToAdmin(environment, "test", "test");
 

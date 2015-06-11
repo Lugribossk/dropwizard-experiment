@@ -1,9 +1,10 @@
 package bo.gotthardt.oauth2;
 
-import bo.gotthardt.model.User;
 import bo.gotthardt.model.OAuth2AccessToken;
-import org.joda.time.Duration;
+import bo.gotthardt.model.User;
 import org.junit.Test;
+
+import java.time.Duration;
 
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
@@ -16,7 +17,7 @@ public class OAuth2AccessTokenTest {
     @Test
     public void shouldBeValidWhenNotExpired() {
         User user = new User("test", "blah", "Blah");
-        OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.standardHours(1));
+        OAuth2AccessToken token = new OAuth2AccessToken(user, Duration.ofDays(1));
 
         assertThat(token.isValid()).isTrue();
     }

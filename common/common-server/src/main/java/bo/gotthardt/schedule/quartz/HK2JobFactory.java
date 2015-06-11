@@ -1,6 +1,6 @@
 package bo.gotthardt.schedule.quartz;
 
-import com.google.inject.Injector;
+import org.glassfish.hk2.api.ServiceLocator;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -11,20 +11,20 @@ import org.quartz.spi.TriggerFiredBundle;
 import javax.inject.Inject;
 
 /**
- * Borrowed from https://github.com/spinscale/dropwizard-jobs/blob/master/dropwizard-jobs-guice/src/main/java/de/spinscale/dropwizard/jobs/GuiceJobFactory.java
+ * A Quartz JobFactory that uses HK2 dependency injection to create Job instances.
  */
-class GuiceJobFactory implements JobFactory {
-    private final Injector injector;
+public class HK2JobFactory implements JobFactory {
+    private final ServiceLocator locator;
 
     @Inject
-    public GuiceJobFactory(Injector injector) {
-        this.injector = injector;
+    public HK2JobFactory(ServiceLocator locator) {
+        this.locator = locator;
     }
 
     @Override
     public Job newJob(TriggerFiredBundle triggerFiredBundle, Scheduler scheduler) throws SchedulerException {
         JobDetail jobDetail = triggerFiredBundle.getJobDetail();
         Class<? extends Job> jobClass = jobDetail.getJobClass();
-        return injector.getInstance(jobClass);
+        return locator.getService(jobClass);
     }
 }

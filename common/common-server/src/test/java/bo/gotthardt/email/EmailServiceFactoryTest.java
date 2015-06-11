@@ -7,13 +7,13 @@ import org.junit.Test;
 import static bo.gotthardt.test.assertj.DropwizardAssertions.assertThat;
 
 
-public class EmailServiceProviderTest {
+public class EmailServiceFactoryTest {
     @Test
     public void shouldCreateLoggerServiceWhenEmailsAreDisabled() {
         TestConfiguration config = new TestConfiguration();
         config.getEmail().setEnabled(false);
 
-        EmailService email = new EmailServiceProvider(config, null).get();
+        EmailService email = new EmailServiceFactory(config, null).provide();
 
         assertThat(email).isInstanceOf(LoggerEmailService.class);
     }

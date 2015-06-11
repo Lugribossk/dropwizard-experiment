@@ -4,18 +4,17 @@ import bo.gotthardt.schedule.HasScheduleConfigurations;
 import bo.gotthardt.schedule.ScheduleConfiguration;
 import bo.gotthardt.schedule.quartz.HasQuartzConfiguration;
 import bo.gotthardt.schedule.quartz.Quartz;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.utils.Key;
@@ -32,7 +31,7 @@ import java.util.stream.Collectors;
  * Message queue workers can be configured with which worker classes to instantiate, and how many threads of each.
  * Scheduled jobs can be configured with which job classes to instantiate, and a cron expression for when they should run.
  *
- * Due to weirdness with the Dropwizard initialization order, a Guice Injector must be set after creation.
+ * Due to weirdness with the Dropwizard initialization order, the HK2 service locator must be set after creation.
  * Make sure it has been set up for providing all the dependencies required for the workers and jobs being used.
  *
  * @author Bo Gotthardt
@@ -42,8 +41,6 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
         extends EnvironmentCommand<T> implements Managed {
     private static final String GROUP_NAME = "cron";
 
-    @Setter
-    private Injector injector;
     private List<QueueWorker> workers = new ArrayList<>();
 
     /**
@@ -56,15 +53,15 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
 
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
-        Preconditions.checkNotNull(injector, "Injector not set, perhaps the run() execution order changed?");
+        ServiceLocator locator = ((ServletContainer) environment.getJerseyServletContainer()).getApplicationHandler().getServiceLocator();
 
         if (!configuration.getWorkers().isEmpty()) {
-            setupWorkers(configuration.getWorkers(), environment, injector);
+            setupWorkers(configuration.getWorkers(), environment, locator);
             log.info("Created {} workers.", workers.size());
         }
 
         if (!configuration.getSchedules().isEmpty()) {
-            Quartz quartz = new Quartz(configuration.getQuartz(), configuration.getDatabase(), injector);
+            Quartz quartz = new Quartz(configuration.getQuartz(), configuration.getDatabase(), locator);
             environment.lifecycle().manage(quartz);
 
             setupSchedules(configuration.getSchedules(), quartz.getScheduler());
@@ -75,7 +72,7 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
         }
     }
 
-    private void setupWorkers(List<WorkerConfiguration> configurations, Environment environment, Injector injector) {
+    private void setupWorkers(List<WorkerConfiguration> configurations, Environment environment, ServiceLocator locator) {
         configurations.forEach(config -> {
                 Class<? extends QueueWorker> workerClass = config.getWorker();
                 ExecutorService executorService = environment.lifecycle()
@@ -84,7 +81,7 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
                         .build();
 
                 for (int i = 0; i < config.getThreads(); i++) {
-                    QueueWorker<?> worker = injector.getInstance(workerClass);
+                    QueueWorker<?> worker = locator.getService(workerClass);
                     executorService.submit(worker);
                     workers.add(worker);
                 }

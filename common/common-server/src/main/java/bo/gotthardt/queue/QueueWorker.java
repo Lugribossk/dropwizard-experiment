@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * Having this as a concrete class rather than passing the processing function directly to the
  * queue lets us make the link between queue and function explicit. It also allows the worker to be instantiated by
- * Guice without TypeLiteral binding configuration craziness.
+ * Guice/HK2 without TypeLiteral binding configuration craziness.
  *
  * @author Bo Gotthardt
  */

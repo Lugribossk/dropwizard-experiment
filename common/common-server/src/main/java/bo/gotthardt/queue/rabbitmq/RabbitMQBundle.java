@@ -14,6 +14,7 @@ import io.dropwizard.setup.Environment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.glassfish.hk2.api.Factory;
 
 import java.io.IOException;
 
@@ -58,7 +59,7 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
 
     @Override
     public void start() throws Exception {
-        // Connection and channel init code should really be in here, but it has to be earlier in the startup to be ready when Guice initializes.
+        // Connection and channel init code should really be in here, but it has to be earlier in the startup to be ready when Guice/HK2 initializes.
     }
 
     @Override
@@ -82,6 +83,18 @@ public class RabbitMQBundle implements ConfiguredBundle<HasRabbitMQConfiguration
         Preconditions.checkState(channel.isOpen(), "Channel already closed.");
 
         return new RabbitMQMessageQueue<>(channel, queueName, type, metrics);
+    }
+
+    public <T> Factory<MessageQueue<T>> getQueueFactory(String queueName, Class<T> type) {
+        return new Factory<MessageQueue<T>>() {
+            @Override
+            public MessageQueue<T> provide() {
+                return getQueue(queueName, type);
+            }
+
+            @Override
+            public void dispose(MessageQueue<T> instance) {}
+        };
     }
 
     /**

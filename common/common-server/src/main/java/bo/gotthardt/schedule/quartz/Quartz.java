@@ -1,9 +1,9 @@
 package bo.gotthardt.schedule.quartz;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Injector;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.lifecycle.Managed;
+import org.glassfish.hk2.api.ServiceLocator;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
@@ -21,20 +21,20 @@ public class Quartz implements Managed, Provider<Scheduler> {
     private Scheduler scheduler;
 
     @Inject
-    public Quartz(QuartzConfiguration quartzConfig, DataSourceFactory dbConfig, Injector injector) throws SchedulerException {
+    public Quartz(QuartzConfiguration quartzConfig, DataSourceFactory dbConfig, ServiceLocator locator) throws SchedulerException {
         this.quartzConfig = quartzConfig;
         this.dbConfig = dbConfig;
 
         SchedulerFactory schedulerFactory = new StdSchedulerFactory(getProperties());
         scheduler = schedulerFactory.getScheduler();
-        scheduler.setJobFactory(new GuiceJobFactory(injector));
+        scheduler.setJobFactory(new HK2JobFactory(locator));
 
         scheduler.start();
     }
 
     @Override
     public void start() throws Exception {
-
+        // Empty on purpose.
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Quartz implements Managed, Provider<Scheduler> {
             props.setProperty("org.quartz.dataSource.main.driver", dbConfig.getDriverClass());
             props.setProperty("org.quartz.dataSource.main.URL", dbConfig.getUrl());
             props.setProperty("org.quartz.dataSource.main.user", dbConfig.getUser());
-            props.setProperty("org.quartz.dataSource.main.passowrd", dbConfig.getPassword());
+            props.setProperty("org.quartz.dataSource.main.password", dbConfig.getPassword());
         }
 
         return props;

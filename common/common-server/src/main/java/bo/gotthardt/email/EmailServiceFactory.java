@@ -2,36 +2,36 @@ package bo.gotthardt.email;
 
 import bo.gotthardt.email.sendgrid.HasSendGridConfiguration;
 import bo.gotthardt.email.sendgrid.SendGridEmailService;
-import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
+import org.glassfish.hk2.api.Factory;
+import org.glassfish.hk2.api.ServiceLocator;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
-/**
- * Guice {@link Provider} for {@link EmailService}s.
- *
- * @author Bo Gotthardt
- */
 @Slf4j
-public class EmailServiceProvider implements Provider<EmailService> {
+public class EmailServiceFactory implements Factory<EmailService> {
     private final HasSendGridConfiguration config;
-    private final Injector injector;
+    private final ServiceLocator locator;
 
     @Inject
-    public EmailServiceProvider(HasSendGridConfiguration config, Injector injector) {
+    public EmailServiceFactory(HasSendGridConfiguration config, ServiceLocator locator) {
         this.config = config;
-        this.injector = injector;
+        this.locator = locator;
     }
 
     @Override
-    public EmailService get() {
+    public EmailService provide() {
         if (!config.getEmail().isEnabled() || config.getSendGrid() == null) {
             log.info("Email sending disabled, logging them to console instead.");
             return new LoggerEmailService();
         } else {
             log.info("Email sending enabled with SendGrid username {}.", config.getSendGrid().getUsername());
-            return injector.getInstance(SendGridEmailService.class);
+            return locator.getService(SendGridEmailService.class);
         }
+    }
+
+    @Override
+    public void dispose(EmailService instance) {
+        // Empty on purpose.
     }
 }

@@ -17,8 +17,6 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Stopwatch;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.java8.Java8Bundle;
 import io.dropwizard.setup.Bootstrap;
@@ -42,7 +40,6 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     @Getter
     private EbeanBundle ebeanBundle;
     private RabbitMQBundle rabbitMqBundle;
-    private WorkersCommand<TodoListConfiguration> workersCommand;
 
     public static void main(String... args) throws Exception {
         Stopwatch startupTimer = Stopwatch.createStarted();
@@ -70,18 +67,16 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         bootstrap.addBundle(new TodoClientBundle());
 
         // The anonymous subclass seems to be needed for the config type to be picked up correctly.
-        workersCommand = new WorkersCommand<TodoListConfiguration>(this) {};
-        bootstrap.addCommand(workersCommand);
+        bootstrap.addCommand(new WorkersCommand<TodoListConfiguration>(TodoListApplication.this) {});
     }
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        Injector injector = Guice.createInjector(new TodoListGuiceModule(environment, configuration, ebeanBundle, rabbitMqBundle));
-        workersCommand.setInjector(injector);
+        environment.jersey().register(new TodoListHK2Binder(environment, configuration, ebeanBundle, rabbitMqBundle));
 
-        environment.jersey().register(injector.getInstance(TodoListResource.class));
-        environment.jersey().register(injector.getInstance(UserResource.class));
-        environment.jersey().register(injector.getInstance(EmailVerificationResource.class));
+        environment.jersey().register(TodoListResource.class);
+        environment.jersey().register(UserResource.class);
+        environment.jersey().register(EmailVerificationResource.class);
 
         environment.jersey().register(ListFilteringFactory.getBinder());
 

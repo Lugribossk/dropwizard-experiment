@@ -13,7 +13,7 @@ machine:
 dependencies:
   override:
     - npm install -g grunt-cli
-    - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
+    - mvn versions:set -DnewVersion=1.0.0-${CIRCLE_SHA1:0:7} -B
     - mvn install -DskipTests=true -B
 
 test:
@@ -31,6 +31,8 @@ deployment:
   dockerImage:
     branch: /.*/
     commands:
+      - docker version
+      - echo $DOCKER_IMAGE_NAME
       - docker build -t $DOCKER_IMAGE_NAME todo/todo-server
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_HOST
       - docker push $DOCKER_IMAGE_NAME

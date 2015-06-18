@@ -7,8 +7,8 @@ machine:
     - rabbitmq-server
     - docker
   environment:
-    DOCKER_HOST: tutum.co
-    DOCKER_IMAGE_NAME: $DOCKER_HOST/$DOCKER_USERNAME/todo-server:$CIRCLE_BRANCH
+    DOCKER_REGISTRY: tutum.co
+    DOCKER_IMAGE_NAME: $DOCKER_REGISTRY/$DOCKER_USERNAME/todo-server:$CIRCLE_BRANCH
 
 dependencies:
   override:
@@ -34,7 +34,7 @@ deployment:
       - docker version
       - echo $DOCKER_IMAGE_NAME
       - docker build -t $DOCKER_IMAGE_NAME todo/todo-server
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_HOST
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_REGISTRY
       - docker push $DOCKER_IMAGE_NAME
 
 general:

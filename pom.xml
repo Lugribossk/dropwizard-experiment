@@ -38,12 +38,6 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
         <dropwizard.version>0.8.1</dropwizard.version>
-
-        <docker.username>${env.DOCKER_USERNAME}</docker.username>
-        <docker.password>${env.DOCKER_PASSWORD}</docker.password>
-        <docker.email>${env.DOCKER_EMAIL}</docker.email>
-        <docker.host>tutum.co</docker.host>
-        <docker.imageName>${docker.host}/${docker.username}/${project.artifactId}</docker.imageName>
     </properties>
 
     <build>
@@ -114,7 +108,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <!-- TODO needed for fat jar? -->
+                                <!-- Include version in fat jar. -->
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                         </archive>
@@ -123,6 +117,7 @@
                         <forceCreation>true</forceCreation>
                         <!-- Avoid empty jar warnings caused by enabling test-jar. -->
                         <skipIfEmpty>true</skipIfEmpty>
+                        <!-- Give jars a predictable name so they're easier to add in the Dockerfile. -->
                         <finalName>${project.artifactId}</finalName>
                     </configuration>
                     <executions>

@@ -10,11 +10,10 @@ RUN apt-get install -y oracle-java8-installer
 
 EXPOSE 80
 
-#RUN mkdir -p /opt/config/
-#VOLUME /opt/config
 #ENV JAVA_TOOL_OPTIONS -Xmx=256m
 
-CMD ["--help"]
-ENTRYPOINT ["java", "-jar", "${project.build.finalName}.jar"]
+ENTRYPOINT ["java", "-jar", "todo-server.jar"]
+CMD ["server", "config.yml"]
 
-ADD ${project.build.finalName}.jar /
+ADD config/config.yml /
+ADD target/todo-server.jar /

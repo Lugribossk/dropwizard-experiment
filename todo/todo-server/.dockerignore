@@ -1,0 +1,10 @@
+src
+target/classes
+target/generated-sources
+target/maven-archiver
+target/maven-status
+target/site
+target/test-classes
+target/original*.jar
+target/*tests.jar
+target/*shaded.jar

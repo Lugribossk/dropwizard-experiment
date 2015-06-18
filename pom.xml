@@ -123,6 +123,7 @@
                         <forceCreation>true</forceCreation>
                         <!-- Avoid empty jar warnings caused by enabling test-jar. -->
                         <skipIfEmpty>true</skipIfEmpty>
+                        <finalName>${artifactId}</finalName>
                     </configuration>
                     <executions>
                         <execution>

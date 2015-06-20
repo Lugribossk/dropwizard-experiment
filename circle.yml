@@ -3,32 +3,43 @@ machine:
     version: oraclejdk8
   node:
     version: 0.12.0
+  python:
+    version: 2.7.9
   services:
     - rabbitmq-server
     - docker
 
 dependencies:
-  override:
+  pre:
     - npm install -g grunt-cli
-    - mvn versions:set -DnewVersion=1.0.0-$(git rev-parse --short HEAD) -B
+    - pip install tutum awscli
+    - chmod +x ./build/*.sh
+  override:
+    - mvn versions:set -DnewVersion=1.0.0-${CIRCLE_SHA1:0:7} -B
     - mvn install -DskipTests=true -B
 
 test:
   override:
     - mvn test -DskipBuild=true -B
-    - cp common/common-client/target/style.xml $CIRCLE_TEST_REPORTS/common-style.xml
-    - cp common/common-client/target/tests.xml $CIRCLE_TEST_REPORTS/common-tests.xml
-    - cp common/common-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
-    - cp integration-tests/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
-    - cp todo/todo-client/target/style.xml $CIRCLE_TEST_REPORTS/todo-style.xml
-    - cp todo/todo-client/target/tests.xml $CIRCLE_TEST_REPORTS/todo-tests.xml
-    #- cp todo/todo-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
+  post:
+    - cp common/common-client/target/style.xml ${CIRCLE_TEST_REPORTS}/common-style.xml
+    - cp common/common-client/target/tests.xml ${CIRCLE_TEST_REPORTS}/common-tests.xml
+    - cp common/common-server/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
+    - cp integration-tests/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
+    - cp todo/todo-client/target/style.xml ${CIRCLE_TEST_REPORTS}/todo-style.xml
+    - cp todo/todo-client/target/tests.xml ${CIRCLE_TEST_REPORTS}/todo-tests.xml
+    #- cp todo/todo-server/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
 
 deployment:
-  dockerImage:
+  production:
+    branch: deploymentstatus
+    commands:
+      - ./build/docker.sh
+      - ./build/redeploy.sh todo-server-095fc30b production
+  imageOnly:
     branch: /.*/
     commands:
-      - mvn validate -DpushDockerImages=true -B
+      - ./build/docker.sh
 
 general:
   artifacts:

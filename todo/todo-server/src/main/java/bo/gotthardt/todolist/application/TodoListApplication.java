@@ -3,7 +3,6 @@ package bo.gotthardt.todolist.application;
 import bo.gotthardt.application.BuildInfo;
 import bo.gotthardt.application.VersionHealthCheck;
 import bo.gotthardt.ebean.EbeanBundle;
-import bo.gotthardt.jersey.filter.BasicAuthFilter;
 import bo.gotthardt.jersey.parameters.ListFilteringFactory;
 import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.OAuth2Bundle;
@@ -58,14 +57,14 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     @Override
     public void initialize(Bootstrap<TodoListConfiguration> bootstrap) {
         ebeanBundle = new EbeanBundle();
-        rabbitMqBundle = new RabbitMQBundle();
+        //rabbitMqBundle = new RabbitMQBundle();
 
         // This outputs xDateTimes as ISO strings rather than an array of numbers in JSON.
         bootstrap.getObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         bootstrap.addBundle(new Java8Bundle());
         bootstrap.addBundle(ebeanBundle);
-        bootstrap.addBundle(rabbitMqBundle);
+        //bootstrap.addBundle(rabbitMqBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
         bootstrap.addBundle(new TodoClientBundle());
 
@@ -76,7 +75,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
     @Override
     public void run(TodoListConfiguration configuration, Environment environment) throws Exception {
-        Injector injector = Guice.createInjector(new TodoListGuiceModule(environment, configuration, ebeanBundle, rabbitMqBundle));
+        Injector injector = Guice.createInjector(new TodoListGuiceModule(environment, configuration, ebeanBundle));
         workersCommand.setInjector(injector);
 
         environment.jersey().register(injector.getInstance(TodoListResource.class));
@@ -97,7 +96,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         log.info(buildInfo.printableInfo());
         environment.healthChecks().register("version", new VersionHealthCheck(buildInfo));
 
-        BasicAuthFilter.addToAdmin(environment, "test", "test");
+        //BasicAuthFilter.addToAdmin(environment, "test", "test");
 
         startupTimeMetric = environment.metrics().timer(MetricRegistry.name(TodoListApplication.class, "startup"));
 
@@ -105,6 +104,6 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         user.setEmail("example@example.com");
         ebeanBundle.getEbeanServer().save(user);
 
-        rabbitMqBundle.getQueue("username", User.class).publish(user);
+        //rabbitMqBundle.getQueue("username", User.class).publish(user);
     }
 }

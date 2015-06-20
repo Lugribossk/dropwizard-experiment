@@ -1,0 +1,13 @@
+server:
+  rootPath: /api/*
+  type: simple
+  applicationContextPath: /
+  connector:
+    type: http
+    port: 80
+
+database:
+  user: sa
+  password:
+  url: jdbc:h2:mem:tests;DB_CLOSE_DELAY=-1
+  driverClass: org.h2.Driver

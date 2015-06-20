@@ -1,0 +1,17 @@
+#!/bin/bash
+# CircleCI environment variables for testing scripts locally.
+# Copy to local.sh and insert keys, then run source ./local.sh to set the variables.
+
+export CIRCLE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+export CIRCLE_SHA1=$(git rev-parse HEAD)
+export CIRCLE_PROJECT_USERNAME=Lugribossk
+export CIRCLE_PROJECT_REPONAME=dropwizard-experiment
+
+export TUTUM_USER=lugribossk
+export TUTUM_APIKEY=x
+
+export DOCKER_USERNAME=${TUTUM_USER}
+export DOCKER_PASSWORD=x
+export DOCKER_EMAIL=x
+
+export GITHUB_TOKEN=x

@@ -20,11 +20,6 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <directory>docker</directory>
-                <filtering>true</filtering>
-                <targetPath>${project.build.directory}</targetPath>
-            </resource>
         </resources>
 
         <plugins>
@@ -56,108 +51,6 @@
                     <plugin>
                         <groupId>org.avaje.ebeanorm</groupId>
                         <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>buildDockerImages</id>
-            <activation>
-                <property>
-                    <name>!skipDocker</name>
-                </property>
-                <file>
-                    <exists>docker/Dockerfile</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <!-- Build and upload Docker image. All the Docker plugins for Maven are not very mature yet, so do it via exec. -->
-                        <executions>
-                            <execution>
-                                <id>docker-build</id>
-                                <phase>install</phase>
-                                <goals><goal>exec</goal></goals>
-                                <configuration>
-                                    <executable>docker</executable>
-                                    <arguments>
-                                        <argument>build</argument>
-                                        <argument>-t</argument>
-                                        <argument>${docker.imageName}</argument>
-                                        <argument>${project.build.directory}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>docker-tag</id>
-                                <phase>install</phase>
-                                <goals><goal>exec</goal></goals>
-                                <configuration>
-                                    <executable>docker</executable>
-                                    <arguments>
-                                        <argument>tag</argument>
-                                        <argument>${docker.imageName}</argument>
-                                        <argument>${docker.imageName}:${git.branch}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>pushDockerImages</id>
-            <activation>
-                <property>
-                    <name>pushDockerImages</name>
-                </property>
-                <file>
-                    <exists>docker/Dockerfile</exists>
-                </file>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>docker-login</id>
-                                <phase>validate</phase>
-                                <goals><goal>exec</goal></goals>
-                                <configuration>
-                                    <executable>docker</executable>
-                                    <arguments>
-                                        <argument>login</argument>
-                                        <argument>-u</argument>
-                                        <argument>${docker.username}</argument>
-                                        <argument>-p</argument>
-                                        <argument>${docker.password}</argument>
-                                        <argument>-e</argument>
-                                        <argument>${docker.email}</argument>
-                                        <argument>${docker.host}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>docker-push</id>
-                                <phase>validate</phase>
-                                <goals><goal>exec</goal></goals>
-                                <configuration>
-                                    <executable>docker</executable>
-                                    <arguments>
-                                        <argument>push</argument>
-                                        <argument>${docker.imageName}:${git.branch}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>

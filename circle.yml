@@ -11,12 +11,10 @@ machine:
 
 dependencies:
   pre:
-    - curl --version
-    - curl -d '{"test": "test"}' localhost
-    - curl -sS -d '{"test": "test"}' localhost
     - npm install -g grunt-cli
     - pip install tutum awscli
     - chmod +x ./build/*.sh
+    - ./build/test.sh
   override:
     - mvn versions:set -DnewVersion=1.0.0-${CIRCLE_SHA1:0:7} -B
     - mvn install -DskipTests=true -B

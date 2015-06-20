@@ -1,4 +1,9 @@
 #!/bin/bash
-curl --version
-curl -d '{"test": "test"}' localhost
-curl -sS -d '{"test": "test"}' localhost
+curl -X POST \
+-d '{"test": "test"}' \
+localhost
+
+TEST=test
+curl -X POST \
+-d '{"test": "'"${TEST}"'"}' \
+localhost

@@ -11,7 +11,7 @@ github () {
     URL=$1 # URL after repo name to post to.
     PAYLOAD=$2 # JSON payload as a string.
 
-	curl -X POST \
+	curl -X POST -sS \
 	-H "Accept: application/vnd.github.v3+json" \
 	-H "Authorization: token "${GITHUB_TOKEN} \
 	-H "Content-Type: application/json" \
@@ -34,15 +34,16 @@ tutumPublicUrl () {
     tutum service inspect ${ID} | grep -Po '"public_dns": ?"\K([^"]*)'
 }
 
-echo Creating Github deployment
-DEPLOYMENT_ID=$(github deployments '{"ref": "'"${CIRCLE_SHA1}"'", "description": "CircleCI", "environment": "'"${DEPLOY_ENVIRONMENT}"'"}' |  grep -Po '"url": ?"[^,]*?deployments/\K([^"]*)')
+echo *** Creating Github deployment
+DEPLOYMENT=$(github deployments '{"ref": "'"${CIRCLE_SHA1}"'", "description": "CircleCI", "required_contexts": [], "environment": "'"${DEPLOY_ENVIRONMENT}"'"}')
+DEPLOYMENT_ID=$(echo ${DEPLOYMENT} |  grep -Po '"url": ?"[^,]*?deployments/\K([^"]*)')
 githubDeployStatus ${DEPLOYMENT_ID} pending
 
-echo Redeploying ${SERVICE_ID} on Tutum
+echo *** Redeploying ${SERVICE_ID} on Tutum
 tutum service redeploy ${SERVICE_ID}
 SERVICE_HEALTHCHECK_URL=$(tutumPublicUrl ${SERVICE_ID})/admin/healthcheck
 
-echo Polling healthcheck on ${SERVICE_HEALTHCHECK_URL}
+echo *** Polling healthcheck on ${SERVICE_HEALTHCHECK_URL}
 if curl --retry 12 --retry-delay 5 --no-buffer ${SERVICE_HEALTHCHECK_URL} ; then
     echo ...ok.
     githubDeployStatus ${DEPLOYMENT_ID} success

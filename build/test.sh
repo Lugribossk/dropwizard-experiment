@@ -16,4 +16,4 @@ github () {
 	https://api.github.com/repos/${REPO_NAME}/${URL}
 }
 
-github deployments "{\"ref\": \"${CIRCLE_SHA1}\", \"description\": \"CircleCI\", \"required_contexts\": [], \"environment\": \"test\"}"
+github deployments "{\"ref\":\"${CIRCLE_SHA1}\",\"description\":\"CircleCI\",\"required_contexts\":[],\"environment\":\"test\"}"

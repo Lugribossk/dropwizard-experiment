@@ -14,7 +14,6 @@ dependencies:
     - npm install -g grunt-cli
     - pip install tutum awscli
     - chmod +x ./build/*.sh
-    - ./build/test.sh
   override:
     - mvn versions:set -DnewVersion=1.0.0-${CIRCLE_SHA1:0:7} -B
     - mvn install -DskipTests=true -B
@@ -36,7 +35,7 @@ deployment:
     branch: deploymentstatus
     commands:
       - ./build/docker.sh
-      #- ./build/redeploy.sh todo-server-095fc30b production
+      - ./build/redeploy.sh todo-server-095fc30b production
   imageOnly:
     branch: /.*/
     commands:

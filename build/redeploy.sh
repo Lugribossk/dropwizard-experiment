@@ -13,7 +13,7 @@ github () {
 
 	curl -X POST -sS \
 	-H "Accept: application/vnd.github.v3+json" \
-	-H "Authorization: token "${GITHUB_TOKEN} \
+	-H "Authorization: token ${GITHUB_TOKEN}" \
 	-H "Content-Type: application/json" \
 	-H "User-Agent: Lugribossk deploy script" \
 	-d ${PAYLOAD} \
@@ -24,7 +24,7 @@ githubDeployStatus () {
     ID=$1 # Github deployment ID.
     STATE=$2 # Github deployment state, either "pending", "success", "failure" or "error".
 
-    github deployments/${ID}/statuses '{"state": "'"${STATE}"'", "target_url": "https://circleci.com/gh/'"${REPO_NAME}"'/'"${CIRCLE_BUILD_NUM}"'"}'
+    github deployments/${ID}/statuses "{\"state\":\"${STATE}\",\"target_url\":\"https://circleci.com/gh/${REPO_NAME}/${CIRCLE_BUILD_NUM}\"}"
 }
 
 tutumPublicUrl () {
@@ -35,8 +35,8 @@ tutumPublicUrl () {
 }
 
 echo Creating Github deployment
-DEPLOYMENT=$(github deployments '{"ref": "'"${CIRCLE_SHA1}"'", "description": "CircleCI", "required_contexts": [], "environment": "'"${DEPLOY_ENVIRONMENT}"'"}')
-DEPLOYMENT_ID=$(echo ${DEPLOYMENT} |  grep -Po '"url": ?"[^,]*?deployments/\K([^"]*)')
+DEPLOYMENT=$(github deployments "{\"ref\":\"${CIRCLE_SHA1}\",\"description\":\"CircleCI\",\"required_contexts\":[],\"environment\":\"${DEPLOY_ENVIRONMENT}\"}")
+DEPLOYMENT_ID=$(echo ${DEPLOYMENT} | grep -Po '"url": ?"[^,]*?deployments/\K([^"]*)')
 githubDeployStatus ${DEPLOYMENT_ID} pending
 
 echo Redeploying ${SERVICE_ID} on Tutum

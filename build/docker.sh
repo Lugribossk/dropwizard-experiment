@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Builds and pushes a Docker image.
 
 NAME=todo-server

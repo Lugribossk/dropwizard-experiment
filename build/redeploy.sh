@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # Redeploys a Tutum service with the newest version of it's associated Docker image, and checks that it starts correctly.
 # Also sends deployment status to Github.
 SERVICE_ID=$1 # Tutum ID of the service to redeploy.

@@ -33,14 +33,19 @@ tutumPublicUrl () {
     tutum service inspect ${ID} | grep -Po '"public_dns": "\K([^"]*)'
 }
 
+echo Creating Github deployment
 DEPLOYMENT_ID=$(github deployments '{"ref": "'"${CIRCLE_SHA1}"'", "description": "CircleCI", "environment": "'"${DEPLOY_ENVIRONMENT}"'"}' |  grep -Po '"url":"[^,]*?deployments/\K([^"]*)')
 githubDeployStatus ${DEPLOYMENT_ID} pending
 
+echo Redeploying ${SERVICE_ID} on Tutum
 tutum service redeploy ${SERVICE_ID}
 SERVICE_HEALTHCHECK_URL=$(tutumPublicUrl ${SERVICE_ID})/admin/healthcheck
 
+echo Polling healthcheck on ${SERVICE_HEALTHCHECK_URL}
 if curl --retry 12 --retry-delay 5 --no-buffer ${SERVICE_HEALTHCHECK_URL} ; then
+    echo ...ok.
     githubDeployStatus ${DEPLOYMENT_ID} success
 else
+    echo ...not ok after 60 seconds!
     githubDeployStatus ${DEPLOYMENT_ID} failure
 fi

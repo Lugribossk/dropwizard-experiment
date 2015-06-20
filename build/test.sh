@@ -12,7 +12,7 @@ github () {
 	-H "Authorization: token "${GITHUB_TOKEN} \
 	-H "Content-Type: application/json" \
 	-H "User-Agent: Lugribossk deploy script" \
-	-d $(echo PAYLOAD) \
+	-d $(echo ${PAYLOAD}) \
 	https://api.github.com/repos/${REPO_NAME}/${URL}
 }
 

@@ -31,11 +31,11 @@ tutumPublicUrl () {
     ID=$1
 
     # TODO It would be better to loop through container_ports and check each container directly.
-    tutum service inspect ${ID} | grep -Po '"public_dns": "\K([^"]*)'
+    tutum service inspect ${ID} | grep -Po '"public_dns": ?"\K([^"]*)'
 }
 
 echo Creating Github deployment
-DEPLOYMENT_ID=$(github deployments '{"ref": "'"${CIRCLE_SHA1}"'", "description": "CircleCI", "environment": "'"${DEPLOY_ENVIRONMENT}"'"}' |  grep -Po '"url":"[^,]*?deployments/\K([^"]*)')
+DEPLOYMENT_ID=$(github deployments '{"ref": "'"${CIRCLE_SHA1}"'", "description": "CircleCI", "environment": "'"${DEPLOY_ENVIRONMENT}"'"}' |  grep -Po '"url": ?"[^,]*?deployments/\K([^"]*)')
 githubDeployStatus ${DEPLOYMENT_ID} pending
 
 echo Redeploying ${SERVICE_ID} on Tutum

@@ -32,7 +32,7 @@ test:
 
 deployment:
   production:
-    branch: master
+    branch: deploymentstatus
     commands:
       - ./build/docker.sh
       - ./build/redeploy.sh todo-server-095fc30b production

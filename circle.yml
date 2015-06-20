@@ -8,13 +8,10 @@ machine:
   services:
     - rabbitmq-server
     - docker
-  environment:
-    DOCKER_REGISTRY: tutum.co
-    DOCKER_IMAGE_NAME: ${DOCKER_REGISTRY}/lugribossk/todo-server:${CIRCLE_BRANCH}
 
 dependencies:
   pre:
-    - npm install -g grunt-cli JSON.sh
+    - npm install -g grunt-cli
     - pip install tutum awscli
   override:
     - mvn versions:set -DnewVersion=1.0.0-${CIRCLE_SHA1:0:7} -B
@@ -33,16 +30,15 @@ test:
     #- cp todo/todo-server/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
 
 deployment:
-  dockerImage:
+  production:
+    branch: master
+    commands:
+      - ./build/docker.sh
+#      - ./build/redeploy.sh blahtutumid production
+  imageOnly:
     branch: /.*/
     commands:
-      - docker build -t ${DOCKER_IMAGE_NAME} todo/todo-server
-      - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} -e ${DOCKER_EMAIL} ${DOCKER_REGISTRY}
-      - docker push ${DOCKER_IMAGE_NAME}
-#  production:
-#    branch: master
-#    commands:
-#      - ./redeploy.sh blahtutumid
+      - ./build/docker.sh
 
 general:
   artifacts:

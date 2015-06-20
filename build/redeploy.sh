@@ -30,6 +30,7 @@ githubDeployStatus () {
 tutumPublicUrl () {
     ID=$1
 
+    # TODO It would be better to loop through container_ports and check each container directly.
     tutum service inspect ${ID} | grep -Po '"public_dns": "\K([^"]*)'
 }
 

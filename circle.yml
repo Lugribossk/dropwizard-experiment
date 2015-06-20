@@ -11,6 +11,9 @@ machine:
 
 dependencies:
   pre:
+    - curl --version
+    - curl -d '{"test": "test"}' localhost
+    - curl -sS -d '{"test": "test"}' localhost
     - npm install -g grunt-cli
     - pip install tutum awscli
     - chmod +x ./build/*.sh
@@ -35,7 +38,7 @@ deployment:
     branch: deploymentstatus
     commands:
       - ./build/docker.sh
-      - ./build/redeploy.sh todo-server-095fc30b production
+      #- ./build/redeploy.sh todo-server-095fc30b production
   imageOnly:
     branch: /.*/
     commands:

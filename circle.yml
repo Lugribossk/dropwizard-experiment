@@ -8,32 +8,34 @@ machine:
     - docker
   environment:
     DOCKER_REGISTRY: tutum.co
-    DOCKER_IMAGE_NAME: $DOCKER_REGISTRY/lugribossk/todo-server:$CIRCLE_BRANCH
+    DOCKER_IMAGE_NAME: ${DOCKER_REGISTRY}/lugribossk/todo-server:${CIRCLE_BRANCH}
 
 dependencies:
-  override:
+  pre:
     - npm install -g grunt-cli
+  override:
     - mvn versions:set -DnewVersion=1.0.0-${CIRCLE_SHA1:0:7} -B
     - mvn install -DskipTests=true -B
 
 test:
   override:
     - mvn test -DskipBuild=true -B
-    - cp common/common-client/target/style.xml $CIRCLE_TEST_REPORTS/common-style.xml
-    - cp common/common-client/target/tests.xml $CIRCLE_TEST_REPORTS/common-tests.xml
-    - cp common/common-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
-    - cp integration-tests/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
-    - cp todo/todo-client/target/style.xml $CIRCLE_TEST_REPORTS/todo-style.xml
-    - cp todo/todo-client/target/tests.xml $CIRCLE_TEST_REPORTS/todo-tests.xml
-    #- cp todo/todo-server/target/surefire-reports/*.xml $CIRCLE_TEST_REPORTS
+  post:
+    - cp common/common-client/target/style.xml ${CIRCLE_TEST_REPORTS}/common-style.xml
+    - cp common/common-client/target/tests.xml ${CIRCLE_TEST_REPORTS}/common-tests.xml
+    - cp common/common-server/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
+    - cp integration-tests/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
+    - cp todo/todo-client/target/style.xml ${CIRCLE_TEST_REPORTS}/todo-style.xml
+    - cp todo/todo-client/target/tests.xml ${CIRCLE_TEST_REPORTS}/todo-tests.xml
+    #- cp todo/todo-server/target/surefire-reports/*.xml ${CIRCLE_TEST_REPORTS}
 
 deployment:
   dockerImage:
     branch: /.*/
     commands:
-      - docker build -t $DOCKER_IMAGE_NAME todo/todo-server
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL $DOCKER_REGISTRY
-      - docker push $DOCKER_IMAGE_NAME
+      - docker build -t ${DOCKER_IMAGE_NAME} todo/todo-server
+      - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} -e ${DOCKER_EMAIL} ${DOCKER_REGISTRY}
+      - docker push ${DOCKER_IMAGE_NAME}
 
 general:
   artifacts:

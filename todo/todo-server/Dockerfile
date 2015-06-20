@@ -15,5 +15,4 @@ EXPOSE 80
 ENTRYPOINT ["java", "-jar", "todo-server.jar"]
 CMD ["server", "config.yml"]
 
-ADD config/config.yml /
-ADD target/todo-server.jar /
+ADD config/*.yml target/todo-server.jar /

@@ -7,11 +7,11 @@ import org.glassfish.hk2.api.Factory;
 
 import javax.inject.Inject;
 
-public class BlahFactory implements Factory<CrudService<Widget>> {
+public class WidgetCrudFactory implements Factory<CrudService<Widget>> {
     private final EbeanServer db;
 
     @Inject
-    public BlahFactory(EbeanServer db) {
+    public WidgetCrudFactory(EbeanServer db) {
         this.db = db;
     }
 

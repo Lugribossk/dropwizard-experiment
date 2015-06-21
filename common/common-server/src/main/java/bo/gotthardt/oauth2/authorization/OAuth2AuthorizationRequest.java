@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
  *
  * @author Bo Gotthardt
  */
+@FunctionalInterface
 public interface OAuth2AuthorizationRequest {
     Optional<User> getValidUser(EbeanServer db);
 }

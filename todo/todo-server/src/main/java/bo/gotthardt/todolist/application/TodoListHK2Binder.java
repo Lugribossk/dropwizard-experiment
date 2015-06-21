@@ -29,7 +29,7 @@ public class TodoListHK2Binder extends AbstractBinder {
             .to(new TypeLiteral<MessageQueue<User>>() {})
             .named("username");
 
-        bindFactory(BlahFactory.class).to(new TypeLiteral<CrudService<Widget>>(){});
+        bindFactory(WidgetCrudFactory.class).to(new TypeLiteral<CrudService<Widget>>(){});
 
         // guice
 //        bind(EmailService.class).toProvider(EmailServiceProvider.class);

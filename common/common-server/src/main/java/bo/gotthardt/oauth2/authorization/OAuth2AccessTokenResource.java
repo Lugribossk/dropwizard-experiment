@@ -8,9 +8,9 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.net.HttpHeaders;
 import io.dropwizard.auth.Auth;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -26,12 +26,16 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Produces(MediaType.APPLICATION_JSON)
-@RequiredArgsConstructor
 @Path("/token")
 public class OAuth2AccessTokenResource {
     private static final Duration TOKEN_LIFETIME = Duration.ofDays(365);
 
     private final EbeanServer db;
+
+    @Inject
+    public OAuth2AccessTokenResource(EbeanServer db) {
+        this.db = db;
+    }
 
     @POST
     public OAuth2AccessToken token(@Context OAuth2AuthorizationRequest authRequest) {

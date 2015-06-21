@@ -1,5 +1,6 @@
 package bo.gotthardt.queue;
 
+import bo.gotthardt.jersey.HK2Utils;
 import bo.gotthardt.schedule.HasScheduleConfigurations;
 import bo.gotthardt.schedule.ScheduleConfiguration;
 import bo.gotthardt.schedule.quartz.HasQuartzConfiguration;
@@ -14,7 +15,6 @@ import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.glassfish.hk2.api.ServiceLocator;
-import org.glassfish.jersey.servlet.ServletContainer;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.utils.Key;
@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
  * Message queue workers can be configured with which worker classes to instantiate, and how many threads of each.
  * Scheduled jobs can be configured with which job classes to instantiate, and a cron expression for when they should run.
  *
- * Due to weirdness with the Dropwizard initialization order, the HK2 service locator must be set after creation.
  * Make sure it has been set up for providing all the dependencies required for the workers and jobs being used.
  *
  * @author Bo Gotthardt
@@ -53,7 +52,7 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
 
     @Override
     protected void run(Environment environment, Namespace namespace, T configuration) throws Exception {
-        ServiceLocator locator = ((ServletContainer) environment.getJerseyServletContainer()).getApplicationHandler().getServiceLocator();
+        ServiceLocator locator = HK2Utils.getServiceLocator(environment);
 
         if (!configuration.getWorkers().isEmpty()) {
             setupWorkers(configuration.getWorkers(), environment, locator);

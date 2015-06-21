@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet author="Bo" id="base">
+        <createTable tableName="email_verification">
+            <column name="token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="type" type="VARCHAR(1)"/>
+            <column name="user_id" type="VARCHAR(40)"/>
+        </createTable>
+        <createTable tableName="oauth2access_token">
+            <column name="access_token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="user_id" type="VARCHAR(40)"/>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="todo_item">
+            <column name="id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="completed" type="BOOL"/>
+            <column name="todo_list_id" type="VARCHAR(40)"/>
+        </createTable>
+        <createTable tableName="todo_list">
+            <column name="id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="owner_id" type="VARCHAR(40)"/>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="users">
+            <column name="id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="widget">
+            <column name="id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+        <addPrimaryKey columnNames="token" constraintName="pk_email_verification" tableName="email_verification"/>
+        <addPrimaryKey columnNames="access_token" constraintName="pk_oauth2access_token" tableName="oauth2access_token"/>
+        <addPrimaryKey columnNames="id" constraintName="pk_todo_item" tableName="todo_item"/>
+        <addPrimaryKey columnNames="id" constraintName="pk_todo_list" tableName="todo_list"/>
+        <addPrimaryKey columnNames="id" constraintName="pk_users" tableName="users"/>
+        <addPrimaryKey columnNames="id" constraintName="pk_widget" tableName="widget"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="email_verification" constraintName="fk_email_verification_user_1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="oauth2access_token" constraintName="fk_oauth2access_token_user_2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="todo_list_id" baseTableName="todo_item" constraintName="fk_todo_item_todolist_3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="todo_list"/>
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="todo_list" constraintName="fk_todo_list_owner_4" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+        <createIndex indexName="ix_email_verification_user_1" tableName="email_verification" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="ix_oauth2access_token_user_2" tableName="oauth2access_token" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="ix_todo_item_todolist_3" tableName="todo_item" unique="false">
+            <column name="todo_list_id"/>
+        </createIndex>
+        <createIndex indexName="ix_todo_list_owner_4" tableName="todo_list" unique="false">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

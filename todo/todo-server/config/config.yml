@@ -7,10 +7,10 @@ server:
     port: 9090
 
 database:
-  user: sa
-  password:
-  url: jdbc:h2:mem:tests;DB_CLOSE_DELAY=-1
-  driverClass: org.h2.Driver
+  user: postgres
+  password: test
+  url: jdbc:postgresql://localhost:5432/development
+  driverClass: org.postgresql.Driver
 
 workers:
   - worker: bo.gotthardt.todolist.worker.UsernamePrintWorker

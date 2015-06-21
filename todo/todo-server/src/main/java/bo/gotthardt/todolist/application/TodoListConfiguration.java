@@ -1,5 +1,6 @@
 package bo.gotthardt.todolist.application;
 
+import bo.gotthardt.ebean.ExtendedDataSourceFactory;
 import bo.gotthardt.ebean.HasDatabaseConfiguration;
 import bo.gotthardt.email.EmailServiceConfiguration;
 import bo.gotthardt.email.HasEmailServiceConfiguration;
@@ -15,8 +16,8 @@ import bo.gotthardt.schedule.ScheduleConfiguration;
 import bo.gotthardt.schedule.quartz.HasQuartzConfiguration;
 import bo.gotthardt.schedule.quartz.QuartzConfiguration;
 import bo.gotthardt.todo.TodoClientConfiguration;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
-import io.dropwizard.db.DataSourceFactory;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ import java.util.List;
 public class TodoListConfiguration extends Configuration implements HasDatabaseConfiguration, HasEmailServiceConfiguration,
         HasSendGridConfiguration, HasRabbitMQConfiguration, HasWorkerConfigurations, HasQuartzConfiguration,
         HasScheduleConfigurations, HasJsClientConfiguration {
-    private DataSourceFactory database = new DataSourceFactory();
+    @JsonProperty("database")
+    private ExtendedDataSourceFactory databaseConfig = new ExtendedDataSourceFactory();
     private EmailServiceConfiguration email = new EmailServiceConfiguration();
     private SendGridConfiguration sendGrid;
     private RabbitMQConfiguration rabbitMq = new RabbitMQConfiguration();

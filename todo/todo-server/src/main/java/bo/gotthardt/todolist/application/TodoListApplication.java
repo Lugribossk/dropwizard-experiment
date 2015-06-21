@@ -2,6 +2,7 @@ package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.application.BuildInfo;
 import bo.gotthardt.application.VersionHealthCheck;
+import bo.gotthardt.ebean.DbDiffCommand;
 import bo.gotthardt.ebean.EbeanBundle;
 import bo.gotthardt.jersey.filter.BasicAuthFilter;
 import bo.gotthardt.jersey.parameters.ListFilteringFactory;
@@ -18,7 +19,9 @@ import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Stopwatch;
 import io.dropwizard.Application;
+import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.java8.Java8Bundle;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.Getter;
@@ -65,9 +68,16 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         bootstrap.addBundle(rabbitMqBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
         bootstrap.addBundle(new TodoClientBundle());
+        bootstrap.addBundle(new MigrationsBundle<TodoListConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(TodoListConfiguration configuration) {
+                return configuration.getDatabaseConfig();
+            }
+        });
 
         // The anonymous subclass seems to be needed for the config type to be picked up correctly.
         bootstrap.addCommand(new WorkersCommand<TodoListConfiguration>(TodoListApplication.this) {});
+        bootstrap.addCommand(new DbDiffCommand<TodoListConfiguration>() {});
     }
 
     @Override

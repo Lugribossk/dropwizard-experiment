@@ -52,6 +52,10 @@ When creating run configurations for tests, add the same VM options as above.
 
 You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
 
+## Deployment
+
+[![Deploy to Tutum](https://s.tutum.co/deploy-to-tutum.svg)](https://dashboard.tutum.co/stack/deploy/)
+
 ## FAQ
 
 ### What's with the Java agent when running in IntelliJ?

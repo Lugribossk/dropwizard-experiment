@@ -64,7 +64,7 @@ public class WorkersCommand<T extends Configuration & HasWorkerConfigurations & 
         }
 
         if (!configuration.getSchedules().isEmpty()) {
-            Quartz quartz = new Quartz(configuration.getQuartz(), configuration.getDatabase(), injector);
+            Quartz quartz = new Quartz(configuration.getQuartz(), configuration.getDatabaseConfig(), injector);
             environment.lifecycle().manage(quartz);
 
             setupSchedules(configuration.getSchedules(), quartz.getScheduler());

@@ -74,7 +74,7 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         bootstrap.addBundle(new MigrationsBundle<TodoListConfiguration>() {
             @Override
             public DataSourceFactory getDataSourceFactory(TodoListConfiguration configuration) {
-                return configuration.getDatabase();
+                return configuration.getDatabaseConfig();
             }
         });
 

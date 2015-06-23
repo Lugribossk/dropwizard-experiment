@@ -1,0 +1,13 @@
+server:
+  rootPath: /api/*
+  type: simple
+  applicationContextPath: /
+  connector:
+    type: http
+    port: 8056
+
+database:
+  user: ${DB_USERNAME:-postgres}
+  password: ${DB_PASSWORD:-test}
+  url: jdbc:postgresql://localhost:5432/${DB_NAME:-integrationtest}
+  driverClass: org.postgresql.Driver

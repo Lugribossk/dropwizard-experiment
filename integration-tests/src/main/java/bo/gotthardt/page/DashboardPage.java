@@ -36,7 +36,7 @@ public class DashboardPage extends PageObject {
     }
 
     public static DashboardPage go(WebDriver driver) {
-        driver.get(UiIntegrationTest.BASE_URL + "");
+        driver.get(UiIntegrationTest.getBaseUrl() + "");
         return new DashboardPage(driver);
     }
 }

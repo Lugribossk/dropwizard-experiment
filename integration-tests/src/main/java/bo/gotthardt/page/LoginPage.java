@@ -48,7 +48,7 @@ public class LoginPage extends PageObject {
     }
 
     public static LoginPage go(WebDriver driver) {
-        driver.get(UiIntegrationTest.BASE_URL);
+        driver.get(UiIntegrationTest.getBaseUrl());
         return new LoginPage(driver);
     }
 }

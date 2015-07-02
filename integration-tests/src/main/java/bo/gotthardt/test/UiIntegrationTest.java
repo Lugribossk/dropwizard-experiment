@@ -42,7 +42,7 @@ public abstract class UiIntegrationTest {
 
     @BeforeClass
     public static void setupWebDriver() {
-        driver = WebDriverFactory.create();
+        driver = WebDriverFactory.createFromEnvVar();
         db = appRule.<TodoListApplication>getApplication().getEbeanBundle().getEbeanServer();
     }
 

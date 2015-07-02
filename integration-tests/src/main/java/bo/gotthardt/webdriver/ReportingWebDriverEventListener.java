@@ -133,14 +133,15 @@ public class ReportingWebDriverEventListener extends AbstractWebDriverEventListe
      * @param classPrefix The package name prefix of your own classes (as opposed to Selenium, standard Java, etc.) that the test cases are located in.
      * @return The modified WebDriver
      */
-    public static WebDriver applyTo(WebDriver driver, String classPrefix) {
+    public static EventFiringWebDriver applyTo(WebDriver driver, String classPrefix) {
+        EventFiringWebDriver eventDriver;
         if (driver instanceof EventFiringWebDriver) {
-            ((EventFiringWebDriver) driver).register(new ReportingWebDriverEventListener(classPrefix));
-            return driver;
+            eventDriver = (EventFiringWebDriver) driver;
         } else {
-            EventFiringWebDriver eventDriver = new EventFiringWebDriver(driver);
-            eventDriver.register(new ReportingWebDriverEventListener(classPrefix));
-            return eventDriver;
+            eventDriver = new EventFiringWebDriver(driver);
         }
+
+        eventDriver.register(new ReportingWebDriverEventListener(classPrefix));
+        return eventDriver;
     }
 }

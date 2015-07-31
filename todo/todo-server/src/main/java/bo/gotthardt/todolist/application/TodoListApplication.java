@@ -10,6 +10,7 @@ import bo.gotthardt.model.User;
 import bo.gotthardt.oauth2.OAuth2Bundle;
 import bo.gotthardt.queue.WorkersCommand;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
+import bo.gotthardt.rest.CrossOriginResourceSharing;
 import bo.gotthardt.todo.TodoClientBundle;
 import bo.gotthardt.todolist.rest.TodoListResource;
 import bo.gotthardt.user.EmailVerificationResource;
@@ -26,11 +27,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -90,13 +87,8 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
 
         environment.jersey().register(ListFilteringFactory.getBinder());
 
-        FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
-        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-        filter.setInitParameter("allowedOrigins", "*");
-        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
-        filter.setInitParameter("allowedMethods", "GET,PUT,POST,DELETE,OPTIONS");
-        filter.setInitParameter("preflightMaxAge", "5184000"); // 2 months
-        filter.setInitParameter("allowCredentials", "true");
+        CrossOriginResourceSharing.enableFor(environment.servlets(), "/*");
+        CrossOriginResourceSharing.enableFor(environment.admin(), "/healthcheck");
 
         BuildInfo buildInfo = BuildInfo.create(environment.getObjectMapper());
         log.info(buildInfo.printableInfo());

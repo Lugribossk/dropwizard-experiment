@@ -24,7 +24,7 @@ public class InMemoryEbeanServer implements EbeanServer {
         DataSourceConfig dbConfig = new DataSourceConfig();
         dbConfig.setUsername("sa");
         dbConfig.setPassword("");
-        dbConfig.setUrl("jdbc:h2:mem:tests;DB_CLOSE_DELAY=-1");
+        dbConfig.setUrl("jdbc:h2:mem:tests2;DB_CLOSE_DELAY=-1");
         dbConfig.setDriver("org.h2.Driver");
 
         ServerConfig config = new ServerConfig();

@@ -55,14 +55,14 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
     @Override
     public void initialize(Bootstrap<TodoListConfiguration> bootstrap) {
         ebeanBundle = new EbeanBundle();
-        rabbitMqBundle = new RabbitMQBundle();
+        //rabbitMqBundle = new RabbitMQBundle();
 
         // This outputs xDateTimes as ISO strings rather than an array of numbers in JSON.
         bootstrap.getObjectMapper().disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         bootstrap.addBundle(new Java8Bundle());
         bootstrap.addBundle(ebeanBundle);
-        bootstrap.addBundle(rabbitMqBundle);
+        //bootstrap.addBundle(rabbitMqBundle);
         bootstrap.addBundle(new OAuth2Bundle(ebeanBundle));
         bootstrap.addBundle(new TodoClientBundle());
         bootstrap.addBundle(new MigrationsBundle<TodoListConfiguration>() {
@@ -102,6 +102,8 @@ public class TodoListApplication extends Application<TodoListConfiguration> {
         user.setEmail("example@example.com");
         ebeanBundle.getEbeanServer().save(user);
 
-        rabbitMqBundle.getQueue("username", User.class).publish(user);
+
+
+        //rabbitMqBundle.getQueue("username", User.class).publish(user);
     }
 }

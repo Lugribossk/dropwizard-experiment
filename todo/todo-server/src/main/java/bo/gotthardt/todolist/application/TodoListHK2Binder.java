@@ -1,9 +1,7 @@
 package bo.gotthardt.todolist.application;
 
 import bo.gotthardt.ebean.EbeanBundle;
-import bo.gotthardt.model.User;
 import bo.gotthardt.model.Widget;
-import bo.gotthardt.queue.MessageQueue;
 import bo.gotthardt.queue.rabbitmq.RabbitMQBundle;
 import bo.gotthardt.rest.CrudService;
 import com.avaje.ebean.EbeanServer;
@@ -25,9 +23,9 @@ public class TodoListHK2Binder extends AbstractBinder {
         bind(environment.metrics()).to(MetricRegistry.class);
         bind(ebeanBundle.getEbeanServer()).to(EbeanServer.class);
 
-        bindFactory(rabbitMqBundle.getQueueFactory("username", User.class))
-            .to(new TypeLiteral<MessageQueue<User>>() {})
-            .named("username");
+//        bindFactory(rabbitMqBundle.getQueueFactory("username", User.class))
+//            .to(new TypeLiteral<MessageQueue<User>>() {})
+//            .named("username");
 
         bindFactory(WidgetCrudFactory.class).to(new TypeLiteral<CrudService<Widget>>(){});
 

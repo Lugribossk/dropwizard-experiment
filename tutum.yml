@@ -1,7 +1,0 @@
-todo-server:
-  image: tutum.co/lugribossk/todo-server:master
-  command: server production.yml
-  ports:
-    - "80:80"
-  restart: always
-  autoredeploy: true

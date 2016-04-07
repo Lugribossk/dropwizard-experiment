@@ -30,7 +30,7 @@ See [common/common-server](./common/common-server) and [todo/todo-server](./todo
 1. Install Java 8 JDK.
 2. Install Maven 3.
 3. Install RabbitMQ (also needs the Erlang VM).
-4. Install Docker (or Boot2docker).
+4. Install Docker (or Docker Toolbox).
 
 ### Running server
 Run `mvn install` in the root of the project and then `java -jar todo\todo-server\target\todo-server-0.0.1-SNAPSHOT.jar server todo\todo-server\config\config.yml`.
@@ -51,10 +51,6 @@ PhantomJS is unfortunately not supported as it uses an old version of Selenium w
 When creating run configurations for tests, add the same VM options as above.
 
 You can make this the default by adding it under Run - Edit Configurations - Defaults - JUnit.
-
-## Deployment
-
-[![Deploy to Tutum](https://s.tutum.co/deploy-to-tutum.svg)](https://dashboard.tutum.co/stack/deploy/)
 
 ## FAQ
 

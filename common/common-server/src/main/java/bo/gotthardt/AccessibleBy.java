@@ -1,5 +1,7 @@
 package bo.gotthardt;
 
+import java.security.Principal;
+
 /**
  * @author Bo Gotthardt
  */

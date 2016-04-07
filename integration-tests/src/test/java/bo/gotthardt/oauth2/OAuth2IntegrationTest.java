@@ -2,16 +2,19 @@ package bo.gotthardt.oauth2;
 
 import bo.gotthardt.model.OAuth2AccessToken;
 import bo.gotthardt.model.User;
-import bo.gotthardt.oauth2.authentication.OAuth2Authenticator;
+import bo.gotthardt.oauth2.authentication.UserAuthenticator;
 import bo.gotthardt.oauth2.authorization.OAuth2AccessTokenResource;
 import bo.gotthardt.oauth2.authorization.OAuth2AuthorizationRequestFactory;
+import bo.gotthardt.oauth2.authorization.UserAuthorizer;
 import bo.gotthardt.test.ApiIntegrationTest;
 import bo.gotthardt.user.UserResource;
 import com.google.common.net.HttpHeaders;
-import io.dropwizard.auth.AuthFactory;
-import io.dropwizard.auth.oauth.OAuthFactory;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -35,7 +38,14 @@ public class OAuth2IntegrationTest extends ApiIntegrationTest {
         .addResource(new OAuth2AccessTokenResource(db))
         .addResource(new UserResource(db))
         .addResource(OAuth2AuthorizationRequestFactory.getBinder())
-        .addResource(AuthFactory.binder(new OAuthFactory<>(new OAuth2Authenticator(db), "OAuth2", User.class)))
+        .addResource(RolesAllowedDynamicFeature.class)
+        .addResource(new AuthValueFactoryProvider.Binder<>(User.class))
+        .addResource(new AuthDynamicFeature(
+            new OAuthCredentialAuthFilter.Builder<User>()
+                .setAuthenticator(new UserAuthenticator(db))
+                .setAuthorizer(new UserAuthorizer())
+                .setPrefix("Bearer")
+                .buildAuthFilter()))
         .setMapper(getMapper())
         .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
         .build();

@@ -1,11 +1,11 @@
 package bo.gotthardt.exception;
 
 import bo.gotthardt.AccessibleBy;
-import bo.gotthardt.Principal;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.core.Response;
+import java.security.Principal;
 
 /**
  * @author Bo Gotthardt

@@ -90,7 +90,7 @@ module.exports = function (grunt) {
     grunt.registerTask("build", [
         "clean:build",
         "webpack:build",
-        "revision",
+        // "revision",
         "string-replace:html"
     ]);
     grunt.registerTask("maven-compile", ["build"]);

@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class OAuth2Authenticator implements Authenticator<String, User> {
+public class UserAuthenticator implements Authenticator<String, User> {
     private final EbeanServer db;
 
     @Override

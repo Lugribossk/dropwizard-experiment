@@ -37,7 +37,7 @@
         <!-- Assign the build timestamp to a new property to work around a Maven bug (http://jira.codehaus.org/browse/MRESOURCES-99).-->
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
-        <dropwizard.version>0.8.1</dropwizard.version>
+        <dropwizard.version>0.9.2</dropwizard.version>
     </properties>
 
     <build>
@@ -582,7 +582,7 @@
             <dependency>
                 <groupId>org.glassfish.jersey.test-framework.providers</groupId>
                 <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
-                <version>2.17</version>
+                <version>2.21</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
